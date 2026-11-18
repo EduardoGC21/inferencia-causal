@@ -49,6 +49,48 @@ def weighted_description(frame):
     return dict(n=len(frame), media=mean, sd=sd, minimo=values.min(), maximo=values.max())
 
 
+def municipal_tables(mod, out):
+    methods = ["emparejada", "emparejada_1a1"]
+    headers = ["", "Uno a muchos", "Uno a uno"]
+    fits = pd.read_csv(mod / "comparaciones_municipales.csv").set_index(["diseno", "muestra", "h"])
+    windows = pd.read_csv(mod / "tramos_y_base.csv", dtype={"tramo": str}).set_index(
+        ["diseno", "muestra", "base", "tramo", "agrupacion"])
+    tests = pd.read_csv(mod / "wald_previos.csv").set_index(["diseno", "muestra", "agrupacion"])
+    sensitivity = pd.read_csv(mod / "sensibilidades_seleccion.csv", dtype={"tramo": str}).set_index(
+        ["escenario", "muestra", "base", "tramo", "agrupacion"])
+
+    def result(row):
+        return f"{fmt(row.efecto, 3)} [{fmt(row.ic_inf, 3)}, {fmt(row.ic_sup, 3)}]"
+
+    support = [fits.loc["principal", method, 0] for method in methods]
+    rows = [
+        ["Tratados / controles / fechas"] + [" / ".join(fmt(row[k], 0) for k in
+                                             ("tratados", "controles", "fechas")) for row in support],
+        ["Día 0"] + [result(row) for row in support],
+        ["Días 1--7"] + [result(windows.loc["principal", m, "-2", "1–7", "entidad"]) for m in methods],
+        ["Días 8--15"] + [result(windows.loc["principal", m, "-2", "8–15", "entidad"]) for m in methods],
+        ["Día 0, base promedio"] + [result(windows.loc["principal", m, "media_previa", "0", "entidad"])
+                                   for m in methods],
+        ["Día 7 placebo"] + [result(fits.loc["placebo", m, 7]) for m in methods],
+        [r"Previos conjuntos, valor \(p\)"] + [
+            r"\(<0{,}001\)" if tests.loc["principal", m, "entidad"].p < 0.001
+            else fmt(tests.loc["principal", m, "entidad"].p, 3) for m in methods],
+    ]
+    table(out / "comparacion_matching.tex", headers, rows)
+    scenarios = {
+        "referencia": "Referencia",
+        "cobertura_predicha": "Cobertura predicha",
+        "hasta_inicio": "Ventana hasta día 0",
+        "hasta_inicio_cobertura_predicha": "Ambos cambios",
+        "senales_cotejadas": "Excluir señales del cotejo",
+    }
+    rows = []
+    for name, label in scenarios.items():
+        pair = [sensitivity.loc[name, m, "-2", "0", "entidad"] for m in methods]
+        rows.append([label, fmt(pair[0].tratados, 0)] + [result(row) for row in pair])
+    table(out / "sensibilidad_matching.tex", ["Escenario", "Tratados", *headers[1:]], rows)
+
+
 def run(config):
     paths = config["paths"]
     mod, out = (paths["outputs"] / directory for directory in ("modelos", "tablas"))
@@ -247,4 +289,5 @@ def run(config):
     }
     (out / "cifras.tex").write_text("".join(r"\newcommand{\F" + k + "}{" + v + "}\n"
                                            for k, v in stats.items()), encoding="utf-8")
+    municipal_tables(mod, out)
     print(f"Tablas y cifras generadas en {out}")

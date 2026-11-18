@@ -70,6 +70,11 @@ fechas dentro de cada diseño, principal o placebo. Filtra `reparto_controles.cs
 por `diseno` y `muestra` para consultar los pares y los pesos de cada método.
 La columna `distancia_log2` registra la distancia del vecino elegido en 1:1.
 
+La [revisión de controles](reporte/cotejo-controles.md) documenta la búsqueda
+de exposiciones omitidas en las fechas de mayor peso. `estimar` reconstruye
+ambos matchings con cobertura predicha, ventanas hasta el día 0 y las señales
+del cotejo. `analizar` genera las tablas que `compilar` incorpora al PDF.
+
 Para trabajar en un worktree, usa una carpeta que contenga `repo/`,
 `tasks/` y `data/` como hermanas. Copia de la entrega auditada las
 entradas de `data/inputs/`, `tasks/` y los originales de `data/raw/`
@@ -91,6 +96,7 @@ originales fijados. La reproducción limpia toma esos archivos de
 | Cortes, faltantes, cobertura y soporte por tratado | `outputs/modelos/covariables_por_fecha.csv`, `cobertura_covariables.csv`, `descartes_municipales.csv` y `soporte_municipal.csv` |
 | Muestras, pesos, balance y denominador censal alterno | `outputs/modelos/muestras_municipales.csv`, `reparto_controles.csv`, `pesos_por_fecha.csv`, `balance.csv` y `soporte_denominador_censal.csv` |
 | Trayectoria, modelos ajustados, Wald, bases y tramos | `outputs/modelos/comparaciones_municipales.csv`, `modelos_m0_m3.csv`, `wald_previos.csv`, `wald_modelos.csv` y `tramos_y_base.csv` |
+| Sensibilidades de selección y cotejo de controles | `outputs/modelos/sensibilidades_seleccion.csv`, `composicion_sensibilidades.csv` y `muestras_sensibilidades.csv` |
 | Conciliación horaria, gravedad, historial y trayectoria visual | `processed/conteos_diarios.parquet`, `outputs/modelos/franjas_y_gravedad.csv`, `frecuencias_franjas_y_gravedad.csv`, `historial.csv` y `outputs/figuras/dinamica_municipal.{pdf,png}` |
 
 `reproducir.py` compara los productos por SHA-256 y el texto paginado del

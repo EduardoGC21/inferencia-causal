@@ -191,28 +191,61 @@ comparación también depende de la cobertura y el aislamiento posteriores
 al episodio. La inferencia permanece sensible a la base y a los
 conglomerados disponibles.
 
+## Sensibilidad a la selección y al cotejo de controles
+
+Se reconstruyen elegibilidad y pesos con los cortes municipales vigentes.
+La cobertura predicha requiere al menos una fila fechable de ATUS en cada
+uno de los tres meses completos anteriores al mes en que comienza la
+ventana de medición. Una anomalía de fecha en el periodo de medición conserva
+la exclusión. Para las observaciones así admitidas, cero significa que no
+se publicó una fila ese día. El corte al inicio acorta tanto la ventana de
+cobertura como la de aislamiento al día 0. Se conserva la base −2 y se
+estima únicamente ese horizonte porque puede haber exposiciones posteriores.
+
+| Escenario | Tratados | Fechas | Uno a muchos, día 0 e IC por entidad | 1:1, día 0 e IC por entidad |
+| --- | ---: | ---: | --- | --- |
+| Referencia | 59 | 28 | +0,289 [−0,155, +0,733] | +0,390 [−0,195, +0,975] |
+| Cobertura predicha | 61 | 29 | +0,251 [−0,213, +0,715] | +0,410 [−0,154, +0,974] |
+| Ventana hasta día 0 | 66 | 31 | +0,397 [−0,077, +0,871] | +0,561 [−0,262, +1,383] |
+| Ventana hasta día 0 y cobertura predicha | 67 | 32 | +0,390 [−0,077, +0,858] | +0,552 [−0,262, +1,366] |
+| Excluir señales del cotejo | 58 | 28 | +0,003 [−0,264, +0,271] | +0,052 [−0,575, +0,678] |
+
+Los cambios de cobertura y ventana incorporan tratados. Al excluir
+dos señales del cotejo baja el contraste en ambos matchings y sale
+Morelia por pérdida de soporte. El escenario cambia tanto la composición
+de tratados como los comparadores. Todos los intervalos del cuadro abarcan
+cero. La revisión de 27 pares de control y el alcance de ACLED se detallan
+en el [cotejo](cotejo-controles.md). Los resultados con base promedio y
+agrupación doble se guardan en `sensibilidades_seleccion.csv`.
+
 ## Reproducción verificada
 
 Python 3.13.2 en Windows x64. La descarga limpia recuperó 100 originales
-municipales (258,3 MB) y verificó sus SHA-256 en 128,52 s. Con ambos
-matchings y los originales locales, `python -m choques todo` tardó 203,40 s.
-`python reproducir.py` cotejó 68 productos por SHA-256 y el PDF binario
-en una copia limpia. El commit auditado por separado cotejó 36 productos
-y el PDF. El contraste auditado regenerado es +0,237468052.
+municipales (258,3 MB) y verificó sus SHA-256 en 128,52 s. Con las nuevas
+sensibilidades, `python -m choques estimar` tardó 140,73 s en el worktree.
+`python reproducir.py` cotejó 73 productos por SHA-256 y el PDF binario
+en una copia limpia. El escrito contiene siete páginas de texto y
+referencias más seis de apéndice. El commit auditado por separado cotejó
+36 productos y el PDF. El contraste auditado regenerado es +0,237468052.
 Se comprobaron por separado los 129 vecinos elegidos en principal y placebo,
 la igualdad de tratados y de las sumas de pesos por fecha y la coincidencia
 de las filas preexistentes en las tablas ampliadas.
 
 | Etapa de la copia limpia | Segundos |
 | --- | ---: |
-| Descargar (verificar originales locales) | 3,32 |
-| Consolidar | 1,90 |
-| Preparar | 100,54 |
-| Validar | 8,57 |
-| Estimar | 103,92 |
-| Analizar | 4,91 |
-| Graficar | 5,50 |
-| Compilar | 5,22 |
+| Descargar (verificar originales locales) | 3,23 |
+| Consolidar | 2,59 |
+| Preparar | 10 506,72 |
+| Validar | 11,26 |
+| Estimar | 126,56 |
+| Analizar | 3,96 |
+| Graficar | 6,07 |
+| Compilar | 6,39 |
+
+El tiempo de pared de preparación coincide con un salto en el reloj de
+la sesión. Se conserva en el registro de reproducción y queda fuera de
+la comparación de rendimiento. La reproducción anterior midió 100,54 s
+en esa etapa, con los mismos insumos y código de preparación.
 
 Fuentes oficiales. [EIC 2015](https://www.inegi.org.mx/programas/intercensal/2015/default.html)
 · [ITER 2020](https://www.inegi.org.mx/app/descarga/ficha.html?ag=0&f=csv&tit=326108)

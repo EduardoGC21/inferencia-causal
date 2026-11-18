@@ -5,7 +5,7 @@ from tempfile import TemporaryDirectory
 import numpy as np
 import pandas as pd
 
-from . import modelos, municipios
+from . import modelos, municipios, sensibilidades
 from .descarga import hash_file
 from .diagnosticos import WINDOWS, average, by_category, history
 from .estadistica import estimate, interval, wald
@@ -108,7 +108,7 @@ def build(config, output):
     weights = (sample.groupby(["diseno", "muestra", "indice", "tratado"], sort=True)
                .agg(n=("clave", "size"), estados=("estado", "nunique"), peso=("peso", "sum")).reset_index())
     csv(weights, output, "pesos_por_fecha")
-    return samples
+    return samples, (tables, changes, state_aggregates)
 
 
 def support(config):
@@ -190,7 +190,7 @@ def run(config):
 
 def estimate_daily(config, output):
     paths, design = config["paths"], config["design"]
-    groups = build(config, output)
+    groups, municipal = build(config, output)
     matrix, events = modelos.load(paths)
     pre = tuple(range(-design["pre"], -design["anticipation"]))
     horizons = [h for h in pre if h < -2] + list(range(design["horizon"] + 1))
@@ -217,4 +217,5 @@ def estimate_daily(config, output):
     by_category(paths["processed"] / "conteos_diarios.parquet",
                 {key: principal[key] for key in ("auditada", "emparejada", "emparejada_1a1")}, matrix, design, output)
     history(principal["auditada"], matrix, events, config["atus"]["first"], design, output)
+    sensibilidades.run(config, matrix, events, municipal, principal, output)
     print(f"Comparaciones municipales estimadas: {len(trajectories)} contrastes y {len(regressions)} regresiones agrupadas.")

@@ -44,6 +44,8 @@ def run(config):
         "claves y territorio; soporte y pesos compartidos; vecino 1:1, distancia, cero, "
         "desempate y reutilización; muestra común M0–M3; "
         "regresión ponderada, Wald matricial y conciliación de hora y gravedad.\n"
+        "- Selección: cobertura con tres meses anteriores, anomalías de fecha, conteos "
+        "publicados y corte de exposición en el día de inicio.\n"
     )
     (output / "validacion.md").write_text(evidence, encoding="utf-8")
     print(evidence)

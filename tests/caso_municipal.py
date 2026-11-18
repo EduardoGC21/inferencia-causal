@@ -5,7 +5,9 @@ from scipy.stats import f
 from choques.conteos import classes
 from choques.estadistica import estimate, wald
 from choques.municipios import choose_cut, join_cut, numeric
+from choques.modelos import Matrix, comparison
 from choques.seleccion import complete_sample, match, one_to_one
+from choques.sensibilidades import monthly_flags, select
 
 
 def cuts_and_join():
@@ -124,8 +126,37 @@ def hourly_and_severity():
     assert [counts[c] for c in ("fatal", "heridos", "danos")] == [2, 2, 2]
 
 
+def coverage_and_isolation():
+    keys = ["01001", "02001", "03001", "04001", "05001", "06001"]
+    dates = pd.date_range("2021-01-01", "2021-08-01")
+    frame = pd.MultiIndex.from_product([keys, dates], names=["clave", "fecha"]).to_frame(index=False)
+    day = pd.Timestamp("2021-06-15")
+    no_report = frame.clave.isin(["02001", "03001", "04001"]) & frame.fecha.ge(day)
+    frame["continuidad"] = ~no_report
+    frame["accidentes"] = np.where(no_report, np.nan, 1.0)
+    matrix = Matrix(frame)
+    months = frame.loc[frame.continuidad & ~(frame.clave.eq("03001") & frame.fecha.dt.month.eq(3))]
+    invalid = pd.DataFrame({"clave": ["04001"], "anio": [2021], "mes": [6]})
+    flags = monthly_flags(matrix, months, invalid)
+    events = pd.DataFrame([
+        ("A", "01001", "01", day, day, "confirmado", "extensa"),
+        ("B", "05001", "05", day + pd.Timedelta(days=1), day + pd.Timedelta(days=1), "confirmado", "extensa"),
+    ], columns=["id_episodio", "clave", "cve_ent", "inicio", "fin", "estado", "clase_final"])
+    design = dict(anticipation=1, pre=14, horizon=15, scale_days=14, washout=21,
+                  min_controls=1, min_control_states=1)
+    audited, _ = comparison(matrix, events, design, "principal")
+    assert set(audited.loc[audited.indice.eq(day), "clave"]) == {"01001", "06001"}
+    predicted, published = select(matrix, events, design, flags)
+    assert set(predicted.loc[predicted.indice.eq(day), "clave"]) == {"01001", "02001", "06001"}
+    assert published.extract(predicted.loc[predicted.indice.eq(day) & predicted.clave.eq("02001")], 0).item() == 0
+    combined, _ = select(matrix, events, design, flags, end_at_start=True)
+    assert set(combined.loc[combined.indice.eq(day), "clave"]) == {"01001", "02001", "05001", "06001"}
+    assert np.isnan(matrix.values[matrix.keys.get_loc("02001"), matrix.dates.get_loc(day)])
+
+
 def run():
     cuts_and_join()
     weights_and_support()
     models_and_wald()
     hourly_and_severity()
+    coverage_and_isolation()
