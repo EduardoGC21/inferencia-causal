@@ -51,9 +51,49 @@ $choquesPy = "..\.venv\Scripts\python.exe"
 
 `todo` ejecuta descarga, preparación, validación, estimación, análisis y
 gráficas. Cada nombre funciona como subcomando independiente. `soporte`
-reconstruye la lista de comparaciones y descartes sin estimar. El catálogo
-CSV entregado es el insumo de `todo`. Se puede reconstruir desde las hojas
+reconstruye las comparaciones auditadas y municipales, los pesos y los
+descartes sin estimar. El catálogo CSV entregado es el insumo de `todo`. Se puede reconstruir desde las hojas
 de evidencia mediante `python -m choques consolidar`.
+
+## Comparaciones municipales
+
+El subcomando `todo` descarga y verifica las fuentes, prepara las
+covariables y los conteos, ejecuta las pruebas sintéticas y estima tanto
+la referencia auditada como las comparaciones con controles municipales.
+La [nota de resultados](reporte/comparaciones-municipales.md) reúne las
+estimaciones, el balance, las falsificaciones y los límites de la rama
+diaria. La reproducción del escrito sigue usando los insumos auditados.
+
+Para trabajar en un worktree, usa una carpeta que contenga `repo/`,
+`tasks/` y `data/` como hermanas. Copia de la entrega auditada las
+entradas de `data/inputs/`, `tasks/` y los originales de `data/raw/`
+con su manifiesto. Cada ejecución resuelve sus rutas desde la configuración
+del checkout y escribe en su propio `data/`. Ejecuta `configuracion`
+para consultar las rutas resueltas antes de correr el flujo.
+
+`descargar --fuente municipios` verifica o recupera los 100 originales
+municipales de [config/fuentes_municipales.json](config/fuentes_municipales.json).
+El manifiesto registra las URL, la consulta exacta de cada entidad al SAIC,
+los periodos, las fechas de consulta y publicación de las ediciones y los
+SHA-256. Si una edición cambia en origen, la descarga requiere los
+originales fijados. La reproducción limpia toma esos archivos de
+`data/raw/municipios/` y reconstruye los productos en otra copia.
+
+| Producto | Ruta desde `data/` |
+| --- | --- |
+| Población, economía, vehículos, denominadores y cambios territoriales | `processed/municipios/`, `outputs/modelos/tasas_saic.csv` y `tasas_vmrc.csv` |
+| Cortes, faltantes, cobertura y soporte por tratado | `outputs/modelos/covariables_por_fecha.csv`, `cobertura_covariables.csv`, `descartes_municipales.csv` y `soporte_municipal.csv` |
+| Muestras, pesos, balance y denominador censal alterno | `outputs/modelos/muestras_municipales.csv`, `reparto_controles.csv`, `pesos_por_fecha.csv`, `balance.csv` y `soporte_denominador_censal.csv` |
+| Trayectoria, modelos ajustados, Wald, bases y tramos | `outputs/modelos/comparaciones_municipales.csv`, `modelos_m0_m3.csv`, `wald_previos.csv`, `wald_modelos.csv` y `tramos_y_base.csv` |
+| Conciliación horaria, gravedad, historial y trayectoria visual | `processed/conteos_diarios.parquet`, `outputs/modelos/franjas_y_gravedad.csv`, `frecuencias_franjas_y_gravedad.csv`, `historial.csv` y `outputs/figuras/dinamica_municipal.{pdf,png}` |
+
+`reproducir.py` compara los productos por SHA-256 y el texto paginado del
+PDF. La ejecución local confirma 73 pares tratados, 7 351 controles,
+30 fechas y +0,237468 choques registrados en el día 0, con tolerancia
+absoluta de 10⁻⁶. El archivo `data/outputs/qa/reproduccion.md` registra
+los tiempos por etapa y el cotejo de productos. El commit auditado
+`68c3457` permite reproducir la entrega original con los mismos insumos
+auditados.
 
 ## Datos, cobertura y trazabilidad
 
