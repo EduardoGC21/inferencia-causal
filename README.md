@@ -64,6 +64,12 @@ La [nota de resultados](reporte/comparaciones-municipales.md) reúne las
 estimaciones, el balance, las falsificaciones y los límites de la rama
 diaria. La reproducción del escrito sigue usando los insumos auditados.
 
+`estimar` compara el matching uno a muchos (`emparejada`) con el vecino más
+cercano por tratado (`emparejada_1a1`). Ambos usan los mismos tratados y
+fechas dentro de cada diseño, principal o placebo. Filtra `reparto_controles.csv`
+por `diseno` y `muestra` para consultar los pares y los pesos de cada método.
+La columna `distancia_log2` registra la distancia del vecino elegido en 1:1.
+
 Para trabajar en un worktree, usa una carpeta que contenga `repo/`,
 `tasks/` y `data/` como hermanas. Copia de la entrega auditada las
 entradas de `data/inputs/`, `tasks/` y los originales de `data/raw/`

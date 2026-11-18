@@ -59,8 +59,9 @@ def municipal_figure(trajectory):
     ax.axhline(0, color=GRAY, linewidth=0.7)
     ax.axvline(-0.5, color=GRAY, linewidth=0.8, linestyle=":")
     for sample, color, marker, offset, label in [
-        ("mismos_tratados", GRAY, "s", -0.15, "Controles auditados"),
-        ("emparejada", BLUE, "o", 0.15, "Controles emparejados"),
+        ("mismos_tratados", GRAY, "s", -0.23, "Controles auditados"),
+        ("emparejada", BLUE, "o", 0.0, "Matching uno a muchos"),
+        ("emparejada_1a1", ACCENT, "^", 0.23, "Matching 1:1"),
     ]:
         rows = trajectory.loc[trajectory.muestra.eq(sample)].sort_values("h")
         if rows.efecto.notna().any():

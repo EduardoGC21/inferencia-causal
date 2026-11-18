@@ -5,7 +5,7 @@ from scipy.stats import f
 from choques.conteos import classes
 from choques.estadistica import estimate, wald
 from choques.municipios import choose_cut, join_cut, numeric
-from choques.seleccion import complete_sample, match
+from choques.seleccion import complete_sample, match, one_to_one
 
 
 def cuts_and_join():
@@ -53,6 +53,24 @@ def weights_and_support():
     common, _ = complete_sample(sample, design)
     assert "06001" not in set(common.clave)
     assert common.groupby("tratado").peso.sum().round(10).tolist() == [4.0, 4.0]
+
+    extra = sample.set_index("clave", drop=False).loc[["01001", "07001"]].copy()
+    extra = extra.assign(clave=["01002", "08001"], estado=["01", "08"])
+    expanded, _, eligible = match(pd.concat([extra, sample], ignore_index=True), design)
+    paired, chosen = one_to_one(expanded, eligible.iloc[::-1])
+    assert paired.loc[paired.tratado.eq(1), "clave"].tolist() == ["09002", "09003", "09004"]
+    assert chosen.set_index("tratado_clave").control_clave.to_dict() == {
+        "09002": "01001", "09003": "01001", "09004": "07001",
+    }
+    assert paired.loc[paired.tratado.eq(0)].set_index("clave").peso.to_dict() == {"01001": 2.0, "07001": 1.0}
+    assert chosen.contribucion.eq(1.0).all()
+    distances = chosen.set_index("tratado_clave").distancia_log2
+    np.testing.assert_allclose(distances.loc[["09002", "09003", "09004"]],
+                               [0, np.log2(1.4), np.log2(1.4)])
+    beta, _, _ = estimate(paired, ["tratado"], paired[["delta"]].to_numpy(), design)
+    assert np.isclose(beta[0, 0], (8 + 7 + 2 - 2 * 1 - 9) / 3)
+    empty, _, no_links = match(sample.loc[sample.clave.eq("09005")], design)
+    assert all(frame.empty for frame in one_to_one(empty, no_links))
 
 
 def models_and_wald():

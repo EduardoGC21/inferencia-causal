@@ -87,6 +87,28 @@ def match(sample, design):
         links, columns=["indice", "tratado_clave", "control_clave", "contribucion"])
 
 
+def one_to_one(matched, links):
+    if links.empty:
+        return matched, links.assign(distancia_log2=pd.Series(dtype=float))
+    pairs = matched.set_index(["indice", "clave"], drop=False)
+    treated_keys = pd.MultiIndex.from_frame(links[["indice", "tratado_clave"]])
+    control_keys = pd.MultiIndex.from_frame(links[["indice", "control_clave"]])
+    treated_values = pairs.loc[treated_keys, COVARIATES].to_numpy(dtype=float)
+    control_values = pairs.loc[control_keys, COVARIATES].to_numpy(dtype=float)
+    # The eligibility ranges allow a zero only when both values are zero.
+    ratios = np.divide(control_values, treated_values, out=np.ones_like(control_values),
+                       where=treated_values != 0)
+    chosen = (links.assign(distancia_log2=np.linalg.norm(np.log2(ratios), axis=1))
+              .sort_values(["distancia_log2", "control_clave"])
+              .drop_duplicates(["indice", "tratado_clave"])
+              .assign(contribucion=1.0))
+    weights = chosen.groupby(["indice", "control_clave"]).contribucion.sum()
+    controls = pairs.loc[weights.index].assign(peso=weights.to_numpy())
+    result = pd.concat([matched.loc[matched.tratado.eq(1)], controls], ignore_index=True)
+    check_weights(result)
+    return result, chosen
+
+
 def same_treated(audited, matched):
     selected = []
     empty = audited.iloc[:0].copy()

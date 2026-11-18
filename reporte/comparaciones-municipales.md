@@ -1,9 +1,9 @@
 # Comparaciones municipales y diagnósticos de la rama diaria
 
 El contraste del día 0 es **+0,237** choques registrados por municipio en la
-muestra auditada, **+0,289** con controles emparejados y **+0,064** al ajustar
-por las tres covariables en una muestra común. Los IC del 95 % de las tres
-estimaciones incluyen cero. Persisten diferencias previas y el signo del
+muestra auditada, **+0,289** en el matching uno a muchos, **+0,390** en el 1:1
+y **+0,064** al ajustar por las tres covariables en una muestra común. Los
+IC del 95 % incluyen cero. Persisten diferencias previas y el signo del
 día 0 cambia con la base previa promedio. Los resultados describen cambios
 en el registro de choques en jornadas documentadas con soporte.
 
@@ -16,38 +16,57 @@ incluidos. Un cero explícito se compara con cero. El tratado debe conservar
 al menos 10 controles de cinco estados. Cada tratado reparte peso uno entre
 sus controles y los pesos de un control compartido se suman por fecha.
 
+La sensibilidad 1:1 usa el mismo conjunto de candidatos de cada tratado con
+soporte y elige el de menor distancia euclidiana en los logaritmos base 2 de
+las razones control/tratado para población, empleo y autos. Las tres
+variables pesan igual y dos ceros confirmados aportan distancia cero. En
+empates se elige la menor clave municipal. Cada vínculo 1:1 aporta peso uno
+y el mismo municipio puede ser el vecino más cercano de varios tratados.
+Sus aportes se suman en una fila por municipio y fecha. El mínimo de
+soporte se aplica antes de elegir al vecino. En el diseño principal y en
+el placebo se conservan los mismos tratados y fechas que en uno a muchos.
+
 | Comparación | Tratados | Controles | Fechas | Día 0 | IC 95 % por entidad | IC 95 % por entidad y fecha |
 | --- | ---: | ---: | ---: | ---: | --- | --- |
 | Auditada completa | 73 | 7 351 | 30 | +0,237 | [−0,211, +0,686] | [−0,406, +0,881] |
 | Mismos tratados, controles auditados | 59 | 7 281 | 28 | +0,261 | [−0,179, +0,701] | [−0,518, +1,041] |
 | Mismos tratados, controles completos | 59 | 7 153 | 28 | +0,259 | [−0,180, +0,699] | [−0,522, +1,041] |
-| Emparejada por tratado | 59 | 2 203 | 28 | +0,289 | [−0,155, +0,733] | [−0,481, +1,059] |
+| Matching uno a muchos | 59 | 2 203 | 28 | +0,289 | [−0,155, +0,733] | [−0,481, +1,059] |
+| Matching 1:1 | 59 | 57 | 28 | +0,390 | [−0,195, +0,975] | [−0,457, +1,237] |
 
 El emparejamiento retiene 27 de 29 episodios y 11 de 14 estados tratados.
-La máxima repetición de un municipio de control en distintas fechas pasa
-de 21 a 15. El primer filtro que deja a un tratado sin el mínimo de
+En 1:1 los 59 vínculos usan 57 observaciones municipio–fecha de 49
+municipios de control. Dos observaciones se comparten entre tratados. El
+número de entidades en la estimación pasa de 32 con uno a muchos a 25 con
+1:1. La máxima repetición de un municipio de control en distintas fechas
+es 21 en la auditada, 15 en uno a
+muchos y tres en 1:1. El primer filtro que deja a un tratado sin el mínimo de
 controles o entidades es población en ocho casos, autos en tres y empleo
 en dos. En el caso restante faltan covariables del tratado. Al fijar los mismos 59 tratados, el contraste cambia en +0,028
 respecto de sus controles auditados. La amplitud del IC por entidad pasa de
 0,880 a 0,888 y la del IC doble de 1,559 a 1,541. El IC doble de la muestra
-auditada completa mide 1,288.
+auditada completa mide 1,288. Frente a uno a muchos, el 1:1 mueve el contraste
+del día 0 en +0,101 y amplía el IC por entidad a 1,169 y el doble a 1,694.
 
 La diferencia de medias estandarizada usa una escala fija, la raíz del
 promedio de las varianzas ponderadas de ambos grupos en la referencia
 auditada. Los valores positivos indican una media mayor en tratados.
 
-| Covariable | Auditada completa | Mismos tratados y controles completos | Emparejada |
-| --- | ---: | ---: | ---: |
-| Población | +0,238 | +0,152 | +0,028 |
-| Ocupados por mil | −0,047 | +0,027 | +0,059 |
-| Autos particulares por mil | −0,395 | −0,387 | −0,177 |
-| Nivel de choques previos | +0,057 | +0,097 | +0,032 |
-| Viviendas con automóvil | +0,288 | +0,216 | +0,324 |
-| Valor agregado por habitante | −0,178 | −0,128 | −0,102 |
+| Covariable | Auditada completa | Mismos tratados y controles completos | Uno a muchos | 1:1 |
+| --- | ---: | ---: | ---: | ---: |
+| Población | +0,238 | +0,152 | +0,028 | +0,030 |
+| Ocupados por mil | −0,047 | +0,027 | +0,059 | +0,045 |
+| Autos particulares por mil | −0,395 | −0,387 | −0,177 | −0,008 |
+| Nivel de choques previos | +0,057 | +0,097 | +0,032 | +0,015 |
+| Viviendas con automóvil | +0,288 | +0,216 | +0,324 | +0,376 |
+| Valor agregado por habitante | −0,178 | −0,128 | −0,102 | +0,009 |
 
 La población, la motorización y los choques previos quedan más balanceados
-entre los mismos tratados. La diferencia en empleo crece y la motorización
-aún muestra una brecha. Usar el último censo anterior al cierre del numerador
+con uno a muchos frente a sus controles completos, y aumenta la diferencia
+en empleo. El 1:1 reduce más las diferencias en motorización, empleo,
+choques previos y valor agregado frente a uno a muchos. La población queda
+prácticamente igual de balanceada y aumenta la diferencia en viviendas con
+automóvil. Usar el último censo anterior al cierre del numerador
 retiene 59 tratados y 2 189 controles emparejados. En placebo se pasa de
 70 tratados y 2 625 controles con CONAPO a 69 tratados y 2 590 controles con el
 denominador censal. El desfase del censo se registra en días por numerador.
@@ -75,34 +94,44 @@ coeficientes identificados y G es el número de entidades o el mínimo entre
 entidades y fechas en la sensibilidad de dos vías. Los grados de libertad
 del denominador son G−1. Para los doce diagnósticos previos se usa su
 covarianza compartida. La prueba conjunta de previos da p < 0,001 con ambas
-agrupaciones en la auditada, la emparejada y M3.
+agrupaciones en la auditada, uno a muchos y M3. En 1:1, la agrupación por
+entidad da F(12, 24) = 5,873 y p = 0,000118. La matriz de covarianza de dos
+vías es indefinida para esta prueba conjunta en el diseño principal y el
+placebo.
 
 El placebo se reconstruye 28 días antes del inicio real con la ventana
 completa libre de exposición. Se vuelven a resolver cortes, soporte y pesos.
-En la muestra emparejada, el día 7 placebo da +0,454, con IC por entidad
-[+0,189, +0,719] e IC doble [+0,049, +0,859]. M3 en su muestra común placebo
-da +0,212 con IC por entidad [−0,081, +0,505]. Estos contrastes y los previos
-limitan una lectura causal.
+Los 70 tratados y 36 fechas se conservan en ambos matchings. Uno a muchos
+usa 2 625 observaciones de control y 1:1 usa 68. En el día 7 placebo, uno a
+muchos da +0,454 con IC por entidad [+0,189, +0,719] e IC doble [+0,049,
++0,859]. El 1:1 da +0,414 con IC por entidad [−0,702, +1,530] e IC doble
+[−0,589, +1,417]. M3 en su muestra común placebo da +0,212 con IC por
+entidad [−0,081, +0,505]. Estos contrastes y los previos limitan una lectura
+causal.
 
 ## Tramos, horarios, gravedad e historial
 
 | Muestra y base | Días 1–7 e IC por entidad | Días 8–15 e IC por entidad |
 | --- | --- | --- |
 | Auditada, −2 | +0,375 [+0,128, +0,622] | +0,495 [+0,205, +0,786] |
-| Emparejada, −2 | +0,551 [+0,317, +0,785] | +0,608 [+0,342, +0,875] |
+| Uno a muchos, −2 | +0,551 [+0,317, +0,785] | +0,608 [+0,342, +0,875] |
+| 1:1, −2 | +0,298 [−0,308, +0,904] | +0,290 [−0,190, +0,771] |
 | Auditada, promedio de −14 a −2 | −0,068 [−0,273, +0,138] | +0,053 [−0,114, +0,220] |
-| Emparejada, promedio de −14 a −2 | +0,037 [−0,191, +0,265] | +0,094 [−0,073, +0,261] |
+| Uno a muchos, promedio de −14 a −2 | +0,037 [−0,191, +0,265] | +0,094 [−0,073, +0,261] |
+| 1:1, promedio de −14 a −2 | −0,105 [−0,469, +0,259] | −0,113 [−0,463, +0,237] |
 
 El día 0 con la base promedio es −0,205 [−0,626, +0,215] en la auditada y
-−0,225 [−0,702, +0,252] en la emparejada. Los tramos ponderan por igual sus
-días dentro de cada par. La figura `dinamica_municipal` compara la trayectoria
-de los mismos 59 tratados con dos conjuntos de controles, con puntos e IC
-puntuales por día. El día −1 se reserva por anticipación.
+−0,225 [−0,702, +0,252] con uno a muchos. En 1:1 es −0,013 [−0,694, +0,668].
+Los tramos ponderan por igual sus días dentro de cada par. La figura
+`dinamica_municipal` compara la trayectoria de los mismos 59 tratados con
+los controles auditados y ambos matchings, con IC puntuales por día. El día
+−1 se reserva por anticipación.
 
 El contraste pareado noche menos día de la primera semana con base −2 es
-+0,013 [−0,161, +0,187] en la auditada y +0,101 [−0,048, +0,250] en la
-emparejada. La comparación horaria empieza en el día 1 porque el catálogo
-carece de una hora de inicio sistemática. Día abarca de 06:00 a 17:59 y noche
++0,013 [−0,161, +0,187] en la auditada, +0,101 [−0,048, +0,250] con uno a
+muchos y −0,225 [−0,650, +0,200] con 1:1. La comparación horaria empieza
+en el día 1 porque el catálogo carece de una hora de inicio sistemática.
+Día abarca de 06:00 a 17:59 y noche
 las horas restantes de la fecha civil. En base −2 y ambos tramos los dos
 grupos suman cero choques de hora desconocida. Los 1 208 choques observados
 en tratados auditados durante la primera semana incluyen 17 fatales, 289
@@ -165,22 +194,25 @@ conglomerados disponibles.
 ## Reproducción verificada
 
 Python 3.13.2 en Windows x64. La descarga limpia recuperó 100 originales
-municipales (258,3 MB) y verificó sus SHA-256 en 128,52 s. Con los
-originales locales, `python -m choques todo` tardó 149,16 s.
+municipales (258,3 MB) y verificó sus SHA-256 en 128,52 s. Con ambos
+matchings y los originales locales, `python -m choques todo` tardó 203,40 s.
 `python reproducir.py` cotejó 68 productos por SHA-256 y el PDF binario
 en una copia limpia. El commit auditado por separado cotejó 36 productos
 y el PDF. El contraste auditado regenerado es +0,237468052.
+Se comprobaron por separado los 129 vecinos elegidos en principal y placebo,
+la igualdad de tratados y de las sumas de pesos por fecha y la coincidencia
+de las filas preexistentes en las tablas ampliadas.
 
 | Etapa de la copia limpia | Segundos |
 | --- | ---: |
-| Descargar (verificar originales locales) | 1,85 |
-| Consolidar | 1,46 |
-| Preparar | 76,10 |
-| Validar | 5,40 |
-| Estimar | 71,21 |
-| Analizar | 2,94 |
-| Graficar | 3,83 |
-| Compilar | 4,25 |
+| Descargar (verificar originales locales) | 3,32 |
+| Consolidar | 1,90 |
+| Preparar | 100,54 |
+| Validar | 8,57 |
+| Estimar | 103,92 |
+| Analizar | 4,91 |
+| Graficar | 5,50 |
+| Compilar | 5,22 |
 
 Fuentes oficiales. [EIC 2015](https://www.inegi.org.mx/programas/intercensal/2015/default.html)
 · [ITER 2020](https://www.inegi.org.mx/app/descarga/ficha.html?ag=0&f=csv&tit=326108)

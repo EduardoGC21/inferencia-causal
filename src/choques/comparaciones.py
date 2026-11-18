@@ -9,7 +9,7 @@ from . import modelos, municipios
 from .descarga import hash_file
 from .diagnosticos import WINDOWS, average, by_category, history
 from .estadistica import estimate, interval, wald
-from .seleccion import COVARIATES, balance, complete_sample, match, same_treated
+from .seleccion import COVARIATES, balance, complete_sample, match, one_to_one, same_treated
 
 
 MODELS = ["tratado", "log_poblacion", "empleo_mil", "autos_mil"]
@@ -69,15 +69,17 @@ def build(config, output):
     for name in ("principal", "placebo"):
         reference = combined.loc[combined.especificacion.eq(name)].copy()
         matched, diagnostics, links = match(reference, design)
+        paired, nearest = one_to_one(matched, links)
         entire, observed = same_treated(reference, matched)
         common, losses = complete_sample(reference, design)
         alternative = reference.assign(empleo_mil=reference.empleo_mil_alt, autos_mil=reference.autos_mil_alt)
         matched_alt, alt_diagnostics, _ = match(alternative, design)
         common_alt, alt_complete = complete_sample(alternative, design)
         sample_set = {"auditada": reference, "mismos_tratados": entire, "mismos_tratados_completos": observed,
-                      "emparejada": matched, "comun_m0_m3": common}
+                      "emparejada": matched, "emparejada_1a1": paired, "comun_m0_m3": common}
         samples[name] = sample_set
-        edges.append(links.assign(diseno=name))
+        edges.extend([links.assign(diseno=name, muestra="emparejada"),
+                      nearest.assign(diseno=name, muestra="emparejada_1a1")])
         loss.append(diagnostics.assign(diseno=name))
         complete_loss.append(losses.assign(diseno=name))
         alternate_loss.extend([alt_diagnostics.assign(diseno=name, metodo="emparejada"),
@@ -213,6 +215,6 @@ def estimate_daily(config, output):
             or abs(benchmark["efecto"] - 0.237468) > 1e-6):
         raise ValueError("Las cifras de la muestra auditada no cumplen la referencia")
     by_category(paths["processed"] / "conteos_diarios.parquet",
-                {key: principal[key] for key in ("auditada", "emparejada")}, matrix, design, output)
+                {key: principal[key] for key in ("auditada", "emparejada", "emparejada_1a1")}, matrix, design, output)
     history(principal["auditada"], matrix, events, config["atus"]["first"], design, output)
     print(f"Comparaciones municipales estimadas: {len(trajectories)} contrastes y {len(regressions)} regresiones agrupadas.")
