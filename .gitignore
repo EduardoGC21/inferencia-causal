@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.egg-info/
+reporte/*.aux
+reporte/*.log
+reporte/*.bbl
+reporte/*.blg
+reporte/*.out
+reporte/*.fls
+reporte/*.fdb_latexmk

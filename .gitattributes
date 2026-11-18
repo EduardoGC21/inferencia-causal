@@ -1,0 +1,7 @@
+# La revisión auditada calcula sus huellas sobre los bytes de estos archivos.
+config/proyecto.toml -text
+src/choques/eventos.py -text
+src/choques/limpieza.py -text
+src/choques/modelos.py -text
+src/choques/panel.py -text
+src/choques/persistente.py -text

@@ -1,0 +1,477 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[spanish,es-nodecimaldot,es-noquoting]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,graphicx,booktabs}
+\usepackage[margin=0.92in]{geometry}
+\usepackage[authoryear,round]{natbib}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Violencia criminal y accidentes registrados},
+  pdfauthor={Proyecto de Inferencia Causal, ITAM}}
+\urlstyle{same}
+\setlength{\parindent}{1.1em}
+\setlength{\parskip}{0.15em}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.14}
+\linespread{1.08}
+\setlength{\bibsep}{1pt}
+\graphicspath{{../../data/outputs/figuras/}}
+\input{../../data/outputs/tablas/cifras.tex}
+
+\title{\textbf{Violencia criminal y accidentes registrados}\\[0.25em]
+\large Jornadas extensas en municipios mexicanos, 2019--2025}
+\author{Proyecto de Inferencia Causal · ITAM}
+\date{Noviembre de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Comparo los accidentes de tránsito registrados antes y después del inicio de
+jornadas extensas de violencia criminal en municipios mexicanos de 2019 a
+2025. Uso diferencias en diferencias con proyecciones locales, cifras
+oficiales diarias y un catálogo auditado. El día de inicio, la diferencia de
+cambios entre \FTratPrincipal{} pares municipio--episodio tratados y los
+controles de las mismas fechas es de \FEfectoCero{} accidentes por municipio.
+El intervalo puntual al 95\,\% va de \FInfCero{} a \FSupCero{}. Las brechas
+previas, el placebo y la sensibilidad a la base limitan la atribución
+causal. La rama semanal de Culiacán describe registros observables, con
+una interrupción de captación y un cambio de perímetro.
+\end{abstract}
+
+\section{Contexto y motivación}
+
+¿Cuántos accidentes registrados cambian en un municipio tras el inicio de una
+jornada extensa de violencia criminal y cuánto dura el cambio? En 2025 se
+registraron \FTotalINEGI{} accidentes en zonas urbanas y suburbanas de México
+en la estadística nacional de vías no federales \citep{inegiatus}. Los cierres
+y el retiro del transporte público pueden modificar la circulación en unas
+horas. Por ejemplo, los ataques del 5 de febrero de 2024 a transportistas
+en Chilpancingo dejaron a la ciudad varios días con el servicio suspendido
+\citep{amapola}. El caso ilustra por qué conviene medir una secuencia de días
+y distinguir el momento del ataque de la duración de sus consecuencias.
+
+La primera hipótesis es que hogares y empresas posponen viajes y disminuyen
+los accidentes registrados. También puede aumentar el riesgo por viaje si
+el tránsito se desvía hacia vialidades menos seguras. A esas dos respuestas se
+suma la reacción de las autoridades que documentan los siniestros. Una
+reducción observada puede combinar menos tránsito, cambios de ruta, cambios
+del riesgo y menos registro. Examino el conteo registrado como resultado
+propio, con esos canales abiertos.
+
+\citet{robles} documentan consecuencias de la violencia del narcotráfico para
+la actividad local. \citet{dell} muestra que los operativos pueden desviar
+rutas y trasladar violencia a otros municipios, un motivo para examinar la
+contaminación geográfica de los comparadores. Para la frecuencia del resultado,
+\citet{bauern} estudian intervenciones viales de un día y muestran la utilidad de
+distinguir cambios contemporáneos de persistencia. A diferencia de las campañas
+programadas, aquí el momento de las jornadas se reconstruye con fuentes
+locales y puede coincidir con operativos, alertas o violencia previa.
+
+El objetivo es el efecto medio del tratamiento sobre los tratados (ATT)
+por horizonte, con el mismo peso por par municipio--episodio. La
+comparación empírica se restringe a jornadas documentadas con cobertura y
+soporte. El día de inicio es el contraste principal y los siguientes 15
+días permiten examinar persistencia. Para Culiacán uso una comparación
+semanal descriptiva.
+
+\section{Datos}
+
+\paragraph{Accidentes y cobertura.}
+La estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y
+Suburbanas (ATUS) del Instituto Nacional de Estadística y Geografía (INEGI)
+recibe información de autoridades estatales y municipales y, para Ciudad de
+México, de las instancias descritas en su ficha \citep{inegimeta}. Usé el ZIP
+anual de 1997--2025, con cifras definitivas de 2025 y las correcciones
+incluidas en esa edición. El manifiesto fija su URL y SHA-256. El periodo
+analítico cubre de enero de 2019 a diciembre de 2025. Los últimos meses de
+2018 aportan historia de reporte al inicio del panel.
+
+El insumo 2019--2025 contiene \FFilasMicro{} registros. El \mbox{100\,\%}
+empata por clave al catálogo municipal del release. Se excluyeron
+\FFechaInvalida{} sin día válido. Se conservaron \FDuplicados{} renglones
+idénticos al anterior o a otro registro en los campos públicos porque el
+archivo carece de un identificador de accidente y dos registros pueden
+compartir los mismos atributos. La llave técnica es año y renglón del CSV.
+La suma de los conteos positivos coincide con los \FAccValidos{} accidentes
+que tienen clave y fecha válidas.
+
+El calendario de las claves del release contiene \FPanelTotal{} filas
+municipio--día. Se distinguen \FPanelPos{} días con registros,
+\FPanelCeros{} ceros respaldados por continuidad y \FPanelFalta{} días sin
+conteo asignable. En la edición utilizada, el INEGI retiró los certificados
+cero de 2018--2024. Para interpretar un día sin filas como cero de
+\emph{registros}, exijo evidencia de captura en el mes en cuestión y en los
+tres meses previos. Una fecha inválida impide inferir ceros en el mes al que
+pertenece, o en el año si el mes se desconoce. Un día positivo informa un
+conteo publicado aunque su mes no satisfaga la continuidad. La regresión
+requiere continuidad para cada día de la ventana, incluidos tanto los
+positivos como los ceros. El cuadro \ref{tab:calidad} documenta los totales
+por año y la cantidad de días de reporte desconocido.
+
+\paragraph{Exposición.}
+Una jornada extensa reúne acciones criminales coordinadas en tres o más
+lugares distintos en 24 horas con afectación de espacios públicos, comercios
+o transporte. La regla se aplica al conjunto de la jornada. Cuando la jornada
+cruza medianoche, el inicio se asigna a cada municipio según su fecha local.
+Dos orígenes independientes tienen que corroborar el lugar y el día para
+entrar como expuesto. Dos notas del mismo despacho cuentan como un solo
+origen. La hoja de evidencia conserva fecha del hecho, fecha de publicación,
+origen y discrepancias. Un ámbito estatal sin municipios comprobables se
+usa para evitar controles posiblemente contaminados.
+
+El catálogo revisado reúne \FCatFilas{} filas. Las \FCatGeo{} (\FCatPct\,\%)
+con clave municipal empatan con ATUS. Las fuentes y las exposiciones se
+enlazan sin duplicar municipio--días. De \FCatExtensas{} jornadas extensas
+resultan \FCatTrat{} pares candidatos antes de los filtros. La auditoría
+añadió incidentes documentados para detectar contaminación y corrigió
+una fecha de inicio persistente. Cuatro asignaciones con corroboración
+pendiente conservan su clase de origen y se examinaron por separado.
+Los \FCatMenor{} incidentes menores delimitan ventanas. La detección
+desigual en prensa limita un análisis de su efecto propio.
+
+\paragraph{Comparabilidad previa.}
+El cuadro \ref{tab:desc} resume el nivel previo usado para elegir los
+controles, con los pesos de la regresión. Es la media diaria en los días
+-28 a -15. Su dispersión refleja diferencias entre pares y fechas. La
+comparación de niveles se usa para evitar contrastar centros urbanos con
+municipios que apenas registran accidentes. Reservé días distintos para
+diagnosticar tendencias previas. La especificación prescinde de covariables
+de población y de actividad económica porque su medición en fechas
+discretas tiene una relación débil con los flujos diarios. Tampoco ajusta
+por cierres o cambios de movilidad posteriores a la jornada.
+
+\begin{table}[H]
+\centering
+\caption{Nivel de accidentes en los 14 días de selección previa}
+\label{tab:desc}
+\input{../../data/outputs/tablas/descriptivos.tex}
+\par\smallskip
+\small Medias y desviaciones estándar ponderadas. Las unidades son accidentes
+por municipio y día. Cada par pertenece a una fecha índice.
+\end{table}
+
+\section{Estrategia empírica}
+
+\subsection{Estimando y proyecciones locales}
+
+Sea \(t\) la fecha índice y \(D_{it}=1\) si el municipio \(i\) experimenta
+el episodio focal en \(t\). \(Y_{i,t+h}(1)\) denota el resultado potencial
+si ocurre el inicio aislado y \(Y_{i,t+h}(0)\), si no ocurre, con el mismo
+historial previo y sin otra exposición en la ventana. El objetivo para los
+tratados con elegibilidad observada \(\mathcal S_{it}=1\) es
+\[
+  \tau_h=\operatorname E\!\left[Y_{i,t+h}(1)-Y_{i,t+h}(0)
+                        \mid D_{it}=1,\;\mathcal S_{it}=1\right],
+  \qquad h=0,\ldots,15.
+\]
+La muestra es común a los horizontes. \(\mathcal S_{it}\) se calcula con
+la trayectoria observada y puede variar bajo la contrafactual. El
+contraste empírico condicionado a ese filtro tiene una interpretación
+descriptiva. Su lectura como ATT exige justificar la selección y los
+supuestos de identificación.
+
+Para cada \(h\) estimo una regresión de diferencias de conteos con un efecto
+fijo \(\lambda_{t,h}\) de fecha índice y día base \(b(t)=t-2\) \citep{dube}.
+\[
+ Y_{i,t+h}-Y_{i,b(t)}
+       = \lambda_{t,h}+\beta_h D_{it}+u_{ith}.
+\]
+Cada tratado tiene peso uno. Si en una fecha hay \(n_{1t}\) tratados y
+\(n_{0t}\) controles elegibles, cada control pesa \(n_{1t}/n_{0t}\). Así,
+los dos grupos tienen el mismo peso total dentro de la fecha y la pendiente
+es el promedio de las diferencias de cambios de cada fecha, con peso
+proporcional a \(n_{1t}\). Los municipios pueden reaparecer si su historial
+satisface la regla en otra fecha. La fecha exacta alinea el calendario y
+los cambios comunes a las unidades en ambos días del contraste. El primer
+día local puede contener horas previas, por lo que el contraste en \(h=0\)
+promedia una exposición que puede ser parcial.
+
+La muestra requiere cobertura entre \(t-28\) y \(t+15\). La razón entre
+los niveles de control y el promedio de tratados, después de sumar
+0,5 accidentes a cada media, debe quedar entre 0,5 y 2. Se exigen al menos
+diez controles de cinco estados por fecha. Los controles están fuera de los
+estados documentados del episodio focal y de lugares con exposición
+directa, probable o indirecta registrada. En ambos grupos se excluyen otras
+exposiciones entre \(t-49\) y \(t+16\), salvo que sean parte del episodio
+focal de ese municipio. La ventana deja 21 días de lavado antes de medir
+niveles y un día de margen después del último horizonte. Para las claves de Sinaloa que cambiaron de perímetro se aplica el corte territorial del diseño.
+
+\subsection{Identificación causal}
+
+\paragraph{Cambios paralelos (no comprobable directamente).}
+El supuesto exige que los cambios contrafactuales promedio de
+\(Y_{it}(0)\) sean iguales para tratados y controles de cada fecha con
+los filtros y pesos especificados. La diferencia posterior de niveles
+incluye el efecto y una brecha contrafactual. Restar la brecha del
+día base elimina diferencias iniciales si la base es anterior al efecto.
+El paralelismo elimina la diferencia en cambios sin tratamiento.
+Comparar en la misma fecha alinea el calendario común. El clima, los
+feriados locales y perfiles distintos por día de la semana pueden
+generar cambios diferenciales incluso entre municipios de escala similar.
+
+\paragraph{Anticipación, arrastre y selección (no comprobables directamente).}
+Reservo el día -1 y uso base -2. El lavado busca reducir efectos de
+episodios anteriores. Las alertas pueden anticiparse y el arrastre
+puede durar más. Exigir cobertura a \(+15\) y ausencia de otra exposición
+a \(+16\) puede seleccionar pares por consecuencias de la primera
+jornada. La elegibilidad bajo ambos regímenes es contrafactual. Esto
+limita incluso la interpretación del día 0.
+
+\paragraph{Interferencia y captación (no comprobables directamente).}
+Excluir estados focales y sitios con señales reduce exposición indirecta.
+La conectividad vial permite desvíos a otros estados. El conteo publicado
+combina movilidad, riesgo y registro. La presencia de una fila en el mes
+es evidencia de captación parcial. Una interrupción puede cambiar tanto
+el conteo observado como la elegibilidad.
+
+\paragraph{Reglas e implicaciones observables (comprobables).}
+Las cronologías, el soporte y las masas de peso por fecha se cotejan
+con el catálogo y el panel. Para los mismos grupos y pesos, los días
+-14 a -3 chequean brechas respecto de -2 y el placebo usa fechas
+desplazadas. Se fijó un accidente por municipio y día como umbral material.
+Estos ejercicios informan la plausibilidad de los supuestos anteriores.
+
+\subsection{Inferencia estadística}
+
+Agrupo por entidad federativa para permitir correlación de los errores
+entre municipios y a lo largo de las fechas dentro de un estado. La
+organización policial y los cambios regionales del registro justifican ese
+nivel. Después del efecto fijo de fecha, la inferencia principal requiere
+que la dependencia residual entre estados sea suficientemente débil.
+La concentración temporal de jornadas en agosto de 2022 y los episodios
+multiestatales son amenazas concretas a ese requisito. También calculo la
+covarianza en dos dimensiones, por estado y fecha índice, que admite
+correlación transversal en la misma fecha. Esa corrección no cubre vínculos
+entre estados en fechas diferentes de una secuencia.
+
+La covarianza CRV1 por estado multiplica el sándwich por
+\(G/(G-1)\,(N-1)/(N-K)\), donde \(G\) cuenta estados y \(K\) es el
+número de efectos fijos de fecha más una pendiente. Uso \(G-1\) grados
+de libertad. La variante de dos vías usa el mínimo de los dos números
+de conglomerados para la corrección y los grados de libertad. Los
+intervalos son puntuales y reflejan incertidumbre muestral condicional al
+diseño, incluida la distribución de tratamientos y pesos, con las
+cautelas de \citet{mackinnon}. La precisión puede ser menor que la
+sugerida por el total de municipios si unos pocos estados o episodios
+aportan gran parte del peso. Una corrección de grados de libertad no
+repara la falta de realizaciones independientes ni el sesgo de selección.
+
+\section{Resultados}
+
+\paragraph{Soporte y trayectoria.}
+De los \FCatTrat{} pares confirmados quedan fuera \FTratSinCobertura{}
+por cobertura y \FTratConTraslape{} por exposición superpuesta.
+La regresión principal usa \FTratPrincipal{} pares expuestos y
+\FControlPrincipal{} pares de control en \FFechasPrincipal{} fechas de
+\FEpisPrincipal{} episodios. Los tratados son \FMuniTrat{} municipios de
+\FEstadosTrat{} estados y los controles \FMuniControl{} municipios de
+\FEstadosControl{} estados. Un control reaparece hasta \FReuso{} veces.
+El estado y el episodio con más peso reúnen, respectivamente,
+\FPesoEstado\,\% y \FPesoEpi\,\% del peso tratado. Los inversos del
+índice de concentración son \FEstadosEf{} estados tratados y
+\FEpisEf{} episodios de peso equivalente. Estos números describen
+concentración y son distintos del número de conglomerados independientes.
+
+El cuadro \ref{tab:princ} reúne el día de inicio y dos horizontes
+prespecificados. En el principal, el día cero se estimó en
+\FEfectoCero{} accidentes por municipio, o \FSigmaCero{} desviaciones
+estándar de los niveles diarios previos de los tratados. El error estándar
+es \FEECero{}, con \FGlCero{} grados de libertad y \(p=\FPcero\).
+La media tratada el día base es \FMediaBase{} accidentes y el contraste
+puntual equivale al \FEfectoPct\,\% de ese promedio. El intervalo incluye cero.
+La agrupación doble produce el intervalo de \FDobleInf{} a \FDobleSup{}
+y \FDobleGl{} grados de libertad el día cero. La figura \ref{fig:din}
+ubica estos resultados en la trayectoria antes y después del inicio y
+muestra sus intervalos de una vía.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{dinamica.pdf}
+\caption{Diferencias de cambios respecto al día -2. Los intervalos puntuales
+al 95\,\% se agrupan por entidad. El fondo marca diferencias de hasta un
+accidente por municipio y día en valor absoluto.}
+\label{fig:din}
+\end{figure}
+
+La brecha de niveles ponderada es \FBrechaBase{} el día -2 y
+\FBrechaCero{} el día 0. El mayor contraste previo, en el día \FDiaPreMax{},
+alcanza \FEstPreMax{} [\FEstPreInf{} a \FEstPreSup{}], frente a
+\FDiaSiete{} y \FDiaQuince{} en los días 7 y 15. De \FPreTotal{} previos,
+\FPreExcluye{} intervalos de una vía y \FPreDobleExcluye{} dobles excluyen
+cero. \FPreAcotados{} intervalos de una vía quedan dentro de un accidente
+en valor absoluto. Los contrastes comparten la base y los intervalos
+son puntuales \citep{roth}. La trayectoria describe cambios relativos a
+una base con brecha baja.
+
+\begin{table}[H]
+\centering
+\caption{Contrastes por horizonte de referencia y especificación}
+\label{tab:princ}
+\small
+\input{../../data/outputs/tablas/principales.tex}
+\par\smallskip
+\(N\) cuenta pares municipio--fecha índice. Efecto y error estándar (EE) en
+accidentes por municipio y día. DE es la desviación estándar diaria previa
+de los tratados en cada especificación. IC al 95\,\% por entidad. Los porcentajes se calculan con cifras completas.
+\end{table}
+
+\paragraph{Robustez y potencia.}
+Con lavado largo y exclusión geográfica se mantienen contrastes
+posteriores positivos y un día 0 impreciso. El placebo desplaza el inicio
+28 días y su día 7 da \FPlaceboSiete{} [\FPlaceboSieteInf{} a
+\FPlaceboSieteSup{}] por entidad, con IC doble de \FPlaceboDobleInf{} a
+\FPlaceboDobleSup{}. El diseño recoge diferencias aun sin un episodio
+focal en la ventana placebo. Recalcular la muestra al omitir episodios
+deja el día 0 entre \FLooMin{} y \FLooMax{} (cuadro \ref{tab:loo}).
+
+Con los mismos pares y pesos revisados, una sensibilidad posterior
+promedia los días -14 a -2 y da \FBaseMediaCero{} [\FBaseMediaInf{} a
+\FBaseMediaSup{}] en el día 0. Usar -14 y -7, del mismo día de semana
+que el inicio, da \FBaseSemanaCero{} [\FBaseSemanaInf{} a
+\FBaseSemanaSup{}]. El MDE del día 0 principal es \FMdeCero{}
+accidentes por municipio, \FMdePct\,\% de la media base. Se calculó
+con una prueba bilateral al 5\,\%, distribución \(t\) no central, EE
+por entidad, \FGlCero{} grados de libertad y potencia de 80\,\%.
+
+\paragraph{Culiacán persistente.}
+El inicio operativo es el 9 de septiembre de 2024 \citep{luz,sinaloa}.
+Desde el 1 de noviembre se suman Culiacán y Eldorado si ambas claves
+tienen cobertura continua \citep{decreto}. Hay \FCulObs{} de \FCulTotal{}
+semanas posteriores observables. De \FCulEleg{} comparadores elegibles
+fuera de Sinaloa se usan \FCulIgu{} por ajuste de -25 a -10 y se valida
+en -9 a -3. La brecha se centra en -2 y omite -1. \FCulRes{}
+
+Durante la interrupción de captación de 2024, ATUS no tiene filas del
+7 al 27 de octubre. La regla infiere ceros en esas tres semanas.
+Tránsito retomó labores el 28 de octubre y una fuente de distinto
+universo documenta registros parciales \citep{transitocul,mapasin}.
+En las \FCulRevision{} semanas que intersectan la revisión, la brecha
+media es \FCulRevisionBrecha{}. En las otras \FCulFuera{} es
+\FCulFueraBrecha{}. La figura \ref{fig:cul} señala las interrupciones.
+Los placebos usan las mismas semanas como referencia descriptiva.
+
+\section{Conclusión y validez externa}
+
+El contraste del día de inicio es de \FEfectoCero{} accidentes
+registrados por municipio en la muestra con soporte. El intervalo
+admite aumentos y reducciones. La brecha baja de -2, los contrastes
+previos y el placebo impiden atribuir con firmeza las diferencias
+posteriores a la jornada. En Culiacán, la captación interrumpida y
+la cobertura tras el cambio territorial aconsejan describir registros
+por tramos de semanas observables.
+
+Los resultados corresponden a registros municipales en vías no federales
+entre 2019 y 2025. Evaluar cambios en riesgo por viaje o decidir sobre
+capacidad de respuesta requeriría aforos, rutas y constancias de reporte.
+La extrapolación a incidentes menores o jornadas consecutivas queda
+abierta por cobertura y diferencias en las secuencias de exposición.
+
+\begingroup
+\small
+\raggedright
+\renewcommand{\url}[1]{\href{#1}{Fuente}}
+\bibliographystyle{plainnat}
+\bibliography{referencias}
+\endgroup
+
+\clearpage
+\appendix
+\section{Cobertura y calendario de la exposición}
+
+El cuadro \ref{tab:calidad} distingue filas de microdatos y días del panel.
+La figura \ref{fig:cal} permite seguir el soporte temporal antes de leer
+los coeficientes de cada horizonte.
+
+\begin{table}[H]
+\centering
+\caption{Conciliación de microdatos y municipio--día por año}
+\label{tab:calidad}
+\small
+\input{../../data/outputs/tablas/calidad.tex}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{calendario.pdf}
+\caption{Inicios locales confirmados y pares con soporte en la especificación
+principal. Algunas fechas reúnen más de un municipio.}
+\label{fig:cal}
+\end{figure}
+
+\paragraph{Cambios posteriores a la entrega congelada.}
+El diseño original daba 77 pares tratados y 7\,796 controles, con
+\(+0{,}25\) el día 0. La revisión de inventario excluye Acayucan por
+una exposición en -2 y tres pares del 23 de abril de 2025 por una
+exposición en -38. Conserva los criterios y reconstruye los pesos.
+\path{data/outputs/qa/cambio-muestra.csv} registra cada diferencia. En el
+corte congelado, predecir cobertura con tres meses anteriores a la
+ventana dio \(+0{,}24\) con 81 pares. Cortar además la selección de
+exposiciones en 0 dio \(+0{,}37\) con 89. Son ejercicios posteriores
+al cierre, sensibles a la distinción entre ausencia de filas y de reporte.
+\path{tasks/revision-auditoria/revision-auditoria.md} conserva sus referencias.
+
+\clearpage
+\section{Serie semanal y reproducción}
+
+La figura \ref{fig:cul} compara el perímetro histórico de Culiacán con el
+promedio de los comparadores. Faltan \FCulFalta{} de \FCulTotal{}
+semanas posteriores por cobertura del nuevo perímetro. En las
+\FCulDespues{} semanas observadas tras la separación, la media de la
+brecha es \FCulDespuesBrecha{}. Los placebos se adjuntan en
+\path{data/outputs/modelos/culiacan_placebos.csv}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{culiacan.pdf}
+\caption{Brecha respecto al promedio de comparadores y a la semana -2.
+El sombreado identifica semanas que intersectan la revisión de la captación.
+Los huecos indican cobertura territorial insuficiente o la semana de anticipación.}
+\label{fig:cul}
+\end{figure}
+
+El proyecto adjunta el paquete Python \path{src/choques/}, la configuración
+\path{config/proyecto.toml}, las pruebas sintéticas en \path{tests/},
+los catálogos CSV y las fuentes de este escrito. \texttt{README.md}
+incluye comandos, versiones y criterios de validación. La ruta de
+estimación usa \texttt{pyfixest.feols} con pesos analíticos. El ejemplo
+de adopción única también se contrasta con \texttt{pyfixest.lpdid}.
+Las tablas, cifras insertadas y gráficas resultan del código, y sus
+equivalentes numéricos se entregan como CSV.
+
+Los datos públicos se recuperan en la
+\href{https://www.inegi.org.mx/programas/accidentes/}{ficha de ATUS del INEGI}
+o mediante la URL del manifiesto. El archivo identificado en
+\path{data/raw/manifiesto.csv} incluye diccionario, catálogos, metadatos
+y archivos anuales. \path{tasks/busqueda-eventos/busqueda-eventos.md} documenta las búsquedas
+y la conciliación. \path{tasks/diseno-t05/diseno_congelado.json} conserva las huellas
+originales. \path{tasks/revision-auditoria/revision_auditada.json} verifica los insumos,
+incluidos panel y exposiciones, y la muestra revisada.
+
+\clearpage
+\section{Trayectoria y diagnóstico de influencia}
+
+\begin{table}[H]
+\centering
+\caption{Todos los contrastes de la especificación principal}
+\label{tab:allh}
+\small
+\input{../../data/outputs/tablas/horizontes.tex}
+\par\smallskip
+IC al 95\,\%. El error doble agrupa por entidad y fecha índice.
+El MDE usa una potencia de 80\,\% con varianza de una vía.
+\end{table}
+
+\clearpage
+\begin{table}[H]
+\centering
+\caption{Día cero al omitir cada episodio completo}
+\label{tab:loo}
+\small
+\input{../../data/outputs/tablas/influencia.tex}
+\par\smallskip
+EE por entidad. Se vuelven a construir la muestra, el calibre y los pesos.
+Los identificadores enlazan a los lugares y fuentes de \texttt{inputs/episodios.csv}.
+\end{table}
+
+\end{document}
