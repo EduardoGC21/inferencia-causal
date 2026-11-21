@@ -1,8 +1,8 @@
 """Rebuild the written project from a fresh copy and compare its products."""
 from datetime import datetime
 import hashlib
+import json
 import os
-import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -33,11 +33,17 @@ def run():
     for directory in ("repo/config", "repo/tests", "tasks", "repo/src"):
         shutil.copytree(root / directory, clean / directory,
                         ignore=shutil.ignore_patterns("__pycache__", "*.egg-info"))
-    for name in ("repo/README.md", "repo/pyproject.toml", "repo/requirements-lock.txt",
+    for name in ("repo/README.md", "repo/pyproject.toml", "repo/requirements-lock.txt", "repo/reproducir.py",
                  "repo/reporte/main.tex", "repo/reporte/referencias.bib"):
         target = clean / name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(root / name, target)
+    source_names = [path.relative_to(root).as_posix() for folder, extension in
+                    (("repo/config", "*"), ("repo/src", "*.py"), ("repo/tests", "*.py"))
+                    for path in sorted((root / folder).rglob(extension)) if path.is_file()]
+    source_names += ["repo/README.md", "repo/pyproject.toml", "repo/requirements-lock.txt",
+                     "repo/reproducir.py", "repo/reporte/main.tex", "repo/reporte/referencias.bib"]
+    source_hashes = {name: digest(root / name) for name in sorted(source_names)}
     raw = clean / "data" / "raw"
     raw.mkdir(parents=True)
     for name in ("manifiesto.csv", "geo-sinaloa.json"):
@@ -67,6 +73,9 @@ def run():
                            env=env, check=True, stdout=stream, stderr=subprocess.STDOUT)
             measures.append((stage, perf_counter() - start))
     compared = []
+    for name, expected in source_hashes.items():
+        if digest(root / name) != expected or digest(clean / name) != expected:
+            raise RuntimeError(f"El código/configuración cambió durante la reproducción: {name}")
     for original in sorted((raw / "municipios").iterdir()):
         name = original.relative_to(clean)
         if digest(original) != digest(root / name):
@@ -92,13 +101,18 @@ def run():
             raise RuntimeError(f"La procedencia regenerada difiere: {name}")
         compared.append(name)
     validation = "data/outputs/modelos/validacion.md"
-    reports = [re.sub(r"Tiempo total [0-9.]+ s", "Tiempo total medido",
-                      (path / validation).read_text(encoding="utf-8")) for path in (root, clean)]
-    if reports[0] != reports[1]:
+    if digest(root / validation) != digest(clean / validation):
         raise RuntimeError("El contenido de la validación sintética difiere")
+    compared.append(validation)
     if readable_pdf(root) != readable_pdf(clean):
         raise RuntimeError("El texto con paginación del PDF regenerado difiere")
     pdf = digest(root / "repo/reporte/main.pdf") == digest(clean_repo / "reporte/main.pdf")
+    if not pdf:
+        raise RuntimeError("El PDF binario regenerado difiere: no basta el texto paginado")
+    compared.append("repo/reporte/main.pdf")
+    hashes = {name: digest(root / name) for name in sorted(compared)}
+    (out / "sha256-verificados.json").write_text(json.dumps(hashes, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    (out / "sha256-fuentes.json").write_text(json.dumps(source_hashes, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     markdown = [
         "# Reproducción del escrito en una copia limpia", "",
         f"Fecha local {datetime.now().isoformat(timespec='seconds')}.",
@@ -106,8 +120,8 @@ def run():
         "La descarga verificó los originales copiados por SHA-256 contra el manifiesto.",
         f"Se regeneraron {len(compared)} productos con SHA-256 idéntico.",
         "El PDF conserva texto, distribución de líneas y saltos de página por pdftotext -layout.",
-        f"PDF binario idéntico: {'sí' if pdf else 'no; se verificó la huella de las figuras y el texto paginado'}.",
-        "La validación sintética coincide al omitir el tiempo variable de ejecución.",
+        "PDF binario idéntico: sí; incluido en el inventario SHA-256.",
+        "La validación sintética tiene SHA-256 idéntico, sin normalizar su contenido.",
         "El log completo se guarda en reproduccion-ejecucion.txt.", "",
         "| Etapa | Segundos |", "| --- | ---: |",
         *(f"| {stage} | {seconds:.2f} |" for stage, seconds in measures), "",

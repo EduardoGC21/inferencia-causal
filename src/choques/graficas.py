@@ -30,7 +30,7 @@ def save(fig, directory, name):
 
 def weekly_figure(cul, cfg):
     comparable = cul.brecha.notna().any()
-    title = ("Brecha semanal del perímetro histórico de Culiacán"
+    title = ("Brecha descriptiva semanal de Culiacán"
              if comparable else "Sin comparadores para la brecha semanal de Culiacán")
     fig, ax = axes((7.35, 2.9), title, "Semana respecto al inicio local", "Accidentes por semana")
     if comparable:

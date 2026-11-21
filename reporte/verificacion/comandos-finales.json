@@ -1,0 +1,44 @@
+[
+  {
+    "command": "python -m choques todo",
+    "exit": 0,
+    "seconds": 332.132
+  },
+  {
+    "command": "python -m choques compilar",
+    "exit": 0,
+    "seconds": 6.033
+  },
+  {
+    "command": "python -m choques analizar",
+    "exit": 0,
+    "seconds": 4.373,
+    "reason": "Explicitacion de CRV1 estatal en placebo; estimaciones sin cambios"
+  },
+  {
+    "command": "python -m choques compilar",
+    "exit": 0,
+    "seconds": 4.36,
+    "reason": "Explicitacion de CRV1 estatal en placebo; estimaciones sin cambios"
+  },
+  {
+    "command": "python -m choques compilar",
+    "exit": 0,
+    "seconds": 5.311,
+    "source": "exec_command.wall_time_seconds",
+    "reason": "Ajuste final de paginacion: 17 paginas, sin paginas huerfanas"
+  },
+  {
+    "command": "python -m choques compilar",
+    "exit": 0,
+    "seconds": 4.56,
+    "reason": "Confirmacion del permiso de Python y aclaracion de los IC en el apendice"
+  },
+  {
+    "command": "python reproducir.py",
+    "exit": 0,
+    "products": 116,
+    "binary_pdf_identical": true,
+    "copy": "worktrees/reproduccion-mfondo4z"
+  }
+]

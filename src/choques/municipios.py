@@ -262,7 +262,7 @@ def attach(sample, tables, changes, design, state_aggregates):
     for index, cohort in sample.groupby("indice", sort=True):
         end = index + pd.Timedelta(days=design["horizon"] + design["anticipation"])
         start = index - pd.Timedelta(days=lag)
-        territory = territories(cohort.clave, index, changes, atus=True)
+        territory = territories(cohort.clave, end if design.get("pre_only") else index, changes, atus=True)
         window_ok = territories(cohort.clave, start, changes, atus=True).eq(
             territories(cohort.clave, end, changes, atus=True))
         cohort = cohort.assign(territorio=territory, territorio_ventana=window_ok)

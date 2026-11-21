@@ -1,0 +1,23 @@
+{
+  "branch": "diseno-causal-final",
+  "base": "e283e2d76190b496644133c7e1e5c0b004a4e99f",
+  "main_clean": true,
+  "main_head": "e283e2d76190b496644133c7e1e5c0b004a4e99f",
+  "worktrees": "worktree C:/Users/Edu/Desktop/Universidad/S9/Inferencia/Proyecto/repo\nHEAD e283e2d76190b496644133c7e1e5c0b004a4e99f\nbranch refs/heads/main\n\nworktree C:/Users/Edu/Desktop/Universidad/S9/Inferencia/Proyecto/worktrees/diseno-causal-final/repo\nHEAD e283e2d76190b496644133c7e1e5c0b004a4e99f\nbranch refs/heads/diseno-causal-final",
+  "frozen_t05": [
+    {
+      "file": "diseno-t05.md",
+      "sha256_before": "7a85f660c8296a7fb567f3d289e6e6442954dec5894d23774e3c1cec907cfcec",
+      "sha256_after": "7a85f660c8296a7fb567f3d289e6e6442954dec5894d23774e3c1cec907cfcec",
+      "sha256_local": "7a85f660c8296a7fb567f3d289e6e6442954dec5894d23774e3c1cec907cfcec",
+      "unchanged": true
+    },
+    {
+      "file": "diseno_congelado.json",
+      "sha256_before": "6fe390c1d68b695f33941df186e3da307e605b1787b2cd0f5d887a054ca3c3cc",
+      "sha256_after": "6fe390c1d68b695f33941df186e3da307e605b1787b2cd0f5d887a054ca3c3cc",
+      "sha256_local": "6fe390c1d68b695f33941df186e3da307e605b1787b2cd0f5d887a054ca3c3cc",
+      "unchanged": true
+    }
+  ]
+}

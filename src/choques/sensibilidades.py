@@ -34,7 +34,7 @@ def monthly_flags(matrix, reported, invalid):
 def select(matrix, events, design, flags=None, end_at_start=False):
     rules = design | {"horizon": 0, "anticipation": 0} if end_at_start else design
     if flags is None:
-        sample, _ = modelos.comparison(matrix, events, rules, "principal")
+        sample, _ = modelos.legacy_comparison(matrix, events, rules, "principal")
         return sample, matrix
 
     seen, bad = flags
@@ -52,7 +52,7 @@ def select(matrix, events, design, flags=None, end_at_start=False):
         view.coverage = np.broadcast_to(clean.to_numpy()[:, None], matrix.coverage.shape)
         # Only the focal designation changes. Other events stay in the contamination inventory.
         cohort = events.assign(estado=events.estado.mask(focal & events.inicio.ne(index), "pendiente"))
-        part, _ = modelos.comparison(view, cohort, rules, "principal")
+        part, _ = modelos.legacy_comparison(view, cohort, rules, "principal")
         if not part.empty:
             parts.append(part)
     sample = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(columns=modelos.SAMPLE)
