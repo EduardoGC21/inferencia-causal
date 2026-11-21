@@ -5,15 +5,15 @@ import tomllib
 
 
 STAGES = {
-    "descargar": ("descarga", "run"),
-    "consolidar": ("consolidacion", "run"),
-    "preparar": ("panel", "run"),
-    "validar": ("validacion", "run"),
-    "soporte": ("modelos", "support"),
-    "estimar": ("modelos", "run"),
-    "analizar": ("analisis", "run"),
-    "graficar": ("graficas", "run"),
-    "compilar": ("escrito", "run"),
+    "descargar": [("descarga", "run"), ("fuentes", "download")],
+    "consolidar": [("consolidacion", "run")],
+    "preparar": [("panel", "run"), ("conteos", "prepare"), ("municipios", "prepare")],
+    "validar": [("validacion", "run")],
+    "soporte": [("modelos", "support"), ("comparaciones", "support")],
+    "estimar": [("modelos", "run"), ("comparaciones", "run")],
+    "analizar": [("analisis", "run")],
+    "graficar": [("graficas", "run")],
+    "compilar": [("escrito", "run")],
 }
 
 
@@ -21,7 +21,7 @@ def main():
     parser = argparse.ArgumentParser(description="Accidentes registrados y episodios de violencia")
     parser.add_argument("stage", choices=["configuracion", *STAGES, "todo"])
     parser.add_argument("--config", type=Path, default=Path("config/proyecto.toml"))
-    parser.add_argument("--fuente", choices=["atus"], default="atus")
+    parser.add_argument("--fuente", choices=["todas", "atus", "municipios"], default="todas")
     parser.add_argument("--desde", type=int)
     parser.add_argument("--hasta", type=int)
     args = parser.parse_args()
@@ -39,5 +39,8 @@ def main():
         config["atus"]["last"] = args.hasta
     stages = ("descargar", "preparar", "validar", "estimar", "analizar", "graficar")
     for stage in stages if args.stage == "todo" else (args.stage,):
-        module, function = STAGES[stage]
-        getattr(import_module(f".{module}", __package__), function)(config)
+        steps = STAGES[stage]
+        if args.stage == "descargar" and args.fuente != "todas":
+            steps = steps[:1] if args.fuente == "atus" else steps[1:]
+        for module, function in steps:
+            getattr(import_module(f".{module}", __package__), function)(config)

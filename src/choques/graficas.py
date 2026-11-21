@@ -53,6 +53,31 @@ def weekly_figure(cul, cfg):
     return fig
 
 
+def municipal_figure(trajectory):
+    fig, ax = axes((8.4, 4.0), "Cómo cambia la trayectoria al emparejar controles",
+                   "Día respecto al inicio", "Choques registrados por municipio y día")
+    ax.axhline(0, color=GRAY, linewidth=0.7)
+    ax.axvline(-0.5, color=GRAY, linewidth=0.8, linestyle=":")
+    for sample, color, marker, offset, label in [
+        ("mismos_tratados", GRAY, "s", -0.23, "Controles auditados"),
+        ("emparejada", BLUE, "o", 0.0, "Matching uno a muchos"),
+        ("emparejada_1a1", ACCENT, "^", 0.23, "Matching 1:1"),
+    ]:
+        rows = trajectory.loc[trajectory.muestra.eq(sample)].sort_values("h")
+        if rows.efecto.notna().any():
+            pairs = int(rows.tratados.iloc[0])
+            ax.errorbar(rows.h + offset, rows.efecto,
+                        yerr=[rows.efecto - rows.ic_inf, rows.ic_sup - rows.efecto],
+                        fmt=marker, color=color, capsize=1.8, markersize=3, elinewidth=0.8,
+                        label=f"{label} · {pairs} tratados")
+    ax.scatter([-2], [0], marker="D", facecolors="white", edgecolors=GRAY, s=24,
+               label="Base −2")
+    ax.set_xticks([-14, -10, -6, -2, 0, 3, 7, 11, 15])
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.16), ncols=3,
+              frameon=False, title="IC del 95 % agrupado por entidad")
+    return fig
+
+
 def run(config):
     plt.rcParams.update({"font.size": 10, "axes.titlesize": 12, "axes.labelsize": 10.5,
                          "legend.fontsize": 9, "pdf.fonttype": 42})
@@ -91,4 +116,6 @@ def run(config):
 
     cul = pd.read_csv(out / "modelos" / "culiacan.csv")
     save(weekly_figure(cul, config["culiacan"]), destination, "culiacan")
-    print(f"Tres figuras vectoriales y sus PNG en {destination}")
+    trajectory = pd.read_csv(out / "modelos" / "comparaciones_municipales.csv").query("diseno == 'principal'")
+    save(municipal_figure(trajectory), destination, "dinamica_municipal")
+    print(f"Figuras vectoriales y sus PNG en {destination}")

@@ -18,6 +18,7 @@ def run(config):
     case["simultaneous_check"]()
     result = case["regression_check"]()
     case["adoption_check"]()
+    runpy.run_path(str(config["root"] / "tests" / "caso_municipal.py"))["run"]()
     evidence = (
         "# Validación con datos sintéticos\n\n"
         "Comando desde la raíz: python -m choques validar.\n\n"
@@ -39,6 +40,13 @@ def run(config):
         f"GL {result['gl_doble']}.\n"
         "- Adopción única: comparación del día cero con pyfixest.lpdid "
         "en una cohorte y controles nunca tratados.\n"
+        "- Covariables municipales: cierre estricto, faltantes, confidencialidad y cero; "
+        "claves y territorio; soporte y pesos compartidos; vecino 1:1, distancia, cero, "
+        "desempate y reutilización; muestra común M0–M3; "
+        "regresión ponderada, Wald matricial y conciliación de nueve cruces de hora y gravedad. "
+        "Contraste nocturno por clase con covarianza compartida y celdas sin registros.\n"
+        "- Selección: cobertura con tres meses anteriores, anomalías de fecha, conteos "
+        "publicados y corte de exposición en el día de inicio.\n"
     )
     (output / "validacion.md").write_text(evidence, encoding="utf-8")
     print(evidence)

@@ -8,6 +8,7 @@ version = "0.1.0"
 requires-python = ">=3.13,<3.14"
 dependencies = [
   "requests==2.34.2", "pandas==3.1.1", "pyarrow==26.0.1",
+  "openpyxl==3.1.5", "xlrd==2.0.2",
   "numpy==2.5.5", "scipy==1.18.1", "pyfixest==0.70.0", "matplotlib==3.11.2",
 ]
 

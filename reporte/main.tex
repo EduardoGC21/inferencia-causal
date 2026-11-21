@@ -14,7 +14,7 @@
 \setlength{\emergencystretch}{2em}
 \renewcommand{\arraystretch}{1.14}
 \linespread{1.08}
-\setlength{\bibsep}{1pt}
+\setlength{\bibsep}{0pt}
 \graphicspath{{../../data/outputs/figuras/}}
 \input{../../data/outputs/tablas/cifras.tex}
 
@@ -34,8 +34,8 @@ oficiales diarias y un catálogo auditado. El día de inicio, la diferencia de
 cambios entre \FTratPrincipal{} pares municipio--episodio tratados y los
 controles de las mismas fechas es de \FEfectoCero{} accidentes por municipio.
 El intervalo puntual al 95\,\% va de \FInfCero{} a \FSupCero{}. Las brechas
-previas, el placebo y la sensibilidad a la base limitan la atribución
-causal. La rama semanal de Culiacán describe registros observables, con
+previas persisten con controles emparejados. El placebo y la sensibilidad a
+la base también limitan la atribución causal. La rama semanal de Culiacán describe registros observables, con
 una interrupción de captación y un cambio de perímetro.
 \end{abstract}
 
@@ -136,10 +136,9 @@ controles, con los pesos de la regresión. Es la media diaria en los días
 -28 a -15. Su dispersión refleja diferencias entre pares y fechas. La
 comparación de niveles se usa para evitar contrastar centros urbanos con
 municipios que apenas registran accidentes. Reservé días distintos para
-diagnosticar tendencias previas. La especificación prescinde de covariables
-de población y de actividad económica porque su medición en fechas
-discretas tiene una relación débil con los flujos diarios. Tampoco ajusta
-por cierres o cambios de movilidad posteriores a la jornada.
+diagnosticar tendencias previas. La referencia auditada aplica el calibre
+de choques previos. Los emparejamientos incorporan población, empleo y autos.
+Las covariables se miden antes del periodo usado para seleccionar controles.
 
 \begin{table}[H]
 \centering
@@ -334,6 +333,13 @@ accidentes por municipio, \FMdePct\,\% de la media base. Se calculó
 con una prueba bilateral al 5\,\%, distribución \(t\) no central, EE
 por entidad, \FGlCero{} grados de libertad y potencia de 80\,\%.
 
+\paragraph{Controles municipales.}
+Ambos métodos emparejan los mismos tratados. Uno a uno mejora el balance en
+motorización y amplía el intervalo del día 0. Las diferencias previas
+persisten y ambos contrastes cambian de signo con la base promedio.
+El apéndice presenta los tramos, el placebo y el cotejo de posibles
+exposiciones en controles (cuadros \ref{tab:matching} y \ref{tab:seleccion}).
+
 \paragraph{Culiacán persistente.}
 El inicio operativo es el 9 de septiembre de 2024 \citep{luz,sinaloa}.
 Desde el 1 de noviembre se suman Culiacán y Eldorado si ambas claves
@@ -353,19 +359,18 @@ Los placebos usan las mismas semanas como referencia descriptiva.
 
 \section{Conclusión y validez externa}
 
-El contraste del día de inicio es de \FEfectoCero{} accidentes
-registrados por municipio en la muestra con soporte. El intervalo
-admite aumentos y reducciones. La brecha baja de -2, los contrastes
-previos y el placebo impiden atribuir con firmeza las diferencias
-posteriores a la jornada. En Culiacán, la captación interrumpida y
-la cobertura tras el cambio territorial aconsejan describir registros
-por tramos de semanas observables.
+El día 0 dio \FEfectoCero{} choques por municipio, con un intervalo que
+incluye cero. Los previos, el placebo y la sensibilidad a la base limitan
+la atribución causal. En los días 8--15, el cruce exploratorio con uno a
+muchos y base -2 dio un contraste noche menos día positivo para solo
+daños y negativo para choques con heridos. Ambos IC por entidad incluyen
+cero con 1:1 o con la base previa promedio (cuadro \ref{tab:nochegravedad}).
 
-Los resultados corresponden a registros municipales en vías no federales
-entre 2019 y 2025. Evaluar cambios en riesgo por viaje o decidir sobre
-capacidad de respuesta requeriría aforos, rutas y constancias de reporte.
-La extrapolación a incidentes menores o jornadas consecutivas queda
-abierta por cobertura y diferencias en las secuencias de exposición.
+El estudio cubre registros en vías no federales entre 2019 y 2025. En
+Culiacán, la interrupción de captación y el cambio territorial limitan la
+comparación a semanas observables. Estimar riesgo por viaje requiere
+aforos, rutas y constancias de reporte. La extrapolación a incidentes
+menores o jornadas consecutivas depende de la cobertura y la exposición.
 
 \begingroup
 \small
@@ -377,6 +382,82 @@ abierta por cobertura y diferencias en las secuencias de exposición.
 
 \clearpage
 \appendix
+\section{Comparación de controles municipales}
+
+Los candidatos elegibles de la misma fecha deben quedar entre la mitad y el
+doble de cada valor tratado. En uno a muchos, cada tratado divide su peso
+entre todos los candidatos compatibles. En uno a uno elige el vecino más
+cercano en diferencias logarítmicas relativas de población, empleo y autos,
+con el mismo peso para las tres variables. Los controles pueden repetirse
+entre tratados y acumular su peso en una sola fila por municipio y fecha.
+
+\begin{table}[H]
+\centering
+\caption{Soporte, contrastes y falsificaciones con ambos matchings}
+\label{tab:matching}
+\small
+\input{../../data/outputs/tablas/comparacion_matching.tex}
+\par\smallskip
+Efectos en accidentes registrados por municipio y día. IC al 95\,\% por
+entidad. La base es el día -2 salvo en la fila con promedio de -14 a -2.
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{dinamica_municipal.pdf}
+\caption{Trayectorias para los mismos tratados. Los intervalos son puntuales.}
+\label{fig:municipales}
+\end{figure}
+
+\clearpage
+\section{Sensibilidad a la cobertura y a otras exposiciones}
+
+La cobertura predicha requiere registros en cada uno de los tres meses
+completos anteriores a la ventana de medición. Se conservan los filtros
+de fechas inválidas. En esta variante, un día sin fila representa cero
+registros publicados y la captación puede seguir siendo incompleta.
+La sensibilidad de ventana corta exige cobertura y aislamiento hasta el
+día 0, y permite otras exposiciones posteriores. Por ello se reporta solo
+ese contraste. Ambas sensibilidades reconstruyen candidatos y pesos.
+
+\begin{table}[H]
+\centering
+\caption{Sensibilidades del contraste del día 0}
+\label{tab:seleccion}
+\small
+\input{../../data/outputs/tablas/sensibilidad_matching.tex}
+\par\smallskip
+Base -2. IC al 95\,\% por entidad. Los tratados coinciden entre matchings
+dentro de cada fila y pueden cambiar entre escenarios.
+\end{table}
+
+El cotejo dirigido revisó controles en cuatro fechas de mayor peso. Dos
+señales municipales con fecha verificable se usaron como exclusiones en
+una sensibilidad. Morelia perdió soporte y ambos contrastes del día 0
+quedaron cerca de cero. La revisión consultó prensa, fuentes oficiales y un
+\href{https://acleddata.com/update/latin-america-and-caribbean-overview-may-2025}{informe público de ACLED}.
+La descarga de los microdatos de ACLED requiere acceso a su portal.
+\path{reporte/cotejo-controles.md} registra fuentes, dictámenes y alcance.
+
+\section{Franja horaria y gravedad}
+
+Se cruzan día, noche y hora desconocida con las tres clases de gravedad.
+Se conservan la muestra y los pesos de cada especificación. El contraste
+noche menos día usa la diferencia de conteos dentro de cada par y clase.
+Se estima a partir del día 1 porque el catálogo rara vez identifica la hora
+de inicio. Las nueve celdas y sus frecuencias se entregan en CSV.
+
+\begin{table}[H]
+\centering
+\caption{Contraste noche menos día dentro de cada clase de gravedad}
+\label{tab:nochegravedad}
+\small
+\input{../../data/outputs/tablas/contraste_nocturno_por_gravedad.tex}
+\par\smallskip
+Choques por municipio y día. Base -2. IC puntuales al 95\,\% por entidad.
+\end{table}
+
+\clearpage
 \section{Cobertura y calendario de la exposición}
 
 El cuadro \ref{tab:calidad} distingue filas de microdatos y días del panel.

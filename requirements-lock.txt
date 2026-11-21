@@ -9,6 +9,7 @@ cloudpickle==3.1.2
 colorama==0.4.6
 contourpy==1.4.0
 cycler==0.12.1
+et-xmlfile==2.0.0
 executing==2.3.0
 faicons==0.2.2
 fonttools==4.68.0
@@ -33,6 +34,7 @@ multimark==0.5.0
 narwhals==2.29.0
 nokap==0.2.0
 numpy==2.5.5
+openpyxl==3.1.5
 packaging==26.3
 pandas==3.1.1
 parso==0.8.7
@@ -62,3 +64,4 @@ websockets==17.4
 within-py==0.4.0
 wrapt==2.6.0.dev1
 zipp==4.1.2
+xlrd==2.0.2

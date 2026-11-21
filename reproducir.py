@@ -45,8 +45,10 @@ def run():
     for original in (root / "data" / "raw").glob("atus-*.zip"):
         shutil.copy2(original, raw / original.name)
 
+    shutil.copytree(root / "data" / "raw" / "municipios", raw / "municipios")
+
     env = os.environ.copy()
-    env["PYTHONPATH"] = str(clean_repo / "src")
+    env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(clean_repo / "src"), env.get("PYTHONPATH")]))
     env["PYTHONIOENCODING"] = "utf-8"
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     subprocess.run([sys.executable, "-c",
@@ -65,8 +67,13 @@ def run():
                            env=env, check=True, stdout=stream, stderr=subprocess.STDOUT)
             measures.append((stage, perf_counter() - start))
     compared = []
+    for original in sorted((raw / "municipios").iterdir()):
+        name = original.relative_to(clean)
+        if digest(original) != digest(root / name):
+            raise RuntimeError(f"El original municipal copiado difiere: {name}")
     for directory, extensions in (
         ("data/inputs", {".csv"}), ("data/interim", {".parquet"}), ("data/processed", {".parquet"}),
+        ("data/processed/municipios", {".parquet", ".csv"}),
         ("data/outputs/modelos", {".csv"}), ("data/outputs/tablas", {".csv", ".tex"}),
         ("data/outputs/figuras", {".pdf", ".png"}),
     ):
