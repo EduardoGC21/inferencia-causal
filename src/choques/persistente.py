@@ -4,6 +4,13 @@ import pandas as pd
 from .modelos import active_events
 
 
+def territorial_donors(keys, changes, first, last):
+    """Cambios M en semanas usadas: se excluyen origen y destino; W no divide."""
+    active = changes.loc[changes.codigo.eq("M") & changes.fecha.between(first, last)]
+    affected = set(active.origen) | set(active.destino)
+    return ~keys.isin(affected)
+
+
 def run(matrix, events, config, output):
     design = config["culiacan"]
     onset = pd.Timestamp(design["onset"])
@@ -31,6 +38,16 @@ def run(matrix, events, config, output):
     broad = set(exposed.loc[exposed.clave.eq(""), "cve_ent"].dropna())
     eligible = np.flatnonzero((matrix.states != "25") & ~matrix.states.isin(broad)
                               & ~matrix.keys.isin(named) & np.isfinite(weekly[:, common]).all(axis=1))
+    if "paths" in config:
+        changes = pd.read_csv(config["paths"]["processed"] / "municipios" / "cambios_territoriales.csv",
+                              dtype={"origen": str, "destino": str}, parse_dates=["fecha"])
+        first = onset + pd.Timedelta(weeks=int(weeks[common].min()))
+        last = onset + pd.Timedelta(weeks=int(weeks[common].max()), days=6)
+        allowed = territorial_donors(matrix.keys, changes, first, last)
+        excluded = eligible[~allowed[eligible]]
+        pd.DataFrame({"clave": matrix.keys[excluded], "desde": first, "hasta": last,
+                      "motivo": "segregacion_M"}).to_csv(output / "culiacan_descartes_territoriales.csv", index=False)
+        eligible = eligible[allowed[eligible]]
     size = design["neighbors"]
     frame = pd.DataFrame({"semana": weeks, "inicio": onset + pd.to_timedelta(7 * weeks, unit="D"),
                           "tratado": weekly[c], "control": np.nan, "brecha": np.nan})

@@ -10,9 +10,9 @@ STAGES = {
     "preparar": [("panel", "run"), ("conteos", "prepare"), ("municipios", "prepare")],
     "validar": [("validacion", "run")],
     "soporte": [("modelos", "support"), ("comparaciones", "support")],
-    "estimar": [("modelos", "run"), ("comparaciones", "run")],
-    "analizar": [("analisis", "run")],
-    "graficar": [("graficas", "run")],
+    "estimar": [("modelos", "run"), ("comparaciones", "run"), ("causal", "run")],
+    "analizar": [("analisis", "run"), ("causal", "tables")],
+    "graficar": [("graficas", "run"), ("causal", "figures")],
     "compilar": [("escrito", "run")],
 }
 
@@ -43,4 +43,8 @@ def main():
         if args.stage == "descargar" and args.fuente != "todas":
             steps = steps[:1] if args.fuente == "atus" else steps[1:]
         for module, function in steps:
-            getattr(import_module(f".{module}", __package__), function)(config)
+            selected = config
+            legacy = root / "config" / "legado.toml"
+            if module in ("modelos", "comparaciones", "analisis", "graficas") and legacy.exists():
+                selected = config | {"design": tomllib.loads(legacy.read_text(encoding="utf-8"))["design"]}
+            getattr(import_module(f".{module}", __package__), function)(selected)

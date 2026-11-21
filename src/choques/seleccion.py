@@ -44,21 +44,29 @@ def complete_sample(sample, design):
     return result, pd.DataFrame(diagnostics)
 
 
-def match(sample, design):
+def match(sample, design, covariates=None):
+    from .modelos import caliber_mask
+    covariates = COVARIATES if covariates is None else covariates
     selected, diagnostics, links = [], [], []
     for index, cohort in sample.groupby("indice", sort=True):
         treated = cohort.loc[cohort.tratado.eq(1)]
         controls = cohort.loc[cohort.tratado.eq(0)].set_index("clave", drop=False)
-        complete = controls.dropna(subset=COVARIATES)
+        complete = controls.dropna(subset=covariates)
         keep_t, weights = [], {}
         for row in treated.itertuples():
-            missing = [name for name in COVARIATES if pd.isna(getattr(row, name))]
+            missing = [name for name in covariates if pd.isna(getattr(row, name))]
             candidates = complete if not missing else complete.iloc[:0]
             counts = {}
             failure = "faltantes_tratado" if missing else ""
             if not failure and not has_support(candidates, design):
                 failure = "datos_completos"
-            for name in COVARIATES:
+            if design.get("individual_caliber", False):
+                candidates = candidates.loc[caliber_mask(candidates.pre_nivel, row.pre_nivel, design.get("caliber", 2.0))]
+                counts["despues_pre_nivel"] = len(candidates)
+                counts["estados_despues_pre_nivel"] = candidates.estado.nunique()
+                if not failure and not has_support(candidates, design):
+                    failure = "pre_nivel"
+            for name in covariates:
                 value = getattr(row, name)
                 candidates = candidates.loc[candidates[name].between(value / 2, value * 2)]
                 counts[f"despues_{name}"] = len(candidates)

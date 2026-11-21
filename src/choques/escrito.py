@@ -8,7 +8,7 @@ def run(config):
     output = config["paths"]["outputs"] / "qa"
     output.mkdir(parents=True, exist_ok=True)
     env = os.environ.copy()
-    env["SOURCE_DATE_EPOCH"] = "1794924000"
+    env["SOURCE_DATE_EPOCH"] = "1795269600"  # 21/11/2026, fecha de autorización del rediseño.
     env["FORCE_SOURCE_DATE"] = "1"
     latex = ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "main.tex"]
     with (output / "compilacion.txt").open("wb") as log:

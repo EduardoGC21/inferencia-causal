@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from choques.panel import run as prepare
-from choques.modelos import Matrix, comparison, fit, regression, run as estimate
+from choques.modelos import Matrix, legacy_comparison as comparison, fit, regression, run as estimate
 from choques.descarga import hash_file
 from choques.consolidacion import run as consolidate
 from choques.persistente import run as persistent

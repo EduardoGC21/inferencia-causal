@@ -1,0 +1,15 @@
+{
+  "python": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+  "executable": "C:\\Users\\Edu\\Desktop\\Universidad\\S9\\Inferencia\\Proyecto\\.venv\\Scripts\\python.exe",
+  "packages": {
+    "numpy": "2.5.5",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "pyfixest": "0.70.0",
+    "openpyxl": "3.1.5",
+    "xlrd": "2.0.2",
+    "matplotlib": "3.11.2"
+  },
+  "pip_check": "No broken requirements found.",
+  "pip_check_exit": 0
+}

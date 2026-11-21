@@ -1,0 +1,40 @@
+[paths]
+raw = "../data/raw"
+interim = "../data/interim"
+processed = "../data/processed"
+inputs = "../data/inputs"
+outputs = "../data/outputs"
+tasks = "../tasks"
+
+[atus]
+first = 2019
+last = 2025
+version = "ATUS-1997-2025-definitiva-2026-07-29"
+url = "https://www.inegi.org.mx/contenidos/programas/accidentes/datosabiertos/conjunto_de_datos_atus_anual_csv.zip"
+
+[design]
+anticipation = 1
+pre = 14
+horizon = 15
+washout = 21
+washout_long = 42
+scale_days = 14
+caliber = 2.0
+min_controls = 10
+min_control_states = 5
+min_two_way_dates = 6
+placebo_days = 28
+pre_important = 1.0
+alpha = 0.05
+power = 0.80
+
+[culiacan]
+onset = "2024-09-09"
+boundary = "2024-11-01"
+train_first = -25
+train_last = -10
+base = -2
+neighbors = 12
+placebos = 12
+reporting_from = "2024-09-25"
+reporting_through = "2024-10-27"

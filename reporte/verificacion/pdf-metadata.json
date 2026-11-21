@@ -1,0 +1,93 @@
+{
+  "pages": 17,
+  "sha256": "5774c704ccc262168dda0c69735b25075decb3e1dede1d80ed79f5f68af7849d",
+  "overfull": 0,
+  "undefined": 0,
+  "page_starts": [
+    {
+      "page": 1,
+      "characters": 3206,
+      "head": "Violencia criminal y accidentes registrados"
+    },
+    {
+      "page": 2,
+      "characters": 3632,
+      "head": "2.     Datos y muestra"
+    },
+    {
+      "page": 3,
+      "characters": 3456,
+      "head": "3.    Estrategia empírica"
+    },
+    {
+      "page": 4,
+      "characters": 3640,
+      "head": "3.1.    Inferencia y separación de estimandos"
+    },
+    {
+      "page": 5,
+      "characters": 2746,
+      "head": "Trayectoria y falsificaciones. La figura 1 muestra ambas escalas y matchings. La semana previa"
+    },
+    {
+      "page": 6,
+      "characters": 3583,
+      "head": "Calendario y controles. Las cinco fechas propuestas no son feriados laborales generales LFT: son"
+    },
+    {
+      "page": 7,
+      "characters": 3975,
+      "head": "Referencias"
+    },
+    {
+      "page": 8,
+      "characters": 3228,
+      "head": "A.     Fuentes y especificaciones progresivas"
+    },
+    {
+      "page": 9,
+      "characters": 3315,
+      "head": "Cuadro 7: d0..1: M0–M3, muestra fija"
+    },
+    {
+      "page": 10,
+      "characters": 3049,
+      "head": "B.    Persistencia y placebo"
+    },
+    {
+      "page": 11,
+      "characters": 2790,
+      "head": "C.     Sensibilidades y calendario"
+    },
+    {
+      "page": 12,
+      "characters": 1296,
+      "head": "Cuadro 12: Soporte de los escenarios"
+    },
+    {
+      "page": 13,
+      "characters": 3099,
+      "head": "Cuadro 13: Cohortes finales y calendario oficial"
+    },
+    {
+      "page": 14,
+      "characters": 2494,
+      "head": "D.     Inferencia y potencia"
+    },
+    {
+      "page": 15,
+      "characters": 2650,
+      "head": "Cuadro 16: Omisión de estados, M0 y 1:muchos"
+    },
+    {
+      "page": 16,
+      "characters": 3227,
+      "head": "E.    T05 y trazabilidad del rediseño"
+    },
+    {
+      "page": 17,
+      "characters": 2471,
+      "head": "F.                        Culiacán y reproducción"
+    }
+  ]
+}

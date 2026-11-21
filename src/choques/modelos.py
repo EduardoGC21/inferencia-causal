@@ -61,7 +61,8 @@ def active_events(events):
     return events
 
 
-def comparison(matrix, events, design, name):
+def legacy_comparison(matrix, events, design, name):
+    """Referencia auditada b=-2; conserva deliberadamente el calibre por fecha."""
     events = active_events(events)
     focal = events.loc[events.estado.eq("confirmado") & events.clase_final.eq("extensa")].copy()
     omitted = name.removeprefix("omitir_") if name.startswith("omitir_") else None
@@ -230,13 +231,13 @@ def support(config, expected_sha=None):
     design = config["design"]
     output = paths["outputs"] / "modelos"
     output.mkdir(parents=True, exist_ok=True)
-    principal, _ = comparison(matrix, events, design, "principal")
+    principal, _ = legacy_comparison(matrix, events, design, "principal")
     ids = sorted(principal.loc[principal.tratado.eq(1), "id_episodio"].unique())
     names = ["principal", "sin_calibre", "lavado_largo", "geografia", "placebo"]
     names.extend(f"omitir_{eid}" for eid in ids)
     samples, diagnostics = [], []
     for name in names:
-        sample, diag = comparison(matrix, events, design, name)
+        sample, diag = legacy_comparison(matrix, events, design, name)
         samples.append(sample.assign(especificacion=name))
         diagnostics.append(diag)
     diag = pd.concat(diagnostics, ignore_index=True)
@@ -260,11 +261,18 @@ def run(config):
     release = paths["tasks"] / "revision-auditoria" / "revision_auditada.json"
     revision = json.loads(release.read_text(encoding="utf-8"))
     fingerprints = revision["sha256"]
+    legacy_digest = fingerprints.get("repo/config/proyecto.toml")
+    if legacy_digest is not None and hash_file(config["root"] / "config" / "legado.toml") != legacy_digest:
+        raise ValueError("La configuración de la referencia auditada fue alterada")
     required = {(paths["processed"] / name).relative_to(project).as_posix()
                 for name in ("panel_diario.parquet", "exposiciones.parquet")}
     if not required <= fingerprints.keys():
         raise ValueError("Faltan huellas del panel o de exposiciones en la revisión auditada")
+    # El manifiesto histórico sigue intacto. Sólo sus datos y T05 son insumos
+    # del rediseño; los hashes de código describen la versión histórica.
     for relative_path, digest in fingerprints.items():
+        if relative_path.startswith("repo/"):
+            continue
         if hash_file(project / relative_path) != digest:
             raise ValueError(f"El insumo de la revisión auditada cambió: {relative_path}")
     support(config, expected_sha=revision["muestra_sha256"])
@@ -308,3 +316,9 @@ def run(config):
     from .persistente import run as persistent
     persistent(matrix, events, config, output)
     print(f"Estimadas {len(estimates)} especificaciones y horizontes.")
+
+
+def caliber_mask(levels, treated_level, ratio=2.0):
+    """Calibre individual, nunca respecto del promedio de una cohorte."""
+    scaled = (np.asarray(levels, dtype=float) + 0.5) / (treated_level + 0.5)
+    return np.isfinite(scaled) & (scaled >= 1 / ratio) & (scaled <= ratio)

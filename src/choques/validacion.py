@@ -7,11 +7,16 @@ import pyfixest as pf
 
 
 def run(config):
+    import unittest
+    suite = unittest.defaultTestLoader.discover(str(config["root"] / "tests"), pattern="test_*.py")
+    result_tests = unittest.TextTestRunner(verbosity=2).run(suite)
+    if not result_tests.wasSuccessful():
+        raise ValueError("Fallaron las pruebas unitarias del diseño final")
     start = perf_counter()
     case = runpy.run_path(str(config["root"] / "tests" / "caso_sintetico.py"))
     output = config["paths"]["outputs"] / "modelos"
     output.mkdir(parents=True, exist_ok=True)
-    with TemporaryDirectory(dir=output) as directory:
+    with TemporaryDirectory() as directory:
         case["preparation_check"](Path(directory))
         case["weekly_check"](Path(directory))
     case["eligibility_check"]()
@@ -22,7 +27,11 @@ def run(config):
     evidence = (
         "# Validación con datos sintéticos\n\n"
         "Comando desde la raíz: python -m choques validar.\n\n"
-        f"PyFixest {pf.__version__}. Tiempo total {perf_counter() - start:.2f} s.\n\n"
+        f"PyFixest {pf.__version__}. {result_tests.testsRun} pruebas unitarias aprobadas.\n\n"
+        "- Diseño final: calibre por tratado heterogéneo; base limpia del mismo día; "
+        "log con ceros y transformación previa al promedio; elegibilidad invariante "
+        "a registros, cobertura, anomalías y episodios posteriores; segregación de "
+        "Villa de Pozos y límites semanales; CRV3 con efectos fijos reestimados.\n"
         "- Preparación: 366 días bisiestos por clave, dos accidentes con campos idénticos "
         "se retienen, un cero con continuidad, un faltante, día inválido, año ajeno y "
         "una exposición enlazada a dos fuentes sin duplicar el panel.\n"
@@ -50,3 +59,4 @@ def run(config):
     )
     (output / "validacion.md").write_text(evidence, encoding="utf-8")
     print(evidence)
+    print(f"Tiempo total {perf_counter() - start:.2f} s (metadato de ejecución, no del producto).")

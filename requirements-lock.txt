@@ -1,4 +1,4 @@
-# Python 3.13.2; Windows x64; versiones de la ejecuci?n verificada
+# Python 3.13.2; Windows x64; versiones de la ejecución verificada
 asttokens==3.0.2
 babel==2.18.0
 certifi==2026.10.23

@@ -9,7 +9,7 @@ from choques.conteos import CROSS, classes
 from choques.diagnosticos import by_category
 from choques.estadistica import estimate, wald
 from choques.municipios import choose_cut, join_cut, numeric
-from choques.modelos import Matrix, comparison
+from choques.modelos import Matrix, legacy_comparison as comparison
 from choques.seleccion import complete_sample, match, one_to_one
 from choques.sensibilidades import monthly_flags, select
 

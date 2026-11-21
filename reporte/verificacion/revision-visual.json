@@ -1,0 +1,152 @@
+{
+  "pdf_sha256": "5774c704ccc262168dda0c69735b25075decb3e1dede1d80ed79f5f68af7849d",
+  "pages": 17,
+  "body_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "references_pages": [
+    7
+  ],
+  "appendix_pages": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "body_font_pt": 11,
+  "overfull_hboxes": 0,
+  "undefined_references_or_citations": 0,
+  "method": "pdftoppm 110 dpi; paginas 16 y 17 reinspeccionadas tras confirmar permiso de Python; las otras quince conservan el PNG SHA-256 inspeccionado",
+  "review": [
+    {
+      "page": 1,
+      "png": "pdf-final/pagina-01.png",
+      "sha256": "7657a94a260e3128b51e29819074cf5b4050f2b372d00c9575672cc838b81938",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 2,
+      "png": "pdf-final/pagina-02.png",
+      "sha256": "5b421481167e2fd4793a05c063afeeca30220dd8d76e55b0711b336550943efb",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 3,
+      "png": "pdf-final/pagina-03.png",
+      "sha256": "3d9a8bf508710ade1eb9c6c3e01b85548ca12f0aff74b4cbff114ca949e2ed15",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 4,
+      "png": "pdf-final/pagina-04.png",
+      "sha256": "11b086c303d77cd1ce85c2ada16f79f493fc1b2e242d6f675db9def7c3e094ce",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 5,
+      "png": "pdf-final/pagina-05.png",
+      "sha256": "bf911c7c8c68ea93f58b3930f1ad7344ed5e3947374df88a8309d27475ac87a0",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 6,
+      "png": "pdf-final/pagina-06.png",
+      "sha256": "2eb77f179375709197c3c4c3e083e5390cf14a2e200f702d61d7974b93562ddf",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 7,
+      "png": "pdf-final/pagina-07.png",
+      "sha256": "b5663550653ff8331f771622f6b8b947ba06fd74ef0132cc324beab802d2dfcf",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 8,
+      "png": "pdf-final/pagina-08.png",
+      "sha256": "c7f65c7b3374f56e917e92ffdf9e43af5b9f184745667ab9d103384187f3b232",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 9,
+      "png": "pdf-final/pagina-09.png",
+      "sha256": "ae4fbcd19c3d01ab32775dc16d6e4d58fb0e9b7e0c3fe9ee48f6af62977a9b7e",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 10,
+      "png": "pdf-final/pagina-10.png",
+      "sha256": "df98f2e35f1022160fccc428897d8bf186c3d569bfd6e89267bff6decac4c74f",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 11,
+      "png": "pdf-final/pagina-11.png",
+      "sha256": "404931f3ebe17070abc0377a39a17def9a1adf3a795a1afb9f1751d24d20d4fd",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 12,
+      "png": "pdf-final/pagina-12.png",
+      "sha256": "e94760e6b76c9fad87c60ce2615ffbc751b9eba607676fa1b6380e8d2231f117",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 13,
+      "png": "pdf-final/pagina-13.png",
+      "sha256": "899b4c4ada8d8cbc7dba31fc40fda03888b36caa62105b8dacbfb4cb9c0a9e45",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 14,
+      "png": "pdf-final/pagina-14.png",
+      "sha256": "93e4527d52bbde6efc00769d99b70f0ccb7c8b5e9242e807a8025bc3937a2ad8",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 15,
+      "png": "pdf-final/pagina-15.png",
+      "sha256": "edcbfafb6cb2ba53c17c53683a5b97b536127be51a3fe309ec3e67c228c99954",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "PNG identico al inspeccionado antes"
+    },
+    {
+      "page": 16,
+      "png": "pdf-final/pagina-16.png",
+      "sha256": "239a9f1859cd3891f3f5a098b36eda2a854019deeb685393b2e2c3570639d15e",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "reinspeccion directa"
+    },
+    {
+      "page": 17,
+      "png": "pdf-final/pagina-17.png",
+      "sha256": "49567cff0bfcdd41fec20e2f518698ba4c49d35cc2d71f893f587320d88a2cbc",
+      "result": "legible; sin recortes, solapamientos o glifos ausentes",
+      "verification": "reinspeccion directa"
+    }
+  ]
+}
