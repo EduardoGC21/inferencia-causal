@@ -75,6 +75,10 @@ de exposiciones omitidas en las fechas de mayor peso. `estimar` reconstruye
 ambos matchings con cobertura predicha, ventanas hasta el día 0 y las señales
 del cotejo. `analizar` genera las tablas que `compilar` incorpora al PDF.
 
+`preparar` construye el cruce de franja y gravedad desde los microdatos.
+`estimar` publica las nueve celdas y el contraste noche menos día por
+clase. Si el parquet de conteos es anterior al cruce, regénéralo con `preparar`.
+
 Para trabajar en un worktree, usa una carpeta que contenga `repo/`,
 `tasks/` y `data/` como hermanas. Copia de la entrega auditada las
 entradas de `data/inputs/`, `tasks/` y los originales de `data/raw/`
@@ -98,6 +102,7 @@ originales fijados. La reproducción limpia toma esos archivos de
 | Trayectoria, modelos ajustados, Wald, bases y tramos | `outputs/modelos/comparaciones_municipales.csv`, `modelos_m0_m3.csv`, `wald_previos.csv`, `wald_modelos.csv` y `tramos_y_base.csv` |
 | Sensibilidades de selección y cotejo de controles | `outputs/modelos/sensibilidades_seleccion.csv`, `composicion_sensibilidades.csv` y `muestras_sensibilidades.csv` |
 | Conciliación horaria, gravedad, historial y trayectoria visual | `processed/conteos_diarios.parquet`, `outputs/modelos/franjas_y_gravedad.csv`, `frecuencias_franjas_y_gravedad.csv`, `historial.csv` y `outputs/figuras/dinamica_municipal.{pdf,png}` |
+| Nueve combinaciones de franja y gravedad y contraste noche menos día por clase | `outputs/modelos/franjas_x_gravedad.csv`, `frecuencias_franjas_x_gravedad.csv` y `outputs/tablas/contraste_nocturno_por_gravedad.tex` |
 
 `reproducir.py` compara los productos por SHA-256 y el texto paginado del
 PDF. La ejecución local confirma 73 pares tratados, 7 351 controles,

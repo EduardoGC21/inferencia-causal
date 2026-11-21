@@ -1,8 +1,12 @@
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
 import numpy as np
 import pandas as pd
 from scipy.stats import f
 
-from choques.conteos import classes
+from choques.conteos import CROSS, classes
+from choques.diagnosticos import by_category
 from choques.estadistica import estimate, wald
 from choques.municipios import choose_cut, join_cut, numeric
 from choques.modelos import Matrix, comparison
@@ -124,6 +128,46 @@ def hourly_and_severity():
     counts = classes(rows).iloc[0]
     assert [counts[c] for c in ("dia", "noche", "hora_desconocida")] == [2, 3, 1]
     assert [counts[c] for c in ("fatal", "heridos", "danos")] == [2, 2, 2]
+    assert [counts[c] for c in CROSS.values()] == [1, 0, 1, 1, 2, 0, 0, 0, 1]
+
+
+def hourly_cross_effects():
+    keys = ["01001", "02001", "03001", "04001"]
+    index = pd.Timestamp("2022-03-01")
+    dates = pd.date_range(index - pd.Timedelta(days=2), index + pd.Timedelta(days=15))
+    sample = pd.DataFrame(dict(clave=keys, indice=index, estado=["01", "02", "03", "04"],
+                               tratado=[1, 1, 0, 0], peso=1.0))
+    records = []
+    for key, day, night in zip(keys, [1, 0, 1, 0], [4, 1, 1, 0]):
+        for date in dates[dates > index]:
+            records.extend([(key, date, "06", "Fatal")] * day)
+            records.extend([(key, date, "18", "Fatal")] * night)
+    rows = pd.DataFrame(records, columns=["clave", "fecha", "ID_HORA", "CLASACC"])
+    panel = pd.MultiIndex.from_product([keys, dates], names=["clave", "fecha"]).to_frame(index=False)
+    totals = rows.groupby(["clave", "fecha"]).size().rename("accidentes")
+    panel = panel.join(totals, on=["clave", "fecha"]).fillna({"accidentes": 0}).assign(continuidad=True)
+    design = dict(pre=2, anticipation=1, alpha=0.05)
+    with TemporaryDirectory() as temporary:
+        folder = Path(temporary)
+        path = folder / "conteos.parquet"
+        classes(rows).reset_index().to_parquet(path, index=False)
+        by_category(path, {"sintetica": sample}, Matrix(panel), design, folder)
+        effects = pd.read_csv(folder / "franjas_x_gravedad.csv")
+        frequencies = pd.read_csv(folder / "frecuencias_franjas_x_gravedad.csv")
+    first = effects.query("base == '-2' and tramo == '1–7' and agrupacion == 'entidad'")
+    both = first.set_index(["franja", "gravedad"])
+    assert len(both) == 12 and both.index.is_unique
+    assert set(effects.tramo) == {"1–7", "8–15"}
+    difference = both.loc["noche_menos_dia", "fatal"]
+    np.testing.assert_allclose([difference.efecto, difference.ee], [2, 1])
+    marginal_day = both.loc["dia", "fatal"]
+    marginal_night = both.loc["noche", "fatal"]
+    assert np.isclose(difference.efecto, marginal_night.efecto - marginal_day.efecto)
+    assert not np.isclose(difference.ee**2, marginal_night.ee**2 + marginal_day.ee**2)
+    empty = both.loc["hora_desconocida", "fatal"]
+    assert empty.estado == "sin_registros" and pd.isna(empty.ic_inf)
+    first_counts = frequencies.query("base == '-2' and tramo == '1–7'")
+    assert first_counts.groupby("tratado").choques.sum().tolist() == [14, 42]
 
 
 def coverage_and_isolation():
@@ -159,4 +203,5 @@ def run():
     weights_and_support()
     models_and_wald()
     hourly_and_severity()
+    hourly_cross_effects()
     coverage_and_isolation()

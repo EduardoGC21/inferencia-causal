@@ -90,6 +90,16 @@ def municipal_tables(mod, out):
         rows.append([label, fmt(pair[0].tratados, 0)] + [result(row) for row in pair])
     table(out / "sensibilidad_matching.tex", ["Escenario", "Tratados", *headers[1:]], rows)
 
+    crossed = pd.read_csv(mod / "franjas_x_gravedad.csv").set_index(
+        ["muestra", "base", "tramo", "franja", "gravedad", "agrupacion"])
+    severity = {"fatal": "Fatal", "heridos": "Con heridos", "danos": "Solo daños"}
+    rows = []
+    for span, label in (("1–7", "1--7"), ("8–15", "8--15")):
+        for code, name in severity.items():
+            pair = [crossed.loc[m, "-2", span, "noche_menos_dia", code, "entidad"] for m in methods]
+            rows.append([label, name] + [result(row) for row in pair])
+    table(out / "contraste_nocturno_por_gravedad.tex", ["Días", "Gravedad", *headers[1:]], rows)
+
 
 def run(config):
     paths = config["paths"]

@@ -139,6 +139,45 @@ con heridos y 902 de sólo daños. Los conteos de clase conservan los ceros
 con cobertura. Los intervalos por gravedad son exploratorios y las
 frecuencias de fatales son bajas.
 
+### Cruce de franja y gravedad
+
+Cada choque se asigna a una de nueve celdas. Sus sumas reproducen tanto
+las tres franjas como las tres clases de gravedad y el total diario. El
+contraste noche menos día se estima por clase dentro de cada par. Se
+conservan las muestras y los pesos de la auditada y ambos matchings para
+los días 1–7 y 8–15, con base −2 y base previa promedio. Las celdas sin
+registros en la base y el tramo se identifican sin asignarles un intervalo.
+En los dos tramos todos los choques de las tres muestras tienen hora
+registrada. En la base previa promedio de los controles auditados hay dos
+choques de solo daños con hora desconocida.
+
+| Gravedad | Día 1–7 | Noche 1–7 | Sin hora 1–7 | Día 8–15 | Noche 8–15 | Sin hora 8–15 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Fatal | 4 | 7 | 0 | 9 | 4 | 0 |
+| Con heridos | 97 | 103 | 0 | 155 | 103 | 0 |
+| Solo daños | 368 | 250 | 0 | 395 | 314 | 0 |
+
+Estos son conteos observados en los 59 pares tratados comunes a los dos
+matchings. El contraste siguiente compara cambios frente a los controles
+y usa la base −2. Los intervalos del 95 % son puntuales por entidad.
+
+| Días | Gravedad | Noche menos día, uno a muchos | Noche menos día, 1:1 |
+| --- | --- | --- | --- |
+| 1–7 | Fatal | +0,011 [−0,006, +0,029] | −0,002 [−0,018, +0,013] |
+| 1–7 | Con heridos | −0,048 [−0,149, +0,053] | −0,073 [−0,277, +0,132] |
+| 1–7 | Solo daños | +0,138 [−0,055, +0,331] | −0,150 [−0,506, +0,206] |
+| 8–15 | Fatal | −0,008 [−0,026, +0,010] | −0,021 [−0,051, +0,009] |
+| 8–15 | Con heridos | −0,158 [−0,314, −0,003] | −0,184 [−0,463, +0,094] |
+| 8–15 | Solo daños | +0,266 [+0,023, +0,508] | +0,089 [−0,356, +0,534] |
+
+En los días 8–15 con uno a muchos y base −2, el cambio relativo es mayor de
+noche para solo daños y mayor de día para choques con heridos. Para
+ambos contrastes los intervalos abarcan cero con el 1:1 o con la base
+previa promedio. El cruce es exploratorio y las conclusiones dependen
+de la base, el método de emparejamiento y la baja frecuencia de fatales.
+
+### Historial
+
 Con una ventana de 365 días, 10 pares tienen antecedente confirmado en el
 catálogo, 61 carecen de antecedente documentado y dos tienen ventana
 incompleta. Los dos grupos con historial evaluable sólo comparten tres
@@ -221,31 +260,29 @@ agrupación doble se guardan en `sensibilidades_seleccion.csv`.
 ## Reproducción verificada
 
 Python 3.13.2 en Windows x64. La descarga limpia recuperó 100 originales
-municipales (258,3 MB) y verificó sus SHA-256 en 128,52 s. Con las nuevas
-sensibilidades, `python -m choques estimar` tardó 140,73 s en el worktree.
-`python reproducir.py` cotejó 73 productos por SHA-256 y el PDF binario
+municipales (258,3 MB) y verificó sus SHA-256 en 128,52 s. Con el cruce
+de franja y gravedad, `python -m choques estimar` tardó 91,61 s en el worktree.
+`python reproducir.py` cotejó 76 productos por SHA-256 y el PDF binario
 en una copia limpia. El escrito contiene siete páginas de texto y
 referencias más seis de apéndice. El commit auditado por separado cotejó
 36 productos y el PDF. El contraste auditado regenerado es +0,237468052.
 Se comprobaron por separado los 129 vecinos elegidos en principal y placebo,
 la igualdad de tratados y de las sumas de pesos por fecha y la coincidencia
 de las filas preexistentes en las tablas ampliadas.
+El cruce concilió con cada marginal y con el total en 723 972
+municipio-días con registros. Las tablas previas de franjas y gravedad,
+la muestra, el reparto de pesos y la trayectoria coincidieron por byte.
 
 | Etapa de la copia limpia | Segundos |
 | --- | ---: |
-| Descargar (verificar originales locales) | 3,23 |
-| Consolidar | 2,59 |
-| Preparar | 10 506,72 |
-| Validar | 11,26 |
-| Estimar | 126,56 |
-| Analizar | 3,96 |
-| Graficar | 6,07 |
-| Compilar | 6,39 |
-
-El tiempo de pared de preparación coincide con un salto en el reloj de
-la sesión. Se conserva en el registro de reproducción y queda fuera de
-la comparación de rendimiento. La reproducción anterior midió 100,54 s
-en esa etapa, con los mismos insumos y código de preparación.
+| Descargar (verificar originales locales) | 2,63 |
+| Consolidar | 1,65 |
+| Preparar | 78,22 |
+| Validar | 5,57 |
+| Estimar | 89,85 |
+| Analizar | 3,16 |
+| Graficar | 3,88 |
+| Compilar | 4,36 |
 
 Fuentes oficiales. [EIC 2015](https://www.inegi.org.mx/programas/intercensal/2015/default.html)
 · [ITER 2020](https://www.inegi.org.mx/app/descarga/ficha.html?ag=0&f=csv&tit=326108)

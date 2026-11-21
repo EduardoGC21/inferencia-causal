@@ -1,5 +1,6 @@
 from zipfile import ZipFile
 
+import numpy as np
 import pandas as pd
 
 from .descarga import archive_members
@@ -10,6 +11,7 @@ from .panel import atomic_parquet
 HOURS = ["dia", "noche", "hora_desconocida"]
 SEVERITY = ["fatal", "heridos", "danos"]
 METRICS = HOURS + SEVERITY
+CROSS = {(hour, severity): f"{hour}_{severity}" for hour in HOURS for severity in SEVERITY}
 
 
 def classes(rows):
@@ -24,7 +26,8 @@ def classes(rows):
     tagged = rows[["clave", "fecha"]].assign(
         dia=day, noche=night, hora_desconocida=unknown,
         fatal=severity.eq("fatal"), heridos=severity.eq("heridos"), danos=severity.eq("danos"))
-    return tagged.groupby(["clave", "fecha"])[METRICS].sum().astype("int32")
+    crossed = {name: tagged[hour] & tagged[severity] for (hour, severity), name in CROSS.items()}
+    return tagged.assign(**crossed).groupby(["clave", "fecha"])[METRICS + list(CROSS.values())].sum().astype("int32")
 
 
 def prepare(config):
@@ -49,5 +52,9 @@ def prepare(config):
             or not by_day[HOURS].sum(axis=1).eq(totals).all()
             or not by_day[SEVERITY].sum(axis=1).eq(totals).all()):
         raise ValueError("Los conteos por hora o gravedad difieren del total diario auditado")
+    crossed = by_day[list(CROSS.values())].to_numpy().reshape(-1, len(HOURS), len(SEVERITY))
+    if (not np.array_equal(crossed.sum(axis=2), by_day[HOURS].to_numpy())
+            or not np.array_equal(crossed.sum(axis=1), by_day[SEVERITY].to_numpy())):
+        raise ValueError("El cruce de franja y gravedad difiere de los conteos marginales")
     atomic_parquet(by_day.reset_index(), paths["processed"] / "conteos_diarios.parquet")
-    print(f"Conteos reconciliados por hora y gravedad en {len(by_day):,} municipio-días con registros.")
+    print(f"Conteos por hora, gravedad y su cruce reconciliados en {len(by_day):,} municipio-días con registros.")

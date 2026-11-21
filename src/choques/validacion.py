@@ -43,7 +43,8 @@ def run(config):
         "- Covariables municipales: cierre estricto, faltantes, confidencialidad y cero; "
         "claves y territorio; soporte y pesos compartidos; vecino 1:1, distancia, cero, "
         "desempate y reutilización; muestra común M0–M3; "
-        "regresión ponderada, Wald matricial y conciliación de hora y gravedad.\n"
+        "regresión ponderada, Wald matricial y conciliación de nueve cruces de hora y gravedad. "
+        "Contraste nocturno por clase con covarianza compartida y celdas sin registros.\n"
         "- Selección: cobertura con tres meses anteriores, anomalías de fecha, conteos "
         "publicados y corte de exposición en el día de inicio.\n"
     )

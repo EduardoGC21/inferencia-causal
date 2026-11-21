@@ -359,17 +359,18 @@ Los placebos usan las mismas semanas como referencia descriptiva.
 
 \section{Conclusión y validez externa}
 
-El día de inicio registra un contraste de \FEfectoCero{} accidentes por
-municipio en la muestra con soporte. El intervalo admite aumentos y
-reducciones. Los previos, el placebo y la sensibilidad a la base limitan
-la atribución a la jornada. En Culiacán, la captación interrumpida y el
-cambio territorial limitan la comparación a semanas observables.
+El día 0 dio \FEfectoCero{} choques por municipio, con un intervalo que
+incluye cero. Los previos, el placebo y la sensibilidad a la base limitan
+la atribución causal. En los días 8--15, el cruce exploratorio con uno a
+muchos y base -2 dio un contraste noche menos día positivo para solo
+daños y negativo para choques con heridos. Ambos IC por entidad incluyen
+cero con 1:1 o con la base previa promedio (cuadro \ref{tab:nochegravedad}).
 
-Los resultados corresponden a registros municipales en vías no federales
-entre 2019 y 2025. Evaluar cambios en riesgo por viaje o decidir sobre
-capacidad de respuesta requeriría aforos, rutas y constancias de reporte.
-La extrapolación a incidentes menores o jornadas consecutivas queda
-abierta por cobertura y diferencias en las secuencias de exposición.
+El estudio cubre registros en vías no federales entre 2019 y 2025. En
+Culiacán, la interrupción de captación y el cambio territorial limitan la
+comparación a semanas observables. Estimar riesgo por viaje requiere
+aforos, rutas y constancias de reporte. La extrapolación a incidentes
+menores o jornadas consecutivas depende de la cobertura y la exposición.
 
 \begingroup
 \small
@@ -437,6 +438,24 @@ quedaron cerca de cero. La revisión consultó prensa, fuentes oficiales y un
 \href{https://acleddata.com/update/latin-america-and-caribbean-overview-may-2025}{informe público de ACLED}.
 La descarga de los microdatos de ACLED requiere acceso a su portal.
 \path{reporte/cotejo-controles.md} registra fuentes, dictámenes y alcance.
+
+\section{Franja horaria y gravedad}
+
+Se cruzan día, noche y hora desconocida con las tres clases de gravedad.
+Se conservan la muestra y los pesos de cada especificación. El contraste
+noche menos día usa la diferencia de conteos dentro de cada par y clase.
+Se estima a partir del día 1 porque el catálogo rara vez identifica la hora
+de inicio. Las nueve celdas y sus frecuencias se entregan en CSV.
+
+\begin{table}[H]
+\centering
+\caption{Contraste noche menos día dentro de cada clase de gravedad}
+\label{tab:nochegravedad}
+\small
+\input{../../data/outputs/tablas/contraste_nocturno_por_gravedad.tex}
+\par\smallskip
+Choques por municipio y día. Base -2. IC puntuales al 95\,\% por entidad.
+\end{table}
 
 \clearpage
 \section{Cobertura y calendario de la exposición}
