@@ -125,7 +125,6 @@
 .match-choice h3 { margin-bottom: 6px; }
 .match-weight { color: var(--muted); margin-top: 3px; }
 #matching h2 { text-wrap: balance; }
-#matching .takeaway { margin-top: 14px; }
 .backup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
 .backup-grid p + p { margin-top: 22px; }
 

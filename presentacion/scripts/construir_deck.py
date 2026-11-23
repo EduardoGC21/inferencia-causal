@@ -186,8 +186,7 @@ add("matching", "Estrategia empírica", "Cómo elegimos los controles para compa
       <p class="match-weight">Concentra el peso de los controles.</p>
     </div>
   </div>
-</div>
-<p class="takeaway">En las mismas fechas, el cambio de los controles aproxima el cambio sin ataque.</p>""",
+</div>""",
 """El contrafactual es cómo habría cambiado el resultado del tratado sin el ataque. Para aproximarlo, busco controles en estados ajenos al episodio. Exijo cobertura en tres meses completos previos, estabilidad territorial y ausencia de exposición documentada desde el Día menos 49. Aplico márgenes de la mitad al doble en accidentes previos, población, empleo y autos. El mínimo es de diez candidatos de al menos cinco estados. Uno a muchos usa todos los elegibles y reparte el peso. Uno a uno elige al más cercano por población, empleo y autos. Después, diferencias en diferencias compara los cambios en las mismas fechas. Queremos estimar el efecto promedio de los pares tratados incluidos, con igual peso por par.""",
 "La comparación requiere una base previa para cada día analizado.", "Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.")
 
