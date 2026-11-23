@@ -80,9 +80,9 @@ rutas de ejecución. Las salidas vigentes contienen una sola base y una sola esc
 
 Se regeneraron las tablas y la trayectoria con la ejecución final. Sus
 huellas coinciden con las de las salidas que alimentan el reporte.
-Se renderizaron las 45 páginas del PDF a 100 puntos por pulgada y se
-revisaron la trayectoria, los cuadros, la paginación y el listado. El
-cuerpo ocupa siete páginas y las referencias empiezan en la octava.
+En la versión anterior se renderizaron las 45 páginas del PDF a 100
+puntos por pulgada y se revisaron la trayectoria, los cuadros, la
+paginación y el listado.
 La conversión comprobó la identidad del listado del apéndice H con las
 1 354 líneas de `codigo_R/analisis.R`. `main.pdf` y `reporte.pdf`
 son idénticos. La revisión de notación usa $Y_{i,d}$ para el conteo diario y
@@ -91,12 +91,15 @@ la notación en las páginas 3 y 4. Las salidas de la estimación
 conservan sus huellas y la presentación final usa las mismas cifras.
 [Verificación de la presentación](../../presentacion/verificacion/REVISION.md)
 
-La figura 1a del reporte reutiliza las series de cambios diarios de la
-diapositiva 7. La brecha entre tratados y controles coincide con los 21
+Las figuras 1a y 1b del reporte reutilizan las series de la diapositiva 7.
+Se reconstruyeron los 42 promedios diarios ponderados de cada grupo a
+partir de los conteos limpios y los 3 613 pares de la muestra principal.
+La máxima discrepancia con la figura 1a fue de $4,93\times10^{-13}$.
+La brecha entre tratados y controles de la figura 1b coincide con los 21
 coeficientes diarios de $M_0$ en la salida de Python para el emparejamiento
 1:muchos. La diferencia absoluta máxima es de $8,20\times10^{-13}$.
-La figura 1b presenta los coeficientes y sus intervalos puntuales. El
-[generador de la figura 1a](../figuras/README.md#trayectoria-de-siniestros-registrados)
-coteja las series y guarda el panel vectorial que compila el reporte.
-Se revisaron las páginas 5 a 8 del PDF recompilado. Las dos figuras
-quedaron en la página 6 y la compilación conservó el listado íntegro de R.
+La figura 1c presenta los coeficientes y sus intervalos puntuales. El
+[generador de las series](../figuras/README.md#trayectoria-de-siniestros-registrados)
+coteja la brecha y guarda los dos paneles vectoriales que compila el reporte.
+El PDF actual tiene 46 páginas. Se revisaron las páginas 5 a 9 y 22.
+El cuerpo ocupa ocho páginas y las referencias empiezan en la novena.

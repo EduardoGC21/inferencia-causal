@@ -27,19 +27,21 @@ parte de las fuentes del documento.
 
 ## Trayectoria de siniestros registrados
 
-`cambios-por-grupo.pdf` es la figura 1a. Usa las series de la diapositiva 7,
-que contienen los cambios ponderados de cada grupo frente a su propia base
-de los días -28 a -8. Desde la raíz del árbol de trabajo:
+`conteos-por-grupo.pdf` (figura 1a) muestra los promedios diarios
+ponderados del día -28 al +13 y sombrea la base de los días -28 a -8.
+`cambios-por-grupo.pdf` (figura 1b) muestra los cambios de cada grupo
+frente a su propia base. Ambos paneles usan las series de la diapositiva 7.
+Para reproducirlos desde la raíz del árbol de trabajo:
 
 ```powershell
-& ../../.venv/Scripts/python.exe reporte/figuras/generar_cambios.py
+& ../../.venv/Scripts/python.exe reporte/figuras/generar_series.py
 ```
 
 El script lee los CSV `series-eventos.csv` y `efectos.csv` de
 `presentacion/assets/datos/` y coteja la brecha entre grupos con los 21
 coeficientes diarios de $M_0$ para el emparejamiento 1:muchos.
 
-`trayectoria-siniestros.png` es la figura 1b. La función `figures` de
+`trayectoria-siniestros.png` es la figura 1c. La función `figures` de
 `src/choques/informe_final.py` la genera desde resultados existentes.
 Distingue matching 1:muchos y 1:1; las barras representan intervalos del
 95 % agrupados por estado y fecha. Las etiquetas y la presentación se

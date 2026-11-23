@@ -245,13 +245,14 @@
       "config/proyecto.toml": "9537097d06f65795a23a85c7cfcddf466c501082f1c4662221629df882f9f091"
     },
     "reporte": {
-      "reporte/main.tex": "4886a0b6c890957d51ab5b3916b75c9bcebc2ac7a1908f93eeddc48401e8788a",
-      "reporte/reporte.md": "1d28d11a9b28658350b31917172d03c6c80254b15c3d2fae5ce08219cadb0ec4",
-      "reporte/main.pdf": "ea1d30c642772b967096669d6c954e625b4e74dfa0d2d6f80fafdbcc57b2036d",
-      "reporte/reporte.pdf": "ea1d30c642772b967096669d6c954e625b4e74dfa0d2d6f80fafdbcc57b2036d",
+      "reporte/main.tex": "64c89ff641df1d289528c692a52398d6b2ce077abe77b0b738e3a0da59154d71",
+      "reporte/reporte.md": "9ca6968109f8cbe6377b8a1f64adc1d52afdd44dc6b1173f49e856146faa9900",
+      "reporte/main.pdf": "da6870c6a009aefcbd68489b00a7bf771df6be3659bd17bd1d3ea9f7f06478c9",
+      "reporte/reporte.pdf": "da6870c6a009aefcbd68489b00a7bf771df6be3659bd17bd1d3ea9f7f06478c9",
       "reporte/figuras/trayectoria-siniestros.png": "4cf1f30545dd2e0321df8328e0189454ee2473f51e441519f1fb19355d1951f1",
       "reporte/figuras/cambios-por-grupo.pdf": "9ac61a8aaa5252a2dd7e1501a6481bd02b7e4e2225e95dcb3cabd88e6d488aea",
-      "reporte/figuras/generar_cambios.py": "d6c435be1312e393a2c8165c9a912e0729a8c85b5ed622bac5e9fb4c4d6f6f24"
+      "reporte/figuras/conteos-por-grupo.pdf": "f73f257d6dac6d1ffbc15b9b27f76f04d760089cd7620bebc903279296c619e3",
+      "reporte/figuras/generar_series.py": "5d5d1e2fbf19ff57bd0c373aa983325034a75aa13fc96ec38e47da26b0622b14"
     },
     "presentacion": {
       "presentacion/index.html": "fd10c2384f6a168ab042fb901c7f13361b106944fbc3690a8b0050baf416e89d",
@@ -265,17 +266,17 @@
       "presentacion/guion.md": "eb1551ffb97104e0bf9f4861130e1d9e870633a1cf6028665a9205e5738d18fe"
     }
   },
-  "paginas_pdf": 45,
+  "paginas_pdf": 46,
   "paginas_secciones": {
-    "Referencias": 8,
-    "Apéndice A. Fuentes y especificaciones progresivas": 9,
-    "Apéndice B. Contrastes principales, persistencia y placebo": 12,
-    "Apéndice C. Sensibilidades y calendario": 13,
-    "Apéndice D. Inferencia y potencia": 16,
-    "Apéndice E. Construcción del catálogo y reproducción": 18,
-    "Apéndice F. Contexto geográfico de la muestra": 19,
-    "Apéndice G. Análisis exploratorio por horario y gravedad": 20,
-    "Apéndice H. Código reproducible en R": 21
+    "Referencias": 9,
+    "Apéndice A. Fuentes y especificaciones progresivas": 10,
+    "Apéndice B. Contrastes principales, persistencia y placebo": 13,
+    "Apéndice C. Sensibilidades y calendario": 14,
+    "Apéndice D. Inferencia y potencia": 17,
+    "Apéndice E. Construcción del catálogo y reproducción": 19,
+    "Apéndice F. Contexto geográfico de la muestra": 20,
+    "Apéndice G. Análisis exploratorio por horario y gravedad": 21,
+    "Apéndice H. Código reproducible en R": 22
   },
   "lineas_codigo_r": 1354,
   "identidad_listado_r": true,
@@ -337,7 +338,31 @@
       5,
       6,
       7,
-      8
+      8,
+      9,
+      22
+    ]
+  },
+  "figura_conteos_por_grupo": {
+    "pagina": 6,
+    "dias": [
+      -28,
+      13
+    ],
+    "dias_base": [
+      -28,
+      -8
+    ],
+    "promedios_cotejados_por_grupo": 42,
+    "pares": 3613,
+    "diferencia_absoluta_maxima": 4.933831121434196e-13,
+    "paginas_revisadas": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      22
     ]
   }
 }
