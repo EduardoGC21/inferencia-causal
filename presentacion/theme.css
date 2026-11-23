@@ -190,10 +190,17 @@
 
 .closing .slide-surface { color: white; background: var(--navy); }
 .closing .eyebrow, .closing a { color: #c7def4; }
-.closing header { margin-top: 69px; }
-.closing-summary { max-width: 820px; }
-.closing-limit { margin-top: 61px; }
-.closing-limit strong { display: inline-block; margin-bottom: 7px; color: #c7def4; }
+.closing header { margin: 30px 0 46px; }
+.closing-results { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.closing-estimate { background: #194169; padding: 24px 30px; }
+.closing-period, .closing-interval { font-size: var(--label); color: #c7def4; }
+.closing-period { font-weight: 700; }
+.closing-number { margin-top: 6px; font-size: var(--title); font-weight: 700; }
+.closing-scale { font-size: var(--body); font-weight: 400; }
+.closing-interval { margin-top: 5px; }
+.closing-persistence h3 { margin: 8px 0 4px; }
+.closing-limit { margin-top: 46px; max-width: 1030px; }
+.closing .source { color: #c7def4; right: 340px; }
 .slide-surface :is(.backup-link, .back-link) { position: absolute; bottom: 34px; right: 76px; font-size: var(--label); }
 .backup .source { right: 300px; }
 .backup-index { display: grid; gap: 19px; margin-top: 45px; }

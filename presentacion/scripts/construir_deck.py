@@ -270,12 +270,24 @@ add("sensibilidades", "Resultados", "Sensibilidad del resultado", 30, f"""
 "¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources,
 table_note=f"Días 0–1 · {m0} · 1:muchos")
 
-add("conclusion", "Conclusión", "La mayor caída relativa aparece al inicio", 20, """
-<p class="closing-summary">La caída destaca en los días 0–1. Después, las estimaciones son menores y la duración sigue abierta.</p>
-<p class="closing-limit"><strong>Limitación</strong><br>Las diferencias previas entre los grupos limitan la atribución causal.</p>
+initial = result()
+add("conclusion", "Conclusión", "La mayor caída estimada aparece al inicio", 20, f"""
+<div class="closing-results">
+  <div class="closing-estimate">
+    <p class="closing-period">Días 0–1</p>
+    <p class="closing-number">{num(initial["efecto"])} <span class="closing-scale">en {log}</span></p>
+    <p class="closing-interval">Intervalo del 95 % [{num(initial["ic_inf"])}; {num(initial["ic_sup"])}]</p>
+  </div>
+  <div class="closing-persistence">
+    <p class="closing-period">Días 2–6 y 7–13</p>
+    <h3>Duración incierta</h3>
+    <p>Ambos intervalos incluyen cero.</p>
+  </div>
+</div>
+<p class="closing-limit"><strong>Las diferencias previas</strong> entre tratados y controles limitan la atribución al ataque.</p>
 <a class="backup-link" href="#/respaldos">Respaldos para discusión →</a>""",
-"""La mayor caída relativa de registros aparece al inicio. Después, las estimaciones son menores y queda abierta la duración. La limitación central para atribuir la caída al ataque es que tratados y controles ya mostraban diferencias antes del inicio.""",
-"Aquí termina la exposición. Los respaldos sirven para la discusión.", "Reporte, §5 y apéndices E–G.", style="closing")
+"""La mayor caída relativa se estima en los días cero y uno. Después, los intervalos incluyen cero y la duración sigue abierta. Las diferencias que ya había entre tratados y controles limitan cuánto podemos atribuir al ataque.""",
+"Aquí termina la exposición. Los respaldos sirven para la discusión.", "Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Y).", sources, style="closing")
 
 add("respaldos", "Discusión", "Respaldos para la discusión", 0, """
 <nav class="backup-index" aria-label="Respaldos">

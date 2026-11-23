@@ -160,19 +160,19 @@ Con los mismos pares y pesos, usar la semana previa como base atenúa la caída 
 
 **Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
 
-## La mayor caída relativa aparece al inicio
+## La mayor caída estimada aparece al inicio
 
 **Identificador** `conclusion` · **Tiempo** 7:40–8:00 (20 s)
 
 **Explicación oral**
 
-La mayor caída relativa de registros aparece al inicio. Después, las estimaciones son menores y queda abierta la duración. La limitación central para atribuir la caída al ataque es que tratados y controles ya mostraban diferencias antes del inicio.
+La mayor caída relativa se estima en los días cero y uno. Después, los intervalos incluyen cero y la duración sigue abierta. Las diferencias que ya había entre tratados y controles limitan cuánto podemos atribuir al ataque.
 
 **Transición**
 
 Aquí termina la exposición. Los respaldos sirven para la discusión.
 
-**Referencia para consulta.** Reporte, §5 y apéndices E–G.
+**Referencia para consulta.** Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Y).
 
 # Respaldos
 
