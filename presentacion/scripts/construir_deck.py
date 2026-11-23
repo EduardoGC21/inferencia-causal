@@ -191,6 +191,7 @@ add("matching", "Estrategia empírica", "Cómo elegimos los controles para compa
 "La comparación requiere una base previa para cada día analizado.", "Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.")
 
 add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 50, f"""
+<p class="lead">Para el Día 0, se promedian las tres fechas resaltadas del mismo día de la semana.</p>
 {calendar()}
 <div class="timeline-key"><span><i class="key-swatch reference"></i> Referencias del Día 0</span><span><i class="key-swatch followup"></i> Tramos analizados</span><span>Semana −1 · diagnóstico previo</span></div>
 <div class="math-band">
