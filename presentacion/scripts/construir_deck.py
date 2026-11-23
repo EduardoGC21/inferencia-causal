@@ -232,7 +232,7 @@ add("eventos", "Estrategia empírica", "Promedios y cambios de tratados y contro
 
 add("trayectoria", "Supuestos", "Diagnóstico de tendencias paralelas", 45, f"""
 <figure class="wide-chart">{figure("trayectoria-principal", "Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.")}
-  <figcaption class="axis-caption">Días respecto al inicio local · Intervalos puntuales del 95 %</figcaption>
+  <figcaption class="axis-caption">Días respecto al inicio local · {m0} · Intervalos puntuales del 95 %</figcaption>
 </figure>
 <div class="diagnostic">
   <p><strong>Tendencias paralelas:</strong> cambios comparables en ausencia del ataque.</p>
