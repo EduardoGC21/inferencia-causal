@@ -266,7 +266,7 @@ for label, row in [
     short, = rows([(label, row)])
     sensitivity_rows.append((short[0], row["tratados"], *short[1:]))
 
-add("sensibilidades", "Resultados", "La referencia previa y el calendario importan", 30, f"""
+add("sensibilidades", "Resultados", "Sensibilidad del resultado", 30, f"""
 <p class="lead">Días 0–1 · {m0}, 1:muchos, {log} · intervalos por estado y fecha</p>
 {table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}""",
 """Con los mismos pares y pesos, la semana previa atenúa la caída y el día menos dos cambia el signo. Ambos intervalos incluyen cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.""",

@@ -146,7 +146,7 @@ La base y el calendario también afectan la lectura del resultado inicial.
 
 **Referencia para consulta.** Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.
 
-## La referencia previa y el calendario importan
+## Sensibilidad del resultado
 
 **Identificador** `sensibilidades` · **Tiempo** 7:10–7:40 (30 s)
 
