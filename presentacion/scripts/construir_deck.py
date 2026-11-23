@@ -70,7 +70,7 @@ def models_table():
     report = (DECK.parent / "reporte/reporte.md").read_text(encoding="utf-8")
     panel = report.split("**Panel A. Resultado:", 1)[1].split("\n\nCada celda", 1)[0]
     labels = {
-        "Tratamiento": "Tratamiento (" + math(r"\widehat{\beta}") + ")",
+        "Tratamiento": "Tratado × Después (" + math(r"\widehat{\tau}_{\mathrm{DD}}") + ")",
         "Logaritmo de la población": "Logaritmo de población",
         "Empleo por cada mil habitantes": "Empleo por mil habitantes",
         "Automóviles por cada mil habitantes": "Autos por mil habitantes",
@@ -104,23 +104,26 @@ def models_table():
     return table(("Variable / estadístico", *models), body)
 
 
-log = math(r"\log(1+Y)")
+log = math(r"\log(1+Z)")
 m0 = math("M_0")
 base_eq = math(
     r"\left.\begin{aligned}"
-    r"g(y)&=\log(1+y)\\"
-    r"B_{ith}^{g}&=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k})"
+    r"B_{ith}^{g}&=\tfrac13\sum_{k\in\{28,21,14\}}g(Z_{i,r(t,h)-k})\\"
+    r"g(z)&=\log(1+z)"
     r"\end{aligned}\right\}"
     r"\quad{\color{#235ca0}\longrightarrow}\quad"
-    r"\Delta_{ith}^{g}=g(Y_{i,t+h})-B_{ith}^{g}",
+    r"\begin{aligned}Y_{ith0}^{g}&=B_{ith}^{g}\\"
+    r"Y_{ith1}^{g}&=g(Z_{i,t+h})\end{aligned}",
     True,
 )
 reg_eq = math(
-    r"\underbrace{\Delta_{ith}^{g}}_{\text{cambio}}"
-    r"=\underbrace{\lambda_{th}}_{\text{FE de fecha}}"
-    r"+\underbrace{\color{#235ca0}{\beta_h^{g}D_{it}}}_{\text{tratamiento}}"
-    r"+\underbrace{X_{it}^{\prime}\gamma_h}_{\text{covariables}}"
-    r"+\underbrace{u_{ith}}_{\text{residuo}}",
+    r"\begin{gathered}\underbrace{Y_{iths}^{g}}_{\text{Valor por municipio, fecha y día o tramo}}"
+    r"=\underbrace{\alpha_{ith}}_{\text{Efecto fijo de par}}"
+    r"+\underbrace{\lambda_{th}\mathrm{Post}_s}_{\text{Efecto fijo de inicio × periodo}}"
+    r"\\+\underbrace{\color{#235ca0}{\tau_{\mathrm{DD},h}^{g}}}_{\text{Coeficiente de interés}}"
+    r"\underbrace{(\mathrm{Treat}_{it}\times\mathrm{Post}_s)}_{\text{Tratado × Después}}"
+    r"+\underbrace{(X_{it}^{\prime}\gamma_h)\mathrm{Post}_s}_{\text{Ajuste por covariables}}"
+    r"+\underbrace{\varepsilon_{iths}}_{\text{Residuo}}\end{gathered}",
     True,
 )
 
@@ -204,27 +207,28 @@ add("matching", "Estrategia empírica", "Cómo elegimos los controles para compa
 "La comparación requiere una base previa para cada día analizado.", "Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.")
 
 add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 50, f"""
-<p class="lead">Para el Día 0, se promedian las tres fechas resaltadas del mismo día de la semana.</p>
+<p class="lead">{math("Z")} es el conteo diario. La base del Día 0 usa las tres fechas resaltadas.</p>
 {calendar()}
 <div class="timeline-key"><span><i class="key-swatch reference"></i> Referencias del Día 0</span><span><i class="key-swatch followup"></i> Tramos analizados</span><span>Semana −1 · diagnóstico previo</span></div>
 <div class="math-band">
   {base_eq}
 </div>""",
-"""Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. Dejo fuera la semana menos uno para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local, h el día relativo y r conserva el día de la semana. Aplico logaritmo de uno más Y a cada conteo antes de promediar las tres referencias. Resto esa base del valor observado. Cada tramo promedia cambios diarios. El Día 0 puede incluir horas anteriores al inicio.""",
-"Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.", "Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.")
+"""Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. La semana menos uno sirve para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local y h el día relativo. Aplico logaritmo de uno más Z a cada conteo antes de promediar. Para cada día guardo dos filas: la base y el valor observado. En cada tramo, cada fila promedia sus valores diarios. El Día cero puede incluir horas anteriores al inicio.""",
+"Ahora podemos comparar las dos filas de cada par.", "Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.")
 
 add("regresion", "Estrategia empírica", "Estimación por mínimos cuadrados ponderados", 50, f"""
+<p class="reg-indices">{math("i")} municipio · {math("t")} fecha de inicio · {math("h")} día o tramo · {math("s")} fila de comparación · {math("g")} escala (logaritmos o niveles)</p>
+<p class="reg-periods">{math(r"\mathrm{Post}_s=0")} Base previa <span aria-hidden="true">·</span> {math(r"\mathrm{Post}_s=1")} Día o tramo {math("h")} (p. ej., días 0–1)</p>
 <div class="math-band reg-equation">{reg_eq}</div>
-<p class="reg-reading"><strong>{math(r"\boldsymbol{\beta_h^g}")} mide la diferencia entre cambios.</strong></p>
-<p class="reg-estimand"><strong>Estimamos ATT en escala {math(r"\boldsymbol{\log(1+Y)}")}.</strong></p>""",
-"""La variable dependiente es el cambio que acabamos de construir. D vale uno para el tratado y cero para un control. Lambda es el efecto fijo de fecha y descuenta cambios comunes a cada inicio. Beta es la diferencia entre cambios. Buscamos estimar el efecto promedio del tratamiento sobre los tratados, el ATT. X reúne covariables previas, gamma sus coeficientes y u el residuo. La regresión usa mínimos cuadrados ponderados. En M cero, cada tratado pesa uno y distribuye una unidad de peso entre sus controles. Equivale a promediar 77 contrastes, uno por par tratado. M uno añade logaritmo de población, M dos empleo por mil habitantes y M tres autos por mil. La muestra y los pesos explícitos se conservan.""",
-"Veamos las trayectorias que dan origen a ese contraste.", "Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.")
+<p class="reg-reading">{math(r"\mathrm{Treat}_{it}")} vale 1 para tratados y 0 para controles.</p>""",
+"""Después vale cero en la base y uno en el día o tramo que analizo. En los días cero a uno, Y promedia el resultado de ambos días en la fila con Después igual a uno. Si analizo el día menos dos, esa fila también lleva un uno. Al restar los dos valores de Y, obtengo el cambio de cada par y alfa se cancela. Lambda recoge el cambio común de cada fecha de inicio. Tau compara el cambio de los tratados con el de sus controles. En M cero, los 77 tratados pesan igual. Los modelos siguientes ajustan por población, empleo y autos.""",
+"Veamos las trayectorias que dan origen a ese contraste.", "Reporte, §3 y apéndice D. Las dos formas de estimar reproducen el mismo coeficiente y la misma inferencia cuando la corrección cuenta pares.")
 
 add("eventos", "Estrategia empírica", "Promedios y cambios de tratados y controles", 60, f"""
 <div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span></div>
 <div class="series-layout">
   <figure><figcaption>Promedio observado</figcaption>{figure("eventos-observados.svg", "Promedios observados por grupo, del día −28 al 13.")}</figure>
-  <figure><figcaption>Cambio medio respecto a la base</figcaption>{figure("eventos-cambios.svg", "Cambios medios de tratados y controles en log(1+Y), del día −7 al 13.")}</figure>
+  <figure><figcaption>Cambio medio respecto a la base</figcaption>{figure("eventos-cambios.svg", "Cambios medios de tratados y controles en log(1+Z), del día −7 al 13.")}</figure>
 </div>
 <p class="axis-caption">Días respecto al inicio local</p>""",
 """A la izquierda, cada línea promedia el logaritmo de uno más el conteo de siniestros por municipio y día. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.""",
@@ -238,13 +242,13 @@ add("trayectoria", "Supuestos", "Diagnóstico de tendencias paralelas", 45, f"""
   <p><strong>Tendencias paralelas:</strong> cambios comparables en ausencia del ataque.</p>
   <p><strong>Prueba previa por semanas:</strong> rechaza por estado; es inconclusa por estado y fecha.</p>
 </div>""",
-"""Cada punto es la diferencia entre los cambios de tratados y controles. Es el coeficiente estimado, beta gorro. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.""",
+"""Cada punto estima tau, la diferencia entre los cambios de tratados y controles. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.""",
 "Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Modelo M₀, 1:muchos. Intervalos puntuales del 95 % por estado y fecha. Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
 
 add("resultados", "Resultados", "Añadir covariables cambia poco la estimación inicial", 35, f"""
 {models_table()}""",
-"""En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Y. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.""",
-"Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares municipio–fecha, efectos fijos de fecha y el cambio en log(1+Y). Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources,
+"""En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Z. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.""",
+"Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares: 77 tratados y 3 536 de control. Las dos medidas de ajuste corresponden a la regresión sobre cambios. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*).", sources,
 table_note="Días 0–1 · 1:muchos · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.")
 
 add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 40, f"""
@@ -267,7 +271,7 @@ for label, row in [
 add("sensibilidades", "Resultados", "Sensibilidad del resultado", 30, f"""
 {table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}""",
 """Con los mismos pares y pesos, usar la semana previa como base atenúa la caída y el intervalo incluye cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.""",
-"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources,
+"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Z) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources,
 table_note=f"Días 0–1 · {m0} · 1:muchos")
 
 initial = result()
@@ -287,7 +291,7 @@ add("conclusion", "Conclusión", "La mayor caída estimada aparece al inicio", 2
 <p class="closing-limit"><strong>Las diferencias previas</strong> entre tratados y controles limitan la atribución al ataque.</p>
 <a class="backup-link" href="#/respaldos">Respaldos para discusión →</a>""",
 """La mayor caída relativa se estima en los días cero y uno. Después, los intervalos incluyen cero y la duración sigue abierta. Las diferencias que ya había entre tratados y controles limitan cuánto podemos atribuir al ataque.""",
-"Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.", "Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Y).", sources, style="closing")
+"Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.", "Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Z).", sources, style="closing")
 
 add("referencias", "", "Referencias", 0, """
 <ul class="reference-list">
@@ -320,7 +324,7 @@ add("soporte", "Discusión", "Soporte, balance y pesos", 0, f"""
 <div class="backup-grid">
   <div><h3>Reglas de elegibilidad</h3><p>Tres meses completos con registros, territorio estable y ventana previa libre de exposición documentada.</p><p>Covariables con medición anterior a {math("t-28")} y razones entre 0,5 y 2.</p></div>
   <div><h3>Cómo se reparte el peso</h3><p>{math(r"C_{it}")} reúne los controles elegibles del tratado {math("i")} en {math("t")}.</p>
-  <div class="math-band">{math(r"w_{it}=1\quad(D_{it}=1),\qquad w_{ct}=\sum_{i:\,c\in C_{it}}\frac{1}{|C_{it}|}",True)}</div></div>
+  <div class="math-band">{math(r"w_{it}=1\quad(\mathrm{Treat}_{it}=1),\qquad w_{ct}=\sum_{i:\,c\in C_{it}}\frac{1}{|C_{it}|}",True)}</div></div>
 </div>
 <p class="takeaway">La mayor diferencia estandarizada observada en 1:muchos es 0,082 en valor absoluto.</p>""",
 """El nivel de accidentes se calcula en Días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.""",
@@ -332,7 +336,7 @@ add("inferencia", "Discusión", "La agrupación permite errores dependientes", 0
   <div><h3>Diagnóstico previo por semanas</h3><p>Compara las semanas −4, −3 y −1 con la −2.</p><p>Por estado: {math(r"p<0{,}001")}.<br>Por estado y fecha: {math(r"p=0{,}109")}.</p></div>
 </div>
 <p class="takeaway">La agrupación cambia la precisión. El diagnóstico examina una fuente de sesgo.</p>""",
-"""La agrupación en dos dimensiones admite dependencia por estado y por fecha, descuenta su intersección y conserva el coeficiente. Se distingue de un ajuste de Bonferroni: los intervalos de la trayectoria tienen cobertura nominal por punto. Catorce estados aportan tratados y el peso está concentrado. El intervalo alternativo omite un estado a la vez, conserva los pesos de las filas restantes y vuelve a absorber las fechas. En la prueba previa, la semana menos dos es el punto de referencia para una comparación conjunta distinta de la base diaria y del placebo. El efecto mínimo detectable en niveles para Días 0–1 es de 0,664 registros por municipio y día, bajo prueba bilateral del 5 por ciento y potencia del 80 por ciento.""",
+"""La agrupación en dos dimensiones admite dependencia por estado y por fecha, descuenta su intersección y conserva el coeficiente. La corrección de muestra finita cuenta pares. Si cuenta las 7 226 filas, el valor p del contraste principal pasa de 0,019 a 0,090 con los mismos 31 grados de libertad. Los intervalos de la trayectoria tienen cobertura nominal por punto. Catorce estados aportan tratados y el peso está concentrado. El intervalo alternativo omite un estado a la vez, conserva los pesos de los pares restantes y vuelve a absorber los efectos fijos. En la prueba previa, la semana menos dos es la referencia de la comparación conjunta. El efecto mínimo detectable en niveles para Días 0–1 es de 0,664 registros por municipio y día, bajo una prueba bilateral del 5 por ciento y potencia del 80 por ciento.""",
 "Volver al índice de respaldos.", "Reporte, §3.1, §4 y apéndice D.", sources)
 
 contrast_table = table(("Modelo y escala", "Estimación", "Intervalo del 95 %"), rows([
@@ -344,7 +348,7 @@ add("contrastes", "Discusión", "El signo se mantiene con 1:1 y en niveles", 0, 
 <p class="lead">Días 0–1 · 77 pares tratados · intervalos por estado y fecha</p>
 {contrast_table}
 <p class="takeaway">Con 1:1 y en niveles, el intervalo incluye cero.</p>""",
-"""En uno a uno la magnitud es similar y el intervalo se amplía. En niveles se estiman 0,397 registros menos por municipio y día. El intervalo admite otras magnitudes y un cambio nulo. La transformación exponencial del coeficiente principal da una caída del 10,2 por ciento en la escala geométrica de uno más Y. La media aritmética de los accidentes corresponde a otra cantidad.""",
+"""En uno a uno la magnitud es similar y el intervalo se amplía. En niveles se estiman 0,397 registros menos por municipio y día. El intervalo admite otras magnitudes y un cambio nulo. La transformación exponencial del coeficiente principal da una caída del 10,2 por ciento en la escala geométrica de uno más Z. La media aritmética de los accidentes corresponde a otra cantidad.""",
 "Volver al índice de respaldos.", "Reporte, §4 y cuadros B1–B2.", sources)
 
 add("alternativas", "Discusión", "En niveles cambia la precisión", 0, f"""

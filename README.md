@@ -1,27 +1,51 @@
 # Narcoataques y siniestros viales registrados
 
-## Reporte aprobado y compilación editorial
+## Cotejo del panel en formato largo
 
-Se incorporaron las 21 propuestas aprobadas en Markdown. El cuerpo ocupa siete
-páginas a 11 puntos; las referencias están en la página 8 y los apéndices en
-las páginas 9–49. La selección de tratados y controles se identifica como
-matching 1:muchos o 1:1. Las cifras de los modelos se conservan.
+La sección 3 del reporte presenta dos filas por par municipio–fecha de inicio y
+horizonte. El ajuste absorbe efectos fijos de par y de fecha de inicio por
+periodo de comparación. El coeficiente de **Tratado × Después** reproduce el de
+la regresión de cambios. La corrección por número de pares y los mismos
+conglomerados reproducen también la inferencia reportada.
 
-Para trasladar una nueva versión aprobada del Markdown a LaTeX, desde este
-checkout:
+En la raíz del repositorio, con el entorno Python del proyecto disponible,
+indica la carpeta de modelos de Ruta B ya verificada y los datos procesados
+de la misma ejecución. El cotejo usa sus muestras y pesos y reconstruye las
+bases y los resultados diarios. En R se reconstruyen también las muestras y los
+pesos a partir de los datos limpios.
 
 ```powershell
-python reporte/convertir_markdown.py reporte/reporte.md reporte/main.tex ../tasks/revision-editorial/compilacion
+$env:PYTHONPATH = (Resolve-Path src).Path
+$cotejo = "reporte/verificacion/twfe-local"
+Rscript --vanilla codigo_R/analisis.R RUTA/datos_limpios_R "$cotejo/r" --panel-largo
+python -m choques cotejar-panel --referencia RUTA/data/outputs/modelos --procesados RUTA/data/processed --replica-r "$cotejo/r/modelos" --salida "$cotejo/cotejo"
+```
+
+`--replica-r` es opcional. El subcomando escribe el resumen y los cotejos por
+especificación, incluidas las inferencias con la corrección alternativa que
+cuenta las dos filas por par. El [cotejo documentado](reporte/verificacion/panel-largo.md)
+identifica los insumos y el resultado. El apéndice H incluye la réplica en R.
+
+## Reporte oficial y compilación
+
+El cuerpo ocupa siete páginas a 11 puntos, las referencias están en la página 8
+y los apéndices en las páginas 9–50. En el reporte y la presentación, $Z$ es
+el conteo diario, $Y$ es la variable dependiente y $\tau_{\mathrm{DD}}$ es el
+coeficiente de Tratado × Después.
+
+Desde la raíz del repositorio, convierte el Markdown a LaTeX y compila el PDF.
+
+```powershell
+python reporte/convertir_markdown.py reporte/reporte.md reporte/main.tex reporte/verificacion/twfe-local/compilacion
 python -m choques compilar
 ```
 
 Estos comandos solo actualizan el escrito; no ejecutan estimaciones ni el
 flujo completo. La compilación utiliza Biber y conserva idénticos `main.pdf`
 y `reporte.pdf`. Las figuras locales están en `reporte/figuras/`.
-`codigo_R/analisis.R`, ya incorporado a main, se conserva sin cambios.
+El apéndice H incluye la versión actual de `codigo_R/analisis.R`.
 
-El apéndice H (pp. 23–49) incorpora las 1 465 líneas de ese archivo R, con
-números de línea. Una ejecución nueva desde el ZIP de datos limpios reprodujo
+Antes del cotejo en formato largo, una ejecución desde el ZIP de datos limpios reprodujo
 los 22 productos cotejados con tolerancia absoluta de 1e-6 y las 18 tablas a
 la precisión impresa. El [registro del cotejo](reporte/verificacion/reproduccion-r.json)
 incluye huellas del código, insumos y resultados Python de referencia.
@@ -41,9 +65,8 @@ en Python. Las salidas históricas adicionales del archivo R, incluida la
 comparación semanal de Culiacán, permanecen fuera de los resultados del reporte.
 
 La [verificación editorial](reporte/verificacion/revision-editorial.json)
-identifica el PDF final. Los manifiestos de reproducción analítica anteriores
-conservan su alcance histórico; no certifican una nueva ejecución del flujo
-completo para esta edición.
+identifica el PDF anterior al cotejo. Los manifiestos de reproducción analítica
+de esa edición registran la ejecución del flujo completo de referencia.
 
 ## Diseño final: Ruta B
 
@@ -53,10 +76,10 @@ el 21 de noviembre de 2026 después de observar T05 y la auditoría. La rama
 que contiene `0335513`. T08 queda fuera del alcance.
 
 El escrito identifica a Eduardo Garcia Cortez, clave única 207480, y al profesor
-Mauricio Romero. La [verificación del syllabus](reporte/cumplimiento-syllabus.md)
-localiza las cinco secciones obligatorias y sus evidencias: siete páginas de
-cuerpo, una de referencias APA y 41 de apéndices (49 en total), con fuente de 11 puntos
-en el cuerpo y de 9 puntos en el listado de código.
+Mauricio Romero. La [verificación del programa del curso](reporte/cumplimiento-syllabus.md)
+localiza las cinco secciones obligatorias y la notación canónica en la versión
+revisada. El cuerpo ocupa siete páginas a 11 puntos y el listado de código
+usa 9 puntos.
 Los párrafos se alinean a la izquierda, sin justificación ni sangría inicial.
 El apéndice incluye el mapa de municipios tratados y controles.
 El reporte se concentra en jornadas extensas con inicio local definido.
@@ -74,7 +97,7 @@ La [matriz de auditoría y verificación](reporte/auditoria-final.md) vincula ca
 requisito con su código, salidas y evidencia de cierre.
 
 El contraste principal es el promedio diario **d0..1**, M0, matching 1:muchos,
-en `log(1+Y)`. `Y` cuenta registros ATUS publicados con fecha válida: no mide
+en `log(1+Z)`. `Z` cuenta registros ATUS publicados con fecha válida: no mide
 riesgo por viaje y puede cambiar por movilidad, riesgo o captación. Se reportan
 también d0, d1, d2..6, wk0 y wk+1, niveles, matching 1:1 y M0–M3. La conclusión
 se basa en los resultados regenerados, incluidos los diagnósticos desfavorables.
@@ -90,15 +113,15 @@ se basa en los resultados regenerados, incluidos los diagnósticos desfavorables
 | Matching | Desde el pool ya restringido por la fecha | Desde el universo elegible, calibre individual y luego población, empleo/mil y autos/mil |
 | Soporte | Diez controles de cinco estados por fecha | Diez candidatos de cinco estados por tratado; después se elige el vecino 1:1 |
 | Elegibilidad principal | Continuidad hasta +15 y aislamiento hasta +16 | Tres meses completos anteriores al mes del inicio, exposición [-49,-1] y territorio hasta t-1 |
-| Resultado principal | Niveles, día 0 | Promedio de dos días naturales en log(1+Y); niveles complementarios |
+| Resultado principal | Niveles, día 0 | Promedio de dos días naturales en log(1+Z); niveles complementarios |
 | Persistencia | Misma muestra seleccionada a futuro | Rama explícita con cobertura [-28,+13] y aislamiento hasta +14, comparada con la muestra previa |
 | Inferencia | CRV1 estatal y doble; Wald de 12 previos | Ambas CRV1, CRV3 estatal, omisiones y Wald semanal de tres restricciones |
 | Culiacán | Doce donantes, incluido 24028 | Donantes sin segregación M en la ventana; rama descriptiva |
 
 Para h=1, la base es {-27,-20,-13}; para h=7 vuelve a {-28,-21,-14}.
 La fórmula literal r=t+h sería incompatible con la ventana limpia para ciertos
-horizontes. Se transforma cada observación antes de promediar. `100*expm1(beta)`
-describe la escala geométrica de 1+Y, no directamente el cambio porcentual del
+horizontes. Se transforma cada observación antes de promediar. `100*expm1(tau)`
+describe la escala geométrica de 1+Z, no directamente el cambio porcentual del
 promedio aritmético de accidentes. Dos fechas naturales no equivalen a 48 horas
 posteriores exactas si la jornada comienza por la tarde.
 
@@ -149,7 +172,7 @@ incluyendo Huaniqueo 16037 (2025-04-23), que sigue fuera por elegibilidad previa
 La referencia auditada mantiene 73 tratados y +0.237468 en d0 con b=-2.
 El diseño final usa 77 tratados, 3536 controles y 32 fechas: log d0..1=-0.107136,
 IC doble [-0.195466,-0.018805]; niveles=-0.396551, IC doble [-0.864827,+0.071724].
-La equivalencia geométrica de 1+Y es aproximadamente -10.2%; no es directamente
+La equivalencia geométrica de 1+Z es aproximadamente -10.2%; no es directamente
 ese porcentaje de la media de Y. Morelia pasa de diez donantes antiguos a doce
 donantes bajo el nuevo diseño y conserva doce al excluir las señales.
 

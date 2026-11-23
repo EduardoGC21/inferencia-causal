@@ -10,3 +10,4 @@ reporte/*.fls
 reporte/*.fdb_latexmk
 reporte/*.bcf
 reporte/*.run.xml
+reporte/verificacion/twfe-local/

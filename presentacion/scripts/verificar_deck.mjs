@@ -48,7 +48,7 @@ try {
     const surface = page.locator('section.present .slide-surface');
     const clipped = await surface.evaluate(surface => {
       const frame = surface.getBoundingClientRect();
-      return [...surface.querySelectorAll('header, p, img, figcaption, .equation, td, th, a')]
+      return [...surface.querySelectorAll('header, p, img, figcaption, .equation, .katex-html .base, td, th, a')]
         .filter(el => {
           const box = el.getBoundingClientRect();
           return box.right > frame.right + 1 || box.bottom > frame.bottom + 1;

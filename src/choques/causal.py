@@ -37,14 +37,20 @@ def transform(values, scale):
     return np.log1p(values) if scale == "log1p" else values
 
 
-def contrasts(matrix, sample, scale, base="tres_semanas", spans=HORIZONS):
+def contrasts(matrix, sample, scale, base="tres_semanas", spans=HORIZONS, *, panel=False):
     days = set(h for span in spans.values() for h in span)
     references = {h: baseline_offsets(h) if base == "tres_semanas" else
                   tuple(range(-7, 0)) if base == "wk-1" else (-2,) for h in days}
     needed = days | {b for refs in references.values() for b in refs}
     values = {h: transform(matrix.extract(sample, h), scale) for h in sorted(needed)}
-    delta = {h: values[h] - np.mean([values[b] for b in references[h]], axis=0) for h in days}
-    return np.column_stack([np.mean([delta[h] for h in span], axis=0) for span in spans.values()])
+    baselines = {h: np.mean([values[b] for b in references[h]], axis=0) for h in days}
+
+    def aggregate(series):
+        return np.column_stack([np.mean([series[h] for h in span], axis=0) for span in spans.values()])
+
+    if panel:
+        return aggregate(baselines), aggregate(values)
+    return aggregate({h: values[h] - baselines[h] for h in days})
 
 
 def published_matrix(matrix, counts):
@@ -132,14 +138,16 @@ def select_pre(matrix, published, events, reported, invalid, changes, design,
             pd.concat(audits, ignore_index=True))
 
 
-def jackknife(frame, columns, outcomes, design):
-    """CRV3 con pesos fijos: cada réplica vuelve a absorber los efectos de fecha."""
-    beta, _, _ = estimate(frame, columns, outcomes, design)
+def jackknife(frame, columns, outcomes, design, *, baseline=None, beta=None):
+    """CRV3 con pesos fijos y efectos fijos reestimados en cada réplica."""
+    if beta is None:
+        beta, _, _ = estimate(frame, columns, outcomes, design, baseline=baseline, inference=False)
     states = sorted(frame.estado.unique())
     replicas = []
     for state in states:
         keep = frame.estado.ne(state).to_numpy()
-        b, _, _ = estimate(frame.loc[keep].reset_index(drop=True), columns, outcomes[keep], design)
+        b, _, _ = estimate(frame.loc[keep].reset_index(drop=True), columns, outcomes[keep], design,
+                           baseline=None if baseline is None else baseline[keep], inference=False)
         replicas.append(b)
     replicas = np.asarray(replicas)
     delta = (replicas - beta).reshape(len(states), -1)
@@ -161,7 +169,7 @@ def results(matrix, sample, design, scale, base, models=(0,), with_jackknife=Fal
         frame = sample.assign(log_poblacion=np.log(sample.poblacion)) if model else sample
         b, covariances, dfs = estimate(frame, columns, y, design)
         if with_jackknife:
-            v, states, replicates = jackknife(frame, columns, y, design)
+            v, states, replicates = jackknife(frame, columns, y, design, beta=b)
             covariances["CRV3"], dfs["CRV3"] = v, len(states) - 1
             for g, state in enumerate(states):
                 for j, span in enumerate(HORIZONS):
@@ -181,13 +189,15 @@ def results(matrix, sample, design, scale, base, models=(0,), with_jackknife=Fal
     return rows, omitted
 
 
-def weekly_tests(matrix, sample, design, scale):
+def weekly_tests(matrix, sample, design, scale, *, panel=False):
     # wk-2 se omite: las cuatro semanas normalizadas por su promedio son redundantes.
     ref = np.mean([transform(matrix.extract(sample, h), scale) for h in range(-14, -7)], axis=0)
     spans = {"wk-4": range(-28, -21), "wk-3": range(-21, -14), "wk-1": range(-7, 0)}
-    y = np.column_stack([np.mean([transform(matrix.extract(sample, h), scale) for h in days], axis=0) - ref
+    y = np.column_stack([np.mean([transform(matrix.extract(sample, h), scale) for h in days], axis=0)
                          for days in spans.values()])
-    b, covariances, dfs = estimate(sample, ["tratado"], y, design)
+    baseline = np.broadcast_to(ref[:, None], y.shape)
+    b, covariances, dfs = (estimate(sample, ["tratado"], y, design, baseline=baseline) if panel else
+                           estimate(sample, ["tratado"], y - baseline, design))
     rows = []
     for cluster, v in covariances.items():
         eig = np.linalg.eigvalsh(v) if v is not None and np.isfinite(v).all() else [np.nan]
@@ -199,6 +209,25 @@ def weekly_tests(matrix, sample, design, scale):
             rows.append(dict(escala=scale, agrupacion=cluster, referencia="wk-2 [-14,-8]", restricciones=label,
                              **interval(b[j, 0], np.nan if v is None else v[j, j], dfs[cluster], design["alpha"])))
     return rows
+
+
+def cross_outcomes(crossed, frame, *, panel=False):
+    """Días 0–1 por franja y gravedad, y contraste noche menos día."""
+    def at(h):
+        keys = pd.MultiIndex.from_arrays([frame.clave, frame.indice + pd.Timedelta(days=h)])
+        return crossed.reindex(keys, fill_value=0).to_numpy(dtype=float)
+
+    def with_night_gap(values):
+        day, night, _ = np.split(values, 3, axis=1)
+        return np.column_stack([values, night - day])
+
+    observed = [at(h) for h in (0, 1)]
+    baseline = [np.mean([at(b) for b in baseline_offsets(h)], axis=0) for h in (0, 1)]
+    activity = np.sum(observed + baseline, axis=0).any(axis=0)
+    present = np.r_[activity, activity[:3] | activity[3:6]]
+    if panel:
+        return with_night_gap(np.mean(baseline, axis=0)), with_night_gap(np.mean(observed, axis=0)), present
+    return with_night_gap(np.mean(np.subtract(observed, baseline), axis=0)), present
 
 
 def calendar_flags(root, dates):
@@ -331,17 +360,10 @@ def run(config):
     cross_rows = []
     for method in ("emparejada", "emparejada_1a1"):
         frame = samples["principal"][method]
-        def at(h):
-            keys = pd.MultiIndex.from_arrays([frame.clave, frame.indice + pd.Timedelta(days=h)])
-            return crossed.reindex(keys, fill_value=0).to_numpy(dtype=float)
-        change = np.mean([at(h) - np.mean([at(b) for b in baseline_offsets(h)], axis=0) for h in (0, 1)], axis=0)
-        np.testing.assert_allclose(change.sum(axis=1), contrasts(published, frame, "niveles", spans={"d0..1": (0, 1)})[:, 0], atol=1e-12)
-        day, night, _ = np.split(change, 3, axis=1)
-        outcomes = np.column_stack([change, night - day])
+        outcomes, present = cross_outcomes(crossed, frame)
+        np.testing.assert_allclose(outcomes[:, :len(CROSS)].sum(axis=1),
+                                   contrasts(published, frame, "niveles", spans={"d0..1": (0, 1)})[:, 0], atol=1e-12)
         labels = list(CROSS) + [("noche_menos_dia", g) for g in ("fatal", "heridos", "danos")]
-        used = sorted({0, 1} | set(baseline_offsets(0)) | set(baseline_offsets(1)))
-        activity = np.sum([at(h) for h in used], axis=0).any(axis=0)
-        present = np.r_[activity, activity[:3] | activity[3:6]]
         b, cov, dfs = estimate(frame, ["tratado"], outcomes, design)
         for j, (hour, severity) in enumerate(labels):
             for cluster, v in cov.items():

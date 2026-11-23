@@ -83,24 +83,24 @@ def tables(config):
         put(name+'P',r.p);put(name+'Estado',texesc(r.estado))
     # Principal: niveles y log, d0 y d1 separados, y horizontes de persistencia.
     rows=[]
-    for scale,label in [('log1p',r'$\log(1+Y)$'),('niveles','Niveles')]:
+    for scale,label in [('log1p',r'$\log(1+Z)$'),('niveles','Niveles')]:
         for span in ['d0','d1','d0..1','d2..6','wk+1']:
             a,b=get(scale=scale,span=span),get(scale=scale,span=span,cluster='entidad_fecha')
             rows.append([label,SPAN_LABELS[span],result(a,False),interval(b),fmt(a.efecto_sigma,3),fmt(b.mde,3)])
-    table(tab/'causal_principales.tex',['Escala','Tramo',r'$\hat\beta$ (EE)',r'IC 95\% doble',r'$\beta/\sigma$', 'MDE doble'],rows)
+    table(tab/'causal_principales.tex',['Escala','Tramo',r'$\hat\tau$ (EE)',r'IC 95\% doble',r'$\tau/\sigma$', 'MDE doble'],rows)
     # Progresión con muestra fija, incluido el ajuste sin matching para los mismos tratados.
     rows=[]
     for method in ['comun_m0_m3','mismos_tratados','emparejada','emparejada_1a1']:
         for model in ['M0','M1','M2','M3']:
             log=get(method=method,model=model,cluster='entidad_fecha');lev=get(method=method,model=model,scale='niveles',cluster='entidad_fecha')
             rows.append([METHOD[method],MODEL_LABELS[model],fmt(log.tratados,0),fmt(log.n,0),result(log),result(lev)])
-    table(tab/'causal_modelos.tex',['Controles','Modelo','Trat.',r'$N$',r'$\log(1+Y)$, IC doble','Niveles, IC doble'],rows)
+    table(tab/'causal_modelos.tex',['Controles','Modelo','Trat.',r'$N$',r'$\log(1+Z)$, IC doble','Niveles, IC doble'],rows)
     rows=[]
     for model in ['M0','M1','M2','M3']:
         a=get(model=model); b=get(model=model,cluster='entidad_fecha')
         c=get(model=model,scale='niveles'); d=get(model=model,scale='niveles',cluster='entidad_fecha')
         rows.append([MODEL_LABELS[model],fmt(a.n,0),result(a,False),interval(b),result(c,False),interval(d)])
-    table(tab/'causal_progresion_principal.tex',['Modelo',r'$N$',r'$\log(1+Y)$ (EE)','IC doble','Niveles (EE)','IC doble'],rows)
+    table(tab/'causal_progresion_principal.tex',['Modelo',r'$N$',r'$\log(1+Z)$ (EE)','IC doble','Niveles (EE)','IC doble'],rows)
     # Balance: denominador común fijado en la muestra con calibre individual.
     bal=pd.read_csv(mod/'causal_balance.csv')
     bal=bal.loc[bal.escenario.eq('principal')]
