@@ -55,7 +55,6 @@ def descriptive(series, field, name, first, ticks):
                 marker=marker, markersize=2.5, linestyle=line, linewidth=1.65)
     days(ax, first, ticks)
     if field == "observado":
-        ax.axvspan(-28.5, -7.5, color=BLUE, alpha=.07, zorder=0)
         ax.set_yticks([.50, .60, .70, .80])
         ax.set_ylim(.47, .88)
     else:

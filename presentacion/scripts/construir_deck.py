@@ -225,11 +225,11 @@ add("eventos", "Estrategia empírica", "De las trayectorias a la diferencia de c
 <p class="lead">1:muchos · {log} · 77 pares tratados y 3 536 de control</p>
 <div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span></div>
 <div class="series-layout">
-  <figure><figcaption>Promedio observado</figcaption>{figure("eventos-observados", "Promedios por grupo, del día −28 al 13. El sombreado cubre la ventana de referencia.")}</figure>
+  <figure><figcaption>Promedio observado</figcaption>{figure("eventos-observados", "Promedios observados por grupo, del día −28 al 13.")}</figure>
   <figure><figcaption>Cambio medio respecto a la base</figcaption>{figure("eventos-cambios", "Cambios medios de tratados y controles en log(1+Y), del día −7 al 13.")}</figure>
 </div>
 <p class="axis-caption">Días respecto al inicio local · Día 0 en línea punteada</p>""",
-"""A la izquierda, cada línea promedia los valores observados de logaritmo de uno más Y. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. El fondo claro marca la ventana de referencia. Cada comparación usa tres días de esa ventana. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.""",
+"""A la izquierda, cada línea promedia los valores observados de logaritmo de uno más Y. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.""",
 "Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.", "Conteos diarios limpios y pares y pesos guardados. Las 21 diferencias de cambios reproducen los coeficientes de M₀.", sources)
 
 add("trayectoria", "Supuestos", "Las diferencias previas limitan la atribución", 45, f"""
