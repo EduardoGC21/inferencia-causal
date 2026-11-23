@@ -10,6 +10,15 @@
 \addbibresource{referencias.bib}
 \setlength{\bibitemsep}{0.1em}
 \usepackage{array,longtable,needspace}
+\usepackage{textcomp,listings}
+\lstdefinestyle{codigoR}{
+  language=R,
+  basicstyle=\ttfamily\fontsize{9}{10.8}\selectfont,
+  numbers=left,numberstyle=\tiny,numbersep=8pt,xleftmargin=2.6em,
+  columns=fullflexible,keepspaces=true,showstringspaces=false,upquote=true,
+  breaklines=true,breakatwhitespace=false,breakindent=1.5em,tabsize=2,
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ñ}{{\~n}}1 {ó}{{\'o}}1 {—}{{\textemdash}}1
+}
 \usepackage[hidelinks]{hyperref}
 \hypersetup{pdftitle={Narcoataques y siniestros viales registrados},pdfauthor={Eduardo Garcia Cortez},pdfsubject={Inferencia Causal, ITAM; profesor Mauricio Romero}}
 \urlstyle{same}
@@ -817,9 +826,9 @@ Los cotejos documentados corresponden a agentes de IA; no se presentan como una 
 
 El paquete \path{src/choques/}, configuración y pruebas acompañan al escrito. \path{README.md} documenta Python 3.13.2, dependencias y compilador. ATUS y los cien originales municipales deben corresponder a sus manifiestos: una edición nueva en la misma URL no los sustituye. Las entradas son \path{data/inputs/episodios.csv} y \path{data/inputs/fuentes_eventos.csv}, reconstruidas desde las hojas de evidencia. Las rutas parten de la carpeta que contiene \path{repo/}, \path{data/} y \path{tasks/}.\par
 
-La interfaz de comandos ejecuta \path{validar}, \path{todo} y \path{compilar}. \path{python reproducir.py} crea otra copia, verifica originales, reconstruye ocho etapas y exige igualdad SHA-256 de todos los productos y del PDF. Las pruebas unitarias y sintéticas cubren calibre heterogéneo, base limpia, log con ceros, invariancia al futuro, territorio, pesos e inferencia con reestimación de fechas. Los tiempos de ejecución se registran aparte de los resultados. El registro de verificación distingue la reproducción del análisis de las revisiones editoriales del PDF.\par
+La interfaz de comandos ejecuta \path{validar}, \path{todo} y \path{compilar}. \texttt{python reproducir.py} crea otra copia, verifica originales, reconstruye ocho etapas y exige igualdad SHA-256 de todos los productos y del PDF. Las pruebas unitarias y sintéticas cubren calibre heterogéneo, base limpia, log con ceros, invariancia al futuro, territorio, pesos e inferencia con reestimación de fechas. Los tiempos de ejecución se registran aparte de los resultados. El registro de verificación distingue la reproducción del análisis de las revisiones editoriales del PDF.\par
 
-Los datos públicos se enlazan en la bibliografía y los manifiestos fijan sus ediciones.\par
+Los datos públicos se enlazan en la bibliografía y los manifiestos fijan sus ediciones. El apéndice H incluye el código R completo y los enlaces al repositorio y a la carpeta de entrega de datos.\par
 
 \clearpage
 
@@ -867,5 +876,27 @@ Solo daños & -0,051 [-0,256; 0,154] & 0,000 [-0,292; 0,292] \\
 {\fontsize{9}{11}\selectfont Registros por municipio y día; IC del 95 \% agrupados por estado y fecha.\par}
 
 \end{minipage}\par\medskip
+
+\clearpage
+
+\section*{Apéndice H. Código reproducible en R}
+
+Se incluye el archivo completo \path{codigo_R/analisis.R}, idéntico al ejecutado para la verificación. La obtención y limpieza de los datos se realizan en Python; este archivo reconstruye el análisis estadístico a partir del paquete de datos limpios, sin leer coeficientes, muestras emparejadas ni pesos precalculados.\par
+
+La ejecución en R reprodujo 22 productos de referencia con tolerancia absoluta de $10^{-6}$, incluidos muestras, pesos, coeficientes e inferencia. Las 18 tablas cotejadas coinciden a la precisión impresa. La diferencia máxima en efectos e inferencia fue de $1{,}4\times10^{-12}$. El registro de verificación se conserva en \path{reporte/verificacion/reproduccion-r.json}.\par
+
+El archivo conserva salidas históricas adicionales, incluida la comparación semanal de Culiacán. Esos resultados no forman parte del análisis presentado en este reporte.\par
+
+\paragraph{Código, datos y ejecución.}
+
+Repositorio de código e instrucciones: \url{https://github.com/EduardoGC21/inferencia-causal}.\par
+
+Carpeta de entrega de datos: \url{https://drive.google.com/drive/folders/19fPf9UVt5Vdm-h2LiM2sBdD9erg0qItu?usp=sharing}.\par
+
+Para reproducir el análisis, descargar y descomprimir \path{datos_limpios_R.zip}, instalar los paquetes \path{data.table}, \path{R.utils} y \path{ggplot2}, y ejecutar desde la raíz del repositorio: \texttt{Rscript codigo\_R/analisis.R RUTA/datos\_limpios\_R RUTA/resultados\_R}. Las rutas se sustituyen por las carpetas de entrada y salida elegidas; las instrucciones también aparecen al inicio del código. La ejecución verificada utilizó R 4.6.1.\par
+
+\subsection*{Listado completo de \path{codigo_R/analisis.R}.}
+
+\lstinputlisting[style=codigoR]{../codigo_R/analisis.R}
 
 \end{document}

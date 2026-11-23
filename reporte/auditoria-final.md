@@ -4,20 +4,23 @@
 
 La entrega aprobada está en [reporte.pdf](reporte.pdf), [reporte.md](reporte.md)
 y [main.tex](main.tex). Tiene siete páginas de cuerpo, una de referencias y
-catorce de apéndices; 22 en total. Mantiene fuente de 11 puntos, párrafos a
+41 de apéndices; 49 en total. Mantiene fuente de 11 puntos en el cuerpo, párrafos a
 la izquierda y citas y referencias APA. La figura geográfica está en el
-apéndice F; el cruce exploratorio por horario y gravedad, en el G.
+apéndice F; el cruce exploratorio por horario y gravedad, en el G; y el código
+R completo, con enlaces al repositorio y a la carpeta de datos, en el H (pp. 23–49).
 [Cumplimiento del syllabus](cumplimiento-syllabus.md) localiza las secciones.
 
 Se incorporaron las 21 propuestas aprobadas y la etiqueta «Matching» para
-describir la selección de tratados y controles. Se revisaron las 22 páginas
-del PDF y su coincidencia con el Markdown. La compilación normal con Biber
-produce `main.pdf` y `reporte.pdf` idénticos; las imágenes renderizadas
-coinciden con la versión inspeccionada.
+describir la selección de tratados y controles. Se revisaron las páginas
+modificadas y nuevas y su coincidencia con el Markdown; las otras 21 páginas
+conservan sus píxeles. La compilación normal con Biber produce `main.pdf` y
+`reporte.pdf` idénticos. Se cotejaron las 1 465 líneas del listado contra el R.
 
 [revision-editorial.json](verificacion/revision-editorial.json) identifica
-esta entrega. No se reestimaron modelos ni se ejecutó el flujo completo en
-la revisión. Los manifiestos de 117 productos y 38 fuentes son registros
+esta entrega. La nueva ejecución del R reprodujo 22 productos dentro de la
+tolerancia absoluta de 1e-6 y 18 tablas a la precisión impresa; consta en
+[reproduccion-r.json](verificacion/reproduccion-r.json). No se ejecutaron
+pruebas unitarias ni el flujo Python completo. Los manifiestos de 117 productos y 38 fuentes son registros
 de la reproducción anterior, cuyo PDF tiene SHA-256
 `fcfeab43aff0209365029ba62d5ebbdcdc9adc64eb4f616455d6bd4fc5d269d7`.
 

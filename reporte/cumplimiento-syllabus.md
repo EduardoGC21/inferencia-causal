@@ -7,7 +7,7 @@ al PDF final.
 
 | Requisito | Ubicación en la versión aprobada |
 | --- | --- |
-| Texto de 6–8 páginas y fuente de 11–12 puntos | Siete páginas de cuerpo (1–7), `article` a 11pt; referencias en p. 8 y apéndices en pp. 9–22 |
+| Texto de 6–8 páginas y fuente de 11–12 puntos | Siete páginas de cuerpo (1–7), `article` a 11pt; referencias en p. 8 y apéndices en pp. 9–49 |
 | Contexto, pregunta, mecanismos y literatura | Sección 1, p. 1: dos antecedentes académicos y una fuente de contexto; ATT antes del estimador |
 | Datos, fuentes, periodo, unidad y N | P. 2: ATUS 2019–2025 e historia de 2018; 3 613 pares municipio–fecha, 77 tratados, 3 536 controles, 31 episodios y 32 fechas |
 | Tratamiento, medición, ceros y selección | P. 2: catálogo propio, inicio local, cobertura previa y límites de la captación |
@@ -22,21 +22,25 @@ al PDF final.
 | Al menos una figura | Figura 1, p. 6: trayectoria en dos escalas y dos esquemas de matching; mapa en p. 21 |
 | Robustez y falsificaciones | Pp. 6–7: diferencias previas, placebo, duración, base alternativa y calendario; apéndices B–D |
 | Conclusión, validez externa, límites y relevancia de política | Sección 5, p. 7 |
-| Apéndices, código y datos públicos | Apéndices A–G, pp. 9–22; fuentes y reproducción en p. 20. Código Python y `codigo_R/analisis.R` en el repositorio |
+| Apéndices, código y datos públicos | Apéndices A–H, pp. 9–49; fuentes y reproducción en p. 20. Apéndice H, pp. 23–49: código R completo (1 465 líneas), instrucciones y enlaces al repositorio y a la carpeta de entrega de datos |
 
 El estudiante confirmó la autorización del profesor para utilizar Python.
-También se conserva el análisis en R incorporado con anterioridad. Para
+El código R completo se incluye en el PDF conforme al requisito de la sección 6,
+p. 4 del syllabus. Su nueva ejecución se cotejó con los resultados vigentes. Para
 esta entrega, el límite acordado se aplica al cuerpo; referencias y
 apéndices van aparte. La presentación oral es una entrega separada.
 
 ## Verificación
 
-Se revisaron visualmente las 22 páginas. La compilación normal con Biber
-terminó sin advertencias LaTeX ni cajas desbordadas. Sus imágenes renderizadas
-coinciden con las de la versión revisada. Markdown, LaTeX y PDF conservan las
-tablas y fórmulas aprobadas.
+Se revisaron las páginas modificadas y nuevas; las otras 21 páginas coinciden
+por píxeles con la versión ya revisada. La compilación normal con Biber terminó
+sin advertencias LaTeX ni cajas desbordadas. Las 1 465 líneas del código del PDF
+coinciden con el archivo R, salvo los espacios que añade el formato del listado.
+Los enlaces de GitHub y Drive están presentes como vínculos activos.
 
 [revision-editorial.json](verificacion/revision-editorial.json) identifica
-el PDF actual. Esta edición no ejecutó pruebas del proyecto, reestimaciones
-ni reproducción completa; los manifiestos anteriores conservan su alcance
-histórico.
+el PDF actual. El [cotejo de R](verificacion/reproduccion-r.json) acredita 22
+productos dentro de la tolerancia absoluta de 1e-6 y 18 tablas idénticas a la
+precisión impresa. Se verificaron los 15 insumos por sus huellas y se preservaron
+los resultados Python. No se ejecutaron pruebas unitarias ni el flujo Python
+completo; los manifiestos anteriores conservan su alcance histórico.
