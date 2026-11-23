@@ -245,11 +245,13 @@
       "config/proyecto.toml": "9537097d06f65795a23a85c7cfcddf466c501082f1c4662221629df882f9f091"
     },
     "reporte": {
-      "reporte/main.tex": "204b125b359604c9c555c12e5dd27f90284211d3d832061e98f68dc46aab1cbe",
-      "reporte/reporte.md": "7cb073dd67b91e27422df605fe6f71c96bfbe05bf27e4cf3c6c62970bc278203",
-      "reporte/main.pdf": "1d804f55aaa344a8499f6f7dda1c57231f5d4478a38bc6b992672a1185c81374",
-      "reporte/reporte.pdf": "1d804f55aaa344a8499f6f7dda1c57231f5d4478a38bc6b992672a1185c81374",
-      "reporte/figuras/trayectoria-siniestros.png": "4cf1f30545dd2e0321df8328e0189454ee2473f51e441519f1fb19355d1951f1"
+      "reporte/main.tex": "4886a0b6c890957d51ab5b3916b75c9bcebc2ac7a1908f93eeddc48401e8788a",
+      "reporte/reporte.md": "1d28d11a9b28658350b31917172d03c6c80254b15c3d2fae5ce08219cadb0ec4",
+      "reporte/main.pdf": "ea1d30c642772b967096669d6c954e625b4e74dfa0d2d6f80fafdbcc57b2036d",
+      "reporte/reporte.pdf": "ea1d30c642772b967096669d6c954e625b4e74dfa0d2d6f80fafdbcc57b2036d",
+      "reporte/figuras/trayectoria-siniestros.png": "4cf1f30545dd2e0321df8328e0189454ee2473f51e441519f1fb19355d1951f1",
+      "reporte/figuras/cambios-por-grupo.pdf": "9ac61a8aaa5252a2dd7e1501a6481bd02b7e4e2225e95dcb3cabd88e6d488aea",
+      "reporte/figuras/generar_cambios.py": "d6c435be1312e393a2c8165c9a912e0729a8c85b5ed622bac5e9fb4c4d6f6f24"
     },
     "presentacion": {
       "presentacion/index.html": "fd10c2384f6a168ab042fb901c7f13361b106944fbc3690a8b0050baf416e89d",
@@ -322,5 +324,20 @@
     "escala": "niveles",
     "estimaciones_concordantes_con_ejecucion_previa": 2660,
     "pruebas_semanales_con_F_y_p_equivalentes": 30
+  },
+  "figura_cambios_por_grupo": {
+    "pagina": 6,
+    "dias": [
+      -7,
+      13
+    ],
+    "contrastes_diarios_cotejados": 21,
+    "diferencia_absoluta_maxima": 8.198997036856781e-13,
+    "paginas_revisadas": [
+      5,
+      6,
+      7,
+      8
+    ]
   }
 }

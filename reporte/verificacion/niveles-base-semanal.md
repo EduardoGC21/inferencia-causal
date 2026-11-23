@@ -90,3 +90,13 @@ $\bar Y_{ith}$ para el promedio del tramo. La revisión visual confirmó
 la notación en las páginas 3 y 4. Las salidas de la estimación
 conservan sus huellas y la presentación final usa las mismas cifras.
 [Verificación de la presentación](../../presentacion/verificacion/REVISION.md)
+
+La figura 1a del reporte reutiliza las series de cambios diarios de la
+diapositiva 7. La brecha entre tratados y controles coincide con los 21
+coeficientes diarios de $M_0$ en la salida de Python para el emparejamiento
+1:muchos. La diferencia absoluta máxima es de $8,20\times10^{-13}$.
+La figura 1b presenta los coeficientes y sus intervalos puntuales. El
+[generador de la figura 1a](../figuras/README.md#trayectoria-de-siniestros-registrados)
+coteja las series y guarda el panel vectorial que compila el reporte.
+Se revisaron las páginas 5 a 8 del PDF recompilado. Las dos figuras
+quedaron en la página 6 y la compilación conservó el listado íntegro de R.

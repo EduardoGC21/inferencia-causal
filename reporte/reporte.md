@@ -150,9 +150,17 @@ Cada celda presenta estimación, error estándar entre paréntesis, intervalo de
 
 ### Trayectoria y falsificaciones.
 
-La figura 1 muestra los contrastes de los días -7 a +13. Los días -3 y -2 presentan diferencias de -0,451 y -0,533, con intervalos puntuales que quedan por debajo de cero en el emparejamiento 1:muchos. El contraste de la semana -1 frente a la base principal es -0,157 (IC [-0,316; 0,002]).
+La figura 1a muestra que, en los días -3 y -2, los registros ya caen más entre los tratados que entre sus controles.
 
-**Figura 1. La trayectoria muestra descensos en los días -2 y 1.** Modelo $M_0$, emparejamientos 1:muchos y 1:1. Base de los días -28 a -8. Los intervalos del 95 % son puntuales y se agrupan por estado y fecha de inicio.
+**Figura 1a. Los cambios de tratados y controles ya difieren antes del inicio.** Para cada grupo, la serie muestra la media del cambio diario de cada par respecto a su promedio de los días -28 a -8, con los pesos del emparejamiento 1:muchos. La línea vertical marca el día 0, fecha del inicio local.
+
+![Cambios diarios de tratados y controles respecto a la base](figuras/cambios-por-grupo.pdf)
+
+La distancia vertical entre las dos series, tratados menos controles, coincide con el coeficiente diario $M_0$ de la figura 1b para 1:muchos. El ajuste por día de la semana se cancela en esa diferencia porque, dentro de cada fecha de inicio, ambos grupos comparten el calendario y tienen el mismo peso total.
+
+En los días -3 y -2, las diferencias son -0,451 y -0,533 siniestros registrados por municipio y día, con intervalos puntuales por debajo de cero. El contraste de la semana -1 frente a la base es -0,157 (IC [-0,316; 0,002]).
+
+**Figura 1b. La trayectoria muestra descensos en los días -2 y 1.** Modelo $M_0$, emparejamientos 1:muchos y 1:1. Base de los días -28 a -8. Los intervalos del 95 % son puntuales y se agrupan por estado y fecha de inicio.
 
 ![Trayectoria de registros](figuras/trayectoria-siniestros.png)
 

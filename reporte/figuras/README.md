@@ -25,9 +25,21 @@ La compilación utiliza la figura entregada. No descarga cartografía ni vuelve
 a estimar los modelos. La copia de reproducción incluye esta carpeta como
 parte de las fuentes del documento.
 
-## Trayectoria de accidentes registrados
+## Trayectoria de siniestros registrados
 
-`trayectoria-siniestros.png` es la figura 1. La función `figures` de
+`cambios-por-grupo.pdf` es la figura 1a. Usa las series de la diapositiva 7,
+que contienen los cambios ponderados de cada grupo frente a su propia base
+de los días -28 a -8. Desde la raíz del árbol de trabajo:
+
+```powershell
+& ../../.venv/Scripts/python.exe reporte/figuras/generar_cambios.py
+```
+
+El script lee los CSV `series-eventos.csv` y `efectos.csv` de
+`presentacion/assets/datos/` y coteja la brecha entre grupos con los 21
+coeficientes diarios de $M_0$ para el emparejamiento 1:muchos.
+
+`trayectoria-siniestros.png` es la figura 1b. La función `figures` de
 `src/choques/informe_final.py` la genera desde resultados existentes.
 Distingue matching 1:muchos y 1:1; las barras representan intervalos del
 95 % agrupados por estado y fecha. Las etiquetas y la presentación se

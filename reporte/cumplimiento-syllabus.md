@@ -21,8 +21,8 @@ al PDF del árbol de trabajo.
 | Resultados, errores, N y progresión | Cuadro 2, p. 5, en siniestros registrados por municipio y día. Las demás muestras figuran en el cuadro A5, p. 11 |
 | Unidades naturales y tamaños estandarizados | P. 5. Se estiman -0,348 siniestros registrados por municipio y día, equivalentes a -0,094 desviaciones estándar de los conteos diarios de la base |
 | Efecto mínimo detectable para resultados nulos | P. 5 y apéndices B y D. Prueba bilateral al 5 % y potencia del 80 % |
-| Al menos una figura | Figura 1, p. 6: trayectoria diaria en niveles para ambos métodos de emparejamiento. Mapa en p. 19 |
-| Robustez y falsificaciones | Pp. 6–7: diferencias previas, placebo, duración, base alternativa y calendario; apéndices B–D |
+| Al menos una figura | Figuras 1a y 1b, p. 6. Cambios diarios de tratados y controles respecto a la base y trayectoria de los coeficientes en niveles. Mapa en p. 19 |
+| Robustez y falsificaciones | Pp. 6–7. Diferencias previas, placebo, duración y calendario. Apéndices B–D |
 | Conclusión, validez externa, límites y relevancia de política | Sección 5, p. 7 |
 | Apéndices, código y datos públicos | Apéndices A–H, pp. 9–45. Fuentes y reproducción en p. 18. Apéndice H, pp. 21–45, con el código R completo (1 354 líneas), instrucciones y enlaces. |
 | Presentación de 8–10 minutos | [Presentación](../presentacion/presentacion.pdf) y [guion](../presentacion/guion.md) para ocho minutos de exposición. |
