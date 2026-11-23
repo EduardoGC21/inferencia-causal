@@ -154,7 +154,7 @@
 .reg-equation .katex-display { margin: 0; text-align: center; }
 .reg-equation .katex-display > .katex { text-align: center; font-size: 1.59em; }
 .reg-reading { margin-top: 30px; }
-.reg-estimand { margin-top: 14px; color: var(--muted); }
+.reg-estimand { margin-top: 14px; }
 
 .series-key { display: flex; gap: 30px; align-items: center; font-size: var(--label); margin: 0 0 12px; }
 .series-line { display: inline-block; width: 29px; border-top: 3px solid; vertical-align: .24em; margin-right: 7px; }
