@@ -39,7 +39,7 @@ def inline(text):
     text = re.sub(r"\$([^$]+)\$", lambda m: keep("$"+m[1]+"$"), text)
     code_pattern = chr(96)+r"([^"+chr(96)+r"]+)"+chr(96)
     text = re.sub(code_pattern, lambda m: keep(
-        r"\texttt{"+plain(m[1])+"}" if " " in m[1] else r"\path{"+m[1]+"}"), text)
+        r"\texttt{"+plain(m[1]).replace("--", "-{}-")+"}" if " " in m[1] else r"\path{"+m[1]+"}"), text)
     text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)",
                   lambda m: keep(r"\href{\detokenize{"+m[2]+"}}{"+inline(m[1])+"}"), text)
     text = re.sub(r"<(https?://[^>]+)>", lambda m: keep(r"\url{"+m[1]+"}"), text)
@@ -61,7 +61,7 @@ def cell(text, expanded):
     return r"\newline ".join(result)
 
 widths = {
-    1: [.26, .26, .19, .145, .145],
+    1: [.22, .255, .255, .135, .135],
     2: [.17, .24, .27, .16, .16],
     3: [.235, .19125, .19125, .19125, .19125],
     4: [.24, .38, .38],
@@ -73,10 +73,10 @@ widths = {
     10: [.23, .11, .07, .197, .197, .196],
     11: [.15, .245, .09, .09, .245, .09, .09],
     12: [.31, .13, .09, .10, .37],
-    13: [.39, .14, .09, .10, .14, .14],
+    13: [.34, .105, .17, .15, .115, .12],
     14: [.22, .10, .23, .23, .22],
     16: [.15, .23, .39, .08, .15],
-    17: [.13, .18, .12, .12, .10, .13, .22],
+    17: [.28, .32, .22, .18],
     18: [.34, .16, .34, .16],
 }
 layout_keys = {'1': 1, 'B1': 2, '2': 3, 'G1': 4, 'A1': 5, 'A2': 6, 'A3': 7, 'A4': 9, 'A5': 8, 'B2': 10, 'B3': 11, 'C1': 12, 'C2': 13, 'C3': 14, 'D1': 16, 'D2': 17, 'D3': 18}
@@ -119,7 +119,7 @@ preamble = r"""\documentclass[11pt,letterpaper]{article}
 \addbibresource{referencias.bib}
 \setlength{\bibitemsep}{0.1em}
 \usepackage{array,longtable,needspace}
-\usepackage{textcomp,listings}
+\usepackage{textcomp,listings,embedfile}
 \lstdefinestyle{codigoR}{
   language=R,
   basicstyle=\ttfamily\fontsize{9}{10.8}\selectfont,
@@ -183,7 +183,7 @@ while i < len(lines):
         heading = s[3:]
         if heading == "Referencias" or heading.startswith("Apéndice "):
             out.append(r"\clearpage")
-        if heading.startswith("2. "):
+        if heading.startswith(("2. ", "4. ")):
             out.append(r"\Needspace{8\baselineskip}")
         out.append(r"\section*{"+inline(heading)+"}")
         if heading == "Referencias":
@@ -194,8 +194,10 @@ while i < len(lines):
         continue
     if s.startswith("### "):
         heading = s[4:]
-        if heading.startswith("Persistencia y calendario"):
-            out.append(r"\Needspace{20\baselineskip}")
+        if heading.startswith("Regresión en el panel diario"):
+            out.append(r"\Needspace{11\baselineskip}")
+        if heading.startswith(("Evolución diaria y diagnósticos", "Persistencia y calendario")):
+            out.append(r"\clearpage")
         command = r"\subsection*" if heading.startswith(("3.1.", "Listado completo")) else r"\paragraph"
         out.append(command+"{"+inline(heading)+"}")
         blocks.append({"type":"heading","line":line,"source":s})
@@ -207,6 +209,7 @@ while i < len(lines):
         program = args.markdown.parent.parent / "codigo_R/analisis.R"
         if code != program.read_text(encoding="utf-8-sig"):
             raise ValueError("El bloque R debe coincidir con codigo_R/analisis.R completo")
+        out.append(r"\embedfile[filespec=analisis.R,mimetype=text/plain,desc={Programa para reproducir el estudio}]{../codigo_R/analisis.R}")
         out.append(r"\lstinputlisting[style=codigoR]{../codigo_R/analisis.R}")
         blocks.append({"type":"code","line":line,"language":"R",
                        "path":"codigo_R/analisis.R","lines":end-i-1,
@@ -282,7 +285,7 @@ while i < len(lines):
             following+=1
         if following<len(lines) and lines[following].strip()=="$":
             out.append(r"\Needspace{8\baselineskip}")
-        is_table_note=text.startswith(("Cada celda de coeficientes presenta", "Emparejamiento 1:muchos:", "Cada celda presenta", "Registros por municipio y día; IC"))
+        is_table_note = (table_box and number == "G1") or text.startswith("Cada celda presenta")
         if is_table_note:
             out.append(r"{\fontsize{9}{11}\selectfont "+inline(text)+r"\par}")
         else:
@@ -290,8 +293,7 @@ while i < len(lines):
                 out.append(r"\RaggedRight "+inline(text)+r"\par")
             else:
                 out.append(inline(text)+r"\par")
-    if table_box and ((number == "G1" and text.startswith("Registros por municipio y día; IC")) or
-                      (number == "1" and text.startswith("Desviación estándar (DE) ponderada"))):
+    if table_box and number in ("1", "G1"):
         out.append(r"\end{minipage}\par\medskip")
         table_box = False
     blocks.append({"type":"reference" if references else "paragraph","line":line,"source":text})

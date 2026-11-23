@@ -7,7 +7,7 @@ from .analisis import table, fmt, texesc
 METHOD = {"emparejada": "1:muchos", "emparejada_1a1": "1:1", "mismos_tratados": "Sin emparejar",
           "sin_covariables": "Calibre individual", "comun_m0_m3": "Completos, calibre"}
 SCENARIO = {"principal": "Principal", "persistencia": "Aislamiento posterior", "placebo": "Placebo 28 días antes",
-            "sin_cinco": "Cinco fechas de auditoría", "sin_laborales": "Sin feriados LFT",
+            "sin_cinco": "Sin las cinco fechas de auditoría", "sin_laborales": "Sin feriados LFT",
             "sin_laborales_escolares": "Sin LFT ni recesos SEP", "sin_pendientes": "Sin dos tratados pendientes",
             "sin_todos_pendientes": "Sin cuatro casos pendientes", "sin_senales": "Sin dos señales en controles"}
 SPAN_LABELS = {"d0": "Día 0", "d1": "Día 1", "d0..1": "Días 0–1", "d2..6": "Días 2–6",
@@ -85,9 +85,9 @@ def tables(config):
         put(name+'P',r.p);put(name+'Estado',texesc(r.estado))
     rows=[]
     for span in SPAN_LABELS:
-        a,b=get(span=span),get(span=span,cluster='entidad_fecha')
-        rows.append([SPAN_LABELS[span],result(a,False),interval(b),fmt(a.efecto_sigma,3),fmt(b.mde,3)])
-    table(tab/'causal_principales.tex',['Tramo',r'$\hat\tau$ (EE estatal)',r'IC 95\% doble',r'$\tau/\sigma$', 'MDE doble'],rows)
+        a = get(span=span, cluster='entidad_fecha')
+        rows.append([SPAN_LABELS[span], result(a, False), interval(a), fmt(a.efecto_sigma, 3), fmt(a.mde, 3)])
+    table(tab/'causal_principales.tex',['Tramo',r'$\hat\tau$ (EE doble)',r'IC 95\% doble',r'$\hat\tau/\sigma$', 'MDE doble'],rows)
     # Progresión con muestra fija, incluido el ajuste sin matching para los mismos tratados.
     rows=[]
     for method in ['comun_m0_m3','mismos_tratados','emparejada','emparejada_1a1']:
@@ -97,8 +97,8 @@ def tables(config):
     table(tab/'causal_modelos.tex',['Controles','Modelo','Trat.',r'$N$','Estimación e IC doble'],rows)
     c = pd.read_csv(mod/'causal_coeficientes.csv')
     c = c.loc[c.escenario.eq('principal') & c.muestra.eq('emparejada')].set_index(['termino','modelo'])
-    terms = {"tratado": "Tratado × Después", "log_poblacion": "Logaritmo de la población",
-             "empleo_mil": "Empleo por cada mil habitantes", "autos_mil": "Automóviles por cada mil habitantes"}
+    terms = {"tratado": "Tratado × Después", "log_poblacion": "Logaritmo de la población × Después",
+             "empleo_mil": "Empleo por mil × Después", "autos_mil": "Automóviles por mil × Después"}
     rows = []
     for k, (term, label) in enumerate(terms.items()):
         row = [label]
@@ -267,7 +267,7 @@ def figures(config):
         )
     ax.axhline(0, color="#555555", linewidth=.6)
     ax.axvline(0, color="#555555", linestyle="--", linewidth=.8)
-    ax.set_ylabel("Siniestros registrados\npor municipio y día", fontsize=9)
+    ax.set_ylabel("Diferencia de cambios en siniestros\nregistrados por municipio y día", fontsize=9)
     ax.set_xlabel("Día respecto al inicio local", fontsize=9)
     ax.set_xticks([-7, -5, -2, 0, 1, 3, 6, 9, 13])
     ax.tick_params(labelsize=8.5)

@@ -14,8 +14,8 @@ Ejecuta los comandos desde `Proyecto/worktrees/niveles-base-semanal`. En
 otra copia, ajusta las rutas al entorno, los datos y la carpeta de salidas.
 Las dependencias Python están fijadas en `requirements-lock.txt`.
 En R se requieren `data.table`, `R.utils` y `ggplot2`. El
-[repositorio](https://github.com/EduardoGC21/inferencia-causal) contiene el
-código y la [carpeta de entrega](https://drive.google.com/drive/folders/19fPf9UVt5Vdm-h2LiM2sBdD9erg0qItu?usp=sharing)
+[programa de esta edición](codigo_R/analisis.R) también se puede extraer de los
+adjuntos del PDF. La [carpeta de entrega](https://drive.google.com/drive/folders/19fPf9UVt5Vdm-h2LiM2sBdD9erg0qItu?usp=sharing)
 contiene `datos_limpios_R.zip`. Extrae el archivo antes de ejecutar R.
 
 ~~~powershell
@@ -61,7 +61,8 @@ Para trasladar el Markdown a LaTeX y compilar, se requieren `pdflatex` y
 ~~~
 
 La conversión exige coincidencia exacta entre el listado del apéndice H y
-`codigo_R/analisis.R`. La compilación produce copias idénticas en
+`codigo_R/analisis.R`. El PDF adjunta ese mismo archivo para ejecutar la réplica.
+La compilación produce copias idénticas en
 `reporte/main.pdf` y `reporte/reporte.pdf`. La [presentación final](presentacion/index.html) y el
 [guion](presentacion/guion.md) usan la misma especificación y notación.
 Las [instrucciones de la presentación](presentacion/README.md) explican

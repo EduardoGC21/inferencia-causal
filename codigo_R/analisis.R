@@ -5,8 +5,8 @@
 #
 # 1. Descomprime datos_limpios_R.zip (el paquete para compartir por Drive).
 # 2. Instala una vez: install.packages(c("data.table", "R.utils", "ggplot2"))
-# 3. Desde la raíz del repositorio:
-#    Rscript codigo_R/analisis.R RUTA/datos_limpios_R RUTA/resultados_R
+# 3. Guarda este programa junto a la carpeta de datos y ejecuta desde allí:
+#    Rscript --vanilla analisis.R datos_limpios_R resultados_R
 #    Añade --arranque para comprobar fechas, pesos y rango con dos cohortes.
 # También puedes cambiar las dos rutas siguientes y ejecutar todo desde RStudio.
 # Las salidas siempre van a la carpeta indicada; no modifica reporte/ ni Python.
@@ -1090,7 +1090,7 @@ tabla <- function(nombre, encabezados, filas) {
 nombres_metodo <- c(emparejada = "1:muchos", emparejada_1a1 = "1:1", mismos_tratados = "Sin matching",
                     sin_covariables = "Calibre individual", comun_m0_m3 = "Completos, calibre")
 nombres_escenario <- c(principal = "Principal", persistencia = "Aislamiento posterior", placebo = "Placebo -28",
-                       sin_cinco = "Cinco fechas de auditoría", sin_laborales = "Sin feriados LFT",
+                       sin_cinco = "Sin las cinco fechas de auditoría", sin_laborales = "Sin feriados LFT",
                        sin_laborales_escolares = "Sin LFT ni recesos SEP", sin_pendientes = "Sin dos tratados pendientes",
                        sin_todos_pendientes = "Sin cuatro casos pendientes", sin_senales = "Sin dos señales en controles")
 nombres_covariable <- c(poblacion = "Población", empleo_mil = "Empleo / mil", autos_mil = "Autos / mil",
@@ -1098,12 +1098,11 @@ nombres_covariable <- c(poblacion = "Población", empleo_mil = "Empleo / mil", a
 
 filas <- list()
 for (tramo in c("d0", "d1", "d0..1", "d2..6", "wk0", "wk+1")) {
-  a <- obtener(tramo = tramo)
-  b <- obtener(tramo = tramo, agrupacion = "entidad_fecha")
-  filas[[tramo]] <- c(tramo, resultado(a, FALSE), resultado(b),
-                      formato(a$efecto_sigma, 3), formato(b$mde, 3))
+  a <- obtener(tramo = tramo, agrupacion = "entidad_fecha")
+  filas[[tramo]] <- c(tramo, resultado(a, FALSE), resultado(a),
+                      formato(a$efecto_sigma, 3), formato(a$mde, 3))
 }
-tabla("causal_principales", c("Tramo", "Estimación (EE estatal)", "Estimación e IC doble", "DE", "MDE doble"), filas)
+tabla("causal_principales", c("Tramo", "Estimación (EE doble)", "Estimación e IC doble", "Estimación / DE previa", "MDE doble"), filas)
 
 filas <- list()
 for (metodo in c("comun_m0_m3", "mismos_tratados", "emparejada", "emparejada_1a1")) {
@@ -1337,7 +1336,7 @@ g_dinamica <- ggplot(datos_dinamica, aes(dia_grafica, efecto, color = metodo, gr
   scale_x_continuous(breaks = c(-7, -5, -2, 0, 1, 3, 6, 9, 13)) +
   labs(title = "Estimaciones diarias alrededor del inicio local",
        subtitle = "Base: días -28 a -8 · Intervalos puntuales del 95 % por estado y fecha",
-       x = "Día respecto al inicio local", y = "Siniestros registrados por municipio y día",
+       x = "Día respecto al inicio local", y = "Diferencia de cambios en siniestros\nregistrados por municipio y día",
        color = NULL, linetype = NULL, shape = NULL) +
   theme_minimal(base_size = 10) +
   theme(legend.position = "top", panel.grid.minor = element_blank(),
