@@ -90,7 +90,7 @@ Veamos las trayectorias que dan origen a ese contraste.
 
 **Referencia para consulta.** Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.
 
-## De las trayectorias a la diferencia de cambios
+## DiD día por día
 
 **Identificador** `eventos` · **Tiempo** 4:10–5:10 (60 s)
 
