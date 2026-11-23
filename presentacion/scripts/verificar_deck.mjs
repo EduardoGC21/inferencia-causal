@@ -29,12 +29,13 @@ try {
   await page.goto(url.href);
   await ready();
   const slides = await page.evaluate(() => Reveal.getSlides().map(s => ({
-    id: s.id, seconds: Number(s.dataset.timing),
+    id: s.id, seconds: Number(s.dataset.timing), backup: s.classList.contains('backup'),
     speech: s.querySelector('aside p:nth-child(2)').textContent,
     transition: s.querySelector('aside p:nth-child(3)').textContent.replace('Transición. ', '')
   })));
   const duration = slides.reduce((sum, slide) => sum + slide.seconds, 0);
   assert.equal(duration, 480);
+  assert.equal(slides[slides.findIndex(slide => slide.id === 'conclusion') + 1].id, 'referencias');
   for (const { id, speech, transition } of slides) {
     assert.ok(script.includes(speech) && script.includes(transition), id);
   }
@@ -75,7 +76,8 @@ try {
   const report = {
     prueba: 'Archivo local en Chromium, red desactivada, 1440 × 900',
     principales: slides.filter(s => s.seconds).length,
-    respaldos: slides.filter(s => !s.seconds).length,
+    referencias: slides.filter(s => s.id === 'referencias').length,
+    respaldos: slides.filter(s => s.backup).length,
     segundos: duration,
     ecuaciones_katex: equations,
     notas_y_transiciones_cotejadas: slides.length,

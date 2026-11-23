@@ -287,7 +287,25 @@ add("conclusion", "Conclusión", "La mayor caída estimada aparece al inicio", 2
 <p class="closing-limit"><strong>Las diferencias previas</strong> entre tratados y controles limitan la atribución al ataque.</p>
 <a class="backup-link" href="#/respaldos">Respaldos para discusión →</a>""",
 """La mayor caída relativa se estima en los días cero y uno. Después, los intervalos incluyen cero y la duración sigue abierta. Las diferencias que ya había entre tratados y controles limitan cuánto podemos atribuir al ataque.""",
-"Aquí termina la exposición. Los respaldos sirven para la discusión.", "Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Y).", sources, style="closing")
+"Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.", "Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Y).", sources, style="closing")
+
+add("referencias", "", "Referencias", 0, """
+<ul class="reference-list">
+  <li>Bauernschuster, S., &amp; Rekers, R. (2022). <a href="https://doi.org/10.1016/j.jpubeco.2022.104663">Speed limit enforcement and road safety</a>. <em>Journal of Public Economics, 210</em>, artículo 104663.</li>
+  <li>Cámara de Diputados. (2025). <a href="https://www.ordenjuridico.gob.mx/Documentos/Federal/html/wo125151.html"><em>Ley Federal del Trabajo</em></a> (art. 74).</li>
+  <li>Consejo Nacional de Población. (2024). <a href="https://www.gob.mx/conapo/documentos/reconstruccion-y-proyecciones-de-la-poblacion-de-los-municipios-de-mexico-1990-2040"><em>Reconstrucción y proyecciones de la población de los municipios de México, 1990–2040</em></a> [Base de datos].</li>
+  <li>Garcia Cortez, E. (2026). <em>Catálogo municipal de narcoataques, 2019–2025</em> [Base de datos de elaboración propia].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2015). <a href="https://www.inegi.org.mx/programas/intercensal/2015/"><em>Encuesta Intercensal 2015</em></a> [Tabulados de población y vivienda].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2021). <a href="https://www.inegi.org.mx/programas/ccpv/2020/"><em>Censo de Población y Vivienda 2020</em></a> [Principales resultados por localidad, ITER].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2025a). <a href="https://www.inegi.org.mx/temas/mg/"><em>Marco geoestadístico</em></a> [Cartografía municipal de diciembre de 2025].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2025b). <a href="https://www.inegi.org.mx/app/saic/"><em>Sistema Automatizado de Información Censal</em></a> [Tabulados de empleo de 2018 y 2023].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2026a). <a href="https://www.inegi.org.mx/programas/accidentes/"><em>Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas</em></a> [Microdatos, 2018–2025].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2026b). <a href="https://www.inegi.org.mx/app/ageeml/"><em>Catálogo Único de Claves de Áreas Geoestadísticas Estatales, Municipales y Localidades</em></a>.</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2026c). <a href="https://www.inegi.org.mx/programas/vehiculosmotor/"><em>Vehículos de Motor Registrados en Circulación</em></a> [Registros municipales, 2018–2024].</li>
+  <li>Secretaría de Educación de Veracruz. (2026). <a href="https://www.sev.gob.mx/educacion-basica/calendario-escolar/"><em>Calendarios escolares históricos de educación básica</em></a>.</li>
+</ul>
+<a class="backup-link" href="#/respaldos">Respaldos para discusión →</a>""",
+"Las referencias quedan disponibles para consulta.", "Pasar al índice de respaldos si hay preguntas.", "Reporte, referencias y apéndices E y F.")
 
 add("respaldos", "Discusión", "Respaldos para la discusión", 0, """
 <nav class="backup-index" aria-label="Respaldos">
@@ -350,10 +368,10 @@ html = []
 script = ["# Guion de exposición", "", "**Narcoataques y siniestros viales registrados**", "",
           "Eduardo Garcia Cortez · CU: 207480 · Inferencia Causal · ITAM", "",
           "Ruta principal de **480 segundos (8:00)**. Los tiempos incluyen las transiciones. "
-          "Para ensayar, lee la explicación oral y la transición. Los respaldos quedan fuera del tiempo.", ""]
+          "Para ensayar, lee la explicación oral y la transición. Las referencias y los respaldos quedan fuera del tiempo.", ""]
 for slide in slides:
     id, title, seconds = (slide[k] for k in ("id", "title", "seconds"))
-    kind = "main" if seconds else "backup"
+    kind = "main" if seconds else "references" if id == "referencias" else "backup"
     time = f"{clock(elapsed)}–{clock(elapsed + seconds)} ({seconds} s)" if seconds else "Fuera de la ruta cronometrada"
     elapsed += seconds
     if id == "respaldos":
@@ -371,9 +389,10 @@ for slide in slides:
     notes = (f'<p><strong>{escape(id)} · {escape(time)}</strong></p><p>{escape(slide["speech"])}</p>'
              f'<p><strong>Transición.</strong> {escape(slide["transition"])}</p>'
              f'<p><strong>Referencia para consulta.</strong> {escape(slide["locator"])}</p>')
+    eyebrow = f'<p class="eyebrow">{slide["chapter"]}</p>' if slide["chapter"] else ""
     html.append(f'''<section id="{id}" class="{kind} {slide['style']}" data-timing="{seconds}">
   <div class="slide-surface">
-    <header><p class="eyebrow">{slide['chapter']}</p><{'h1' if id == 'pregunta' else 'h2'}>{escape(title)}</{'h1' if id == 'pregunta' else 'h2'}></header>
+    <header>{eyebrow}<{'h1' if id == 'pregunta' else 'h2'}>{escape(title)}</{'h1' if id == 'pregunta' else 'h2'}></header>
     {slide['body']}
     {footer}
     {back}
@@ -408,4 +427,5 @@ SLIDES
 rendered = document.replace("SLIDES", "\n".join(html))
 (DECK / "index.html").write_text("\n".join(line.rstrip() for line in rendered.splitlines()) + "\n", encoding="utf-8")
 (DECK / "guion.md").write_text("\n".join(script), encoding="utf-8")
-print(f"{sum(s['seconds'] > 0 for s in slides)} diapositivas en 480 segundos, {sum(not s['seconds'] for s in slides)} respaldos.")
+print(f"{sum(s['seconds'] > 0 for s in slides)} diapositivas en 480 segundos, "
+      f"una de referencias y {sum(not s['seconds'] and s['id'] != 'referencias' for s in slides)} respaldos.")

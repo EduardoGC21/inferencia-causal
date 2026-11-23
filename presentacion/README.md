@@ -1,6 +1,6 @@
 # Narcoataques y siniestros viales registrados
 
-Presentación oral para Inferencia Causal, ITAM. La ruta principal dura **8:00**, con doce diapositivas sobre pregunta, contexto y datos, estrategia empírica, supuestos, resultados y conclusión. El PDF incluye también las cinco diapositivas de discusión.
+Presentación oral para Inferencia Causal, ITAM. La ruta principal dura **8:00**, con doce diapositivas sobre pregunta, contexto y datos, estrategia empírica, supuestos, resultados y conclusión. Después siguen las referencias y cinco diapositivas de discusión, fuera del tiempo de exposición.
 
 ## Abrir y presentar
 

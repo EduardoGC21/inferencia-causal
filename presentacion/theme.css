@@ -201,6 +201,17 @@
 .closing-persistence h3 { margin: 8px 0 4px; }
 .closing-limit { margin-top: 46px; max-width: 1030px; }
 .closing .source { color: #c7def4; right: 340px; }
+.reference-list {
+  columns: 2;
+  column-gap: 46px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--label);
+  line-height: 1.26;
+}
+.reference-list li { break-inside: avoid; margin-bottom: 12px; padding-left: 18px; text-indent: -18px; }
+.reference-list a { color: inherit; text-decoration-color: var(--blue); text-underline-offset: .13em; }
 .slide-surface :is(.backup-link, .back-link) { position: absolute; bottom: 34px; right: 76px; font-size: var(--label); }
 .backup .source { right: 300px; }
 .backup-index { display: grid; gap: 19px; margin-top: 45px; }

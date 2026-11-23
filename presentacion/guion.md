@@ -4,7 +4,7 @@
 
 Eduardo Garcia Cortez · CU: 207480 · Inferencia Causal · ITAM
 
-Ruta principal de **480 segundos (8:00)**. Los tiempos incluyen las transiciones. Para ensayar, lee la explicación oral y la transición. Los respaldos quedan fuera del tiempo.
+Ruta principal de **480 segundos (8:00)**. Los tiempos incluyen las transiciones. Para ensayar, lee la explicación oral y la transición. Las referencias y los respaldos quedan fuera del tiempo.
 
 ## ¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques?
 
@@ -170,9 +170,23 @@ La mayor caída relativa se estima en los días cero y uno. Después, los interv
 
 **Transición**
 
-Aquí termina la exposición. Los respaldos sirven para la discusión.
+Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.
 
 **Referencia para consulta.** Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Y).
+
+## Referencias
+
+**Identificador** `referencias` · **Tiempo** Fuera de la ruta cronometrada
+
+**Explicación oral**
+
+Las referencias quedan disponibles para consulta.
+
+**Transición**
+
+Pasar al índice de respaldos si hay preguntas.
+
+**Referencia para consulta.** Reporte, referencias y apéndices E y F.
 
 # Respaldos
 
