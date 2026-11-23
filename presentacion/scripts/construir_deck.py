@@ -107,8 +107,15 @@ def models_table():
 
 log = math(r"\log(1+Y)")
 m0 = math("M_0")
-base_eq = math(r"B_{ith}^{g}=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k}),\qquad"
-               r"\Delta_{ith}^{g}=g(Y_{i,t+h})-B_{ith}^{g}", True)
+base_eq = math(
+    r"\left.\begin{aligned}"
+    r"g(y)&=\log(1+y)\\"
+    r"B_{ith}^{g}&=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k})"
+    r"\end{aligned}\right\}"
+    r"\quad{\color{#235ca0}\longrightarrow}\quad"
+    r"\Delta_{ith}^{g}=g(Y_{i,t+h})-B_{ith}^{g}",
+    True,
+)
 reg_eq = math(
     r"\underbrace{\Delta_{ith}^{g}}_{\text{cambio}}"
     r"=\underbrace{\lambda_{th}}_{\text{FE de fecha}}"
@@ -202,7 +209,6 @@ add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 
 {calendar()}
 <div class="timeline-key"><span><i class="key-swatch reference"></i> Referencias del Día 0</span><span><i class="key-swatch followup"></i> Tramos analizados</span><span>Semana −1 · diagnóstico previo</span></div>
 <div class="math-band">
-  <p>{math(r"g(y)=\log(1+y)")}</p>
   {base_eq}
 </div>""",
 """Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. Dejo fuera la semana menos uno para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local, h el día relativo y r conserva el día de la semana. Aplico logaritmo de uno más Y a cada conteo antes de promediar las tres referencias. Resto esa base del valor observado. Cada tramo promedia cambios diarios. El Día 0 puede incluir horas anteriores al inicio.""",

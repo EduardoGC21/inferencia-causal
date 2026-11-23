@@ -146,6 +146,7 @@
 .key-swatch { display: inline-block; width: .9em; height: .9em; vertical-align: -.06em; margin-right: 5px; }
 .math-band { background: var(--wash); padding: 20px 28px; margin-top: 26px; }
 #base .math-band { margin-top: 24px; padding-block: 15px; }
+#base .math-band .katex-display > .katex { text-align: center; }
 .equation { display: block; }
 .equation .katex-display { margin: .42em 0; text-align: left; }
 .equation .katex-display > .katex { text-align: left; }
