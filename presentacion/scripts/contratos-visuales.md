@@ -4,6 +4,7 @@ Para la exposición oral de Inferencia Causal se usan posiciones, trayectorias y
 
 | Figura | Pregunta y lectura | Datos, escala y límites |
 | --- | --- | --- |
+| Contexto | ¿Por qué podrían cambiar los accidentes registrados? | Dos mecanismos plausibles vinculan las interrupciones del tránsito con posibles cambios en circulación y riesgo. Se identifica la fuente del inicio local y la fuente del resultado diario. Las flechas representan hipótesis. |
 | Dos mapas | ¿Dónde se encuentran los municipios de la muestra? | Los dos paneles del apéndice F ubican 54 municipios alguna vez tratados y 765 usados como controles, con posibles cruces. Colores cualitativos y escala cartográfica común. Se recortan márgenes y antiguos rótulos; se conserva la extensión. La cartografía es de referencia, con proyección equirectangular a 23° N. |
 | Emparejamiento | ¿Qué municipios aportan el cambio de referencia? | El flujo parte del municipio tratado, muestra los filtros y distingue la selección de todos los elegibles de la del candidato más cercano. Las ramas describen alternativas sobre el mismo conjunto de candidatos. |
 | Calendario | ¿Cómo se construye la base y qué días abarca el seguimiento? | Una celda por día de −28 a +13. El ejemplo resalta las tres referencias del Día 0. Cada tramo de seguimiento se distingue por su tono de azul y su rótulo. La semana −1 queda disponible para diagnóstico. |

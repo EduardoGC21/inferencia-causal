@@ -8,21 +8,35 @@ Ruta principal de **480 segundos (8:00)**. Los tiempos incluyen las transiciones
 
 ## ¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques?
 
-**Identificador** `pregunta` · **Tiempo** 0:00–0:30 (30 s)
+**Identificador** `pregunta` · **Tiempo** 0:00–0:20 (20 s)
 
 **Explicación oral**
 
-¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques? Los bloqueos pueden reducir la circulación y los desvíos podrían compensar esa caída. El artículo de Bauernschuster y Rekers inspira el seguimiento diario de una exposición transitoria. Aquí observo las dos semanas desde el inicio y adapto el emparejamiento al contexto mexicano.
+¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.
 
 **Transición**
 
-El mapa ubica los municipios que aportan esas comparaciones.
+Primero, ¿por qué esperaríamos un cambio?
 
 **Referencia para consulta.** Reporte, §1 y §5. Bauernschuster y Rekers (2022).
 
+## Por qué podrían cambiar los accidentes registrados
+
+**Identificador** `contexto` · **Tiempo** 0:20–0:50 (30 s)
+
+**Explicación oral**
+
+Los bloqueos o la suspensión del transporte pueden reducir la circulación. Los desvíos pueden cambiar el riesgo en otras vías. Para fechar el inicio local uso un catálogo propio de prensa y comunicados. Para medir el resultado uso los accidentes registrados por municipio y día en vías no federales, según la estadística del Instituto Nacional de Estadística y Geografía.
+
+**Transición**
+
+El mapa ubica los municipios que entraron a la muestra.
+
+**Referencia para consulta.** Reporte, §1–2 y apéndice E.
+
 ## La muestra reúne 77 pares tratados
 
-**Identificador** `datos` · **Tiempo** 0:30–1:20 (50 s)
+**Identificador** `datos` · **Tiempo** 0:50–1:40 (50 s)
 
 **Explicación oral**
 
@@ -36,7 +50,7 @@ Con esta unidad, podemos buscar municipios comparables para cada inicio.
 
 ## Cómo elegimos los controles para comparar cambios
 
-**Identificador** `matching` · **Tiempo** 1:20–2:10 (50 s)
+**Identificador** `matching` · **Tiempo** 1:40–2:30 (50 s)
 
 **Explicación oral**
 
@@ -50,7 +64,7 @@ La comparación requiere una base previa para cada día analizado.
 
 ## Cada día tiene tres referencias previas
 
-**Identificador** `base` · **Tiempo** 2:10–3:05 (55 s)
+**Identificador** `base` · **Tiempo** 2:30–3:20 (50 s)
 
 **Explicación oral**
 
@@ -64,7 +78,7 @@ Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus c
 
 ## La fecha común permite comparar cambios
 
-**Identificador** `regresion` · **Tiempo** 3:05–4:00 (55 s)
+**Identificador** `regresion` · **Tiempo** 3:20–4:10 (50 s)
 
 **Explicación oral**
 
@@ -78,7 +92,7 @@ Veamos las trayectorias que dan origen a ese contraste.
 
 ## De las trayectorias a la diferencia de cambios
 
-**Identificador** `eventos` · **Tiempo** 4:00–5:00 (60 s)
+**Identificador** `eventos` · **Tiempo** 4:10–5:10 (60 s)
 
 **Explicación oral**
 
@@ -92,7 +106,7 @@ Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.
 
 ## Las diferencias previas limitan la atribución
 
-**Identificador** `trayectoria` · **Tiempo** 5:00–5:45 (45 s)
+**Identificador** `trayectoria` · **Tiempo** 5:10–5:55 (45 s)
 
 **Explicación oral**
 
@@ -106,7 +120,7 @@ Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.
 
 ## El ajuste cambia poco la estimación inicial
 
-**Identificador** `resultados` · **Tiempo** 5:45–6:25 (40 s)
+**Identificador** `resultados` · **Tiempo** 5:55–6:30 (35 s)
 
 **Explicación oral**
 
@@ -120,7 +134,7 @@ Veamos si la caída persiste después del primer tramo.
 
 ## La duración queda abierta
 
-**Identificador** `duracion` · **Tiempo** 6:25–7:05 (40 s)
+**Identificador** `duracion` · **Tiempo** 6:30–7:10 (40 s)
 
 **Explicación oral**
 
@@ -134,11 +148,11 @@ La base y el calendario también afectan la lectura del resultado inicial.
 
 ## La referencia previa y el calendario importan
 
-**Identificador** `sensibilidades` · **Tiempo** 7:05–7:40 (35 s)
+**Identificador** `sensibilidades` · **Tiempo** 7:10–7:40 (30 s)
 
 **Explicación oral**
 
-Con los mismos pares y pesos, si uso la semana previa, la caída es menor. Si uso el Día menos dos, el signo cambia. Ambos intervalos incluyen cero. Al excluir feriados y recesos escolares, el coeficiente es algo más negativo, pero quedan solo 25 pares tratados y aumenta la incertidumbre. También cambia la composición. El placebo reconstruye la comparación 28 días antes. Su estimación inmediata es de menor magnitud y su intervalo incluye cero. Ninguna de estas comprobaciones, por sí sola, establece causalidad.
+Con los mismos pares y pesos, la semana previa reduce la magnitud de la caída y el Día menos dos cambia el signo. Ambos intervalos incluyen cero. Sin feriados ni recesos, la muestra queda en 25 tratados y aumenta la incertidumbre. El placebo reconstruye la comparación 28 días antes y da una caída de menor magnitud, con un intervalo que incluye cero.
 
 **Transición**
 

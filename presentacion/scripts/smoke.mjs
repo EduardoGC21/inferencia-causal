@@ -10,7 +10,10 @@ try {
   await page.waitForFunction(() => window.Reveal?.isReady());
   await page.evaluate(() => window.deckReady);
   await page.keyboard.press('ArrowRight');
+  assert.equal(await page.evaluate(() => Reveal.getCurrentSlide().id), 'contexto');
+  await page.keyboard.press('ArrowRight');
   assert.equal(await page.evaluate(() => Reveal.getCurrentSlide().id), 'datos');
+  await page.keyboard.press('ArrowLeft');
   await page.keyboard.press('ArrowLeft');
   assert.equal(await page.evaluate(() => Reveal.getCurrentSlide().id), 'pregunta');
   assert.deepEqual(errors, []);

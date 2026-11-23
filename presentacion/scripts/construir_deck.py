@@ -111,12 +111,36 @@ base_eq = math(r"B_{ith}^{g}=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k}),\q
                r"\Delta_{ith}^{g}=g(Y_{i,t+h})-B_{ith}^{g}", True)
 reg_eq = math(r"\Delta_{ith}^{g}=\lambda_{th}+\beta_h^{g}D_{it}+X_{it}^{\prime}\gamma_h+u_{ith}", True)
 
-add("pregunta", "Municipios de México · 2019–2025", "¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques?", 30, """
+add("pregunta", "Municipios de México · 2019–2025", "¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques?", 20, """
 <canvas class="cover-art" width="1100" height="1440" role="img" aria-label="Ilustración cenital de un choque entre dos autos en un cruce"></canvas>
 <p class="byline"><span class="project-title">Narcoataques y siniestros viales registrados</span>
 <strong>Eduardo Garcia Cortez · CU: 207480</strong><br>Inferencia Causal · ITAM</p>""",
-"""¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques? Los bloqueos pueden reducir la circulación y los desvíos podrían compensar esa caída. El artículo de Bauernschuster y Rekers inspira el seguimiento diario de una exposición transitoria. Aquí observo las dos semanas desde el inicio y adapto el emparejamiento al contexto mexicano.""",
-"El mapa ubica los municipios que aportan esas comparaciones.", "Reporte, §1 y §5. Bauernschuster y Rekers (2022).", style="cover")
+"""¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.""",
+"Primero, ¿por qué esperaríamos un cambio?", "Reporte, §1 y §5. Bauernschuster y Rekers (2022).", style="cover")
+
+add("contexto", "Contexto", "Por qué podrían cambiar los accidentes registrados", 30, """
+<div class="context-layout">
+  <div>
+    <h3>Mecanismos posibles</h3>
+    <div class="context-path">
+      <p><strong>Bloqueos o suspensión del transporte</strong></p>
+      <span class="context-arrow" aria-hidden="true">→</span>
+      <p>Menos circulación</p>
+    </div>
+    <div class="context-path">
+      <p><strong>Desvíos</strong></p>
+      <span class="context-arrow" aria-hidden="true">→</span>
+      <p>Cambios de ruta y de riesgo por vía</p>
+    </div>
+  </div>
+  <div class="context-data">
+    <h3>Qué observamos</h3>
+    <p><strong>Inicio local del ataque</strong><br>Fecha y lugar en el catálogo propio de prensa y comunicados.</p>
+    <p><strong>Accidentes registrados</strong><br>Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas (ATUS). Registros por municipio y día en vías no federales.</p>
+  </div>
+</div>""",
+"""Los bloqueos o la suspensión del transporte pueden reducir la circulación. Los desvíos pueden cambiar el riesgo en otras vías. Para fechar el inicio local uso un catálogo propio de prensa y comunicados. Para medir el resultado uso los accidentes registrados por municipio y día en vías no federales, según la estadística del Instituto Nacional de Estadística y Geografía.""",
+"El mapa ubica los municipios que entraron a la muestra.", "Reporte, §1–2 y apéndice E.")
 
 add("datos", "Contexto y datos", "La muestra reúne 77 pares tratados", 50, f"""
 <div class="map-context">
@@ -163,7 +187,7 @@ add("matching", "Estrategia empírica", "Cómo elegimos los controles para compa
 """El contrafactual es cómo habría cambiado el resultado del tratado sin el ataque. Para aproximarlo, busco controles en estados ajenos al episodio. Exijo cobertura en tres meses completos previos, estabilidad territorial y ausencia de exposición documentada desde el Día menos 49. Aplico márgenes de la mitad al doble en accidentes previos, población, empleo y autos. El mínimo es de diez candidatos de al menos cinco estados. Uno a muchos usa todos los elegibles y reparte el peso. Uno a uno elige al más cercano por población, empleo y autos. Después, diferencias en diferencias compara los cambios en las mismas fechas. Queremos estimar el efecto promedio de los pares tratados incluidos, con igual peso por par.""",
 "La comparación requiere una base previa para cada día analizado.", "Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.")
 
-add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 55, f"""
+add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 50, f"""
 <p class="lead">Para el Día 0, se promedian las tres fechas resaltadas del mismo día de la semana.</p>
 {calendar()}
 <div class="timeline-key"><span><i class="key-swatch reference"></i> Ejemplo de base para el Día 0</span><span><i class="key-swatch followup"></i> Días de seguimiento analizados</span><span>Semana −1: diagnóstico previo</span></div>
@@ -175,7 +199,7 @@ add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 
 """Cada casilla es un día respecto al inicio. Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esos jueves. La semana menos uno sirve para el diagnóstico previo. En la fórmula, i indica municipio, t el inicio local, h el día relativo y Y el conteo. Primero transformo cada conteo con logaritmo de uno más Y. Después promedio las tres referencias y resto esa base del valor observado. Cada tramo promedia cambios de días naturales. El Día 0 puede incluir horas anteriores al inicio.""",
 "Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.", "Reporte, §3. Ejemplo fechado: 17 de octubre de 2019 en Culiacán.")
 
-add("regresion", "Estrategia empírica", "La fecha común permite comparar cambios", 55, f"""
+add("regresion", "Estrategia empírica", "La fecha común permite comparar cambios", 50, f"""
 <div class="reg-contrast">
   <p><strong>Cambio del tratado</strong><br>Valor del día menos su base</p>
   <span class="operator">−</span>
@@ -212,7 +236,7 @@ add("trayectoria", "Supuestos", "Las diferencias previas limitan la atribución"
 """Cada punto compara los cambios. Su intervalo puntual del 95 por ciento admite dependencia por estado y fecha. Para atribuirlo al ataque, los cambios sin ataque tendrían que ser paralelos en esta escala. También requerimos una base libre de anticipación y de efectos de ataques previos, y controles sin contagio. El emparejamiento mejora el balance observado. Aun así, los Días menos cinco y menos dos presentan diferencias negativas. La prueba semanal rechaza diferencias previas nulas por estado. Al agrupar también por fecha, el valor p es 0,109. La evidencia deja abierta una fuente de sesgo.""",
 "Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
 
-add("resultados", "Resultados", "El ajuste cambia poco la estimación inicial", 40, f"""
+add("resultados", "Resultados", "El ajuste cambia poco la estimación inicial", 35, f"""
 <p class="lead">Días 0–1 · 1:muchos · Cambio en {log} · Efectos fijos de fecha</p>
 {models_table()}
 <p class="model-caption">3 613 pares · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.</p>""",
@@ -239,11 +263,11 @@ for label, row in [
     short, = rows([(label, row)])
     sensitivity_rows.append((short[0], row["tratados"], *short[1:]))
 
-add("sensibilidades", "Resultados", "La referencia previa y el calendario importan", 35, f"""
+add("sensibilidades", "Resultados", "La referencia previa y el calendario importan", 30, f"""
 <p class="lead">Días 0–1 · {m0}, 1:muchos, {log} · intervalos por estado y fecha</p>
 {table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}
 <p class="takeaway">Cambiar la base conserva los pares. Excluir fechas cambia la muestra.</p>""",
-"""Con los mismos pares y pesos, si uso la semana previa, la caída es menor. Si uso el Día menos dos, el signo cambia. Ambos intervalos incluyen cero. Al excluir feriados y recesos escolares, el coeficiente es algo más negativo, pero quedan solo 25 pares tratados y aumenta la incertidumbre. También cambia la composición. El placebo reconstruye la comparación 28 días antes. Su estimación inmediata es de menor magnitud y su intervalo incluye cero. Ninguna de estas comprobaciones, por sí sola, establece causalidad.""",
+"""Con los mismos pares y pesos, la semana previa reduce la magnitud de la caída y el Día menos dos cambia el signo. Ambos intervalos incluyen cero. Sin feriados ni recesos, la muestra queda en 25 tratados y aumenta la incertidumbre. El placebo reconstruye la comparación 28 días antes y da una caída de menor magnitud, con un intervalo que incluye cero.""",
 "¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources)
 
 add("conclusion", "Conclusión", "La mayor caída relativa aparece al inicio", 20, """
