@@ -233,7 +233,7 @@ add("eventos", "Estrategia empírica", "DiD día por día", 60, f"""
 """A la izquierda, cada línea promedia los valores observados de logaritmo de uno más Y. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.""",
 "Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.", "Conteos diarios limpios y pares y pesos guardados. Las 21 diferencias de cambios reproducen los coeficientes de M₀.", sources)
 
-add("trayectoria", "Supuestos", "Las diferencias previas limitan la atribución", 45, f"""
+add("trayectoria", "Supuestos", "Coeficientes diarios e intervalos de confianza.", 45, f"""
 <p class="lead">{outcome} <span class="chart-meta"> · {m0} · 1:muchos · Intervalos puntuales del 95 %</span></p>
 <figure class="wide-chart">{figure("trayectoria-principal", "Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.")}</figure>
 <p class="axis-caption">Días respecto al inicio local</p>
