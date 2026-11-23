@@ -104,7 +104,7 @@ Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.
 
 **Referencia para consulta.** Conteos diarios limpios y pares y pesos guardados. Las 21 diferencias de cambios reproducen los coeficientes de M₀.
 
-## Coeficientes diarios e intervalos de confianza.
+## Diagnóstico de tendencias paralelas
 
 **Identificador** `trayectoria` · **Tiempo** 5:10–5:55 (45 s)
 
