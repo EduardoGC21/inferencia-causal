@@ -150,7 +150,7 @@
 .equation { display: block; }
 .equation .katex-display { margin: .42em 0; text-align: left; }
 .equation .katex-display > .katex { text-align: left; }
-.reg-equation { margin-top: 42px; padding: 32px 24px; }
+.reg-equation { margin-top: 102px; padding: 32px 24px; }
 .reg-equation .katex-display { margin: 0; text-align: center; }
 .reg-equation .katex-display > .katex { text-align: center; font-size: 1.59em; }
 .reg-reading { margin-top: 30px; }
