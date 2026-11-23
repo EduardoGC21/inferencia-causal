@@ -1,9 +1,15 @@
 # Reproducción del escrito en una copia limpia
 
-Fecha local 2026-11-21T16:36:59.
-Copia worktrees/reproduccion-mfondo4z. La misma .venv cargó el código de la copia.
+Este es el registro histórico de la reproducción analítica anterior a la
+edición aprobada. El PDF final y su compilación editorial se identifican en
+[revision-editorial.json](revision-editorial.json). No se repitió el flujo
+completo durante la revisión editorial.
+
+
+Fecha local 2026-11-22T13:58:14.
+Copia worktrees/reproduccion-rjg8q7fb. La misma .venv cargó el código de la copia.
 La descarga verificó los originales copiados por SHA-256 contra el manifiesto.
-Se regeneraron 116 productos con SHA-256 idéntico.
+Se regeneraron 117 productos con SHA-256 idéntico.
 El PDF conserva texto, distribución de líneas y saltos de página por pdftotext -layout.
 PDF binario idéntico: sí; incluido en el inventario SHA-256.
 La validación sintética tiene SHA-256 idéntico, sin normalizar su contenido.
@@ -11,14 +17,14 @@ El log completo se guarda en reproduccion-ejecucion.txt.
 
 | Etapa | Segundos |
 | --- | ---: |
-| descargar | 2.16 |
-| consolidar | 1.58 |
-| preparar | 79.43 |
-| validar | 5.92 |
-| estimar | 241.74 |
-| analizar | 5.04 |
-| graficar | 5.61 |
-| compilar | 4.75 |
+| descargar | 2.09 |
+| consolidar | 1.52 |
+| preparar | 82.75 |
+| validar | 7.95 |
+| estimar | 245.38 |
+| analizar | 4.84 |
+| graficar | 6.32 |
+| compilar | 4.82 |
 
 ## Productos cotejados
 
@@ -104,6 +110,7 @@ El log completo se guarda en reproduccion-ejecucion.txt.
 - data/outputs/tablas/causal_placebo.tex
 - data/outputs/tablas/causal_previos.tex
 - data/outputs/tablas/causal_principales.tex
+- data/outputs/tablas/causal_progresion_principal.tex
 - data/outputs/tablas/causal_sensibilidades.tex
 - data/outputs/tablas/causal_soporte.tex
 - data/outputs/tablas/causal_trazabilidad.tex

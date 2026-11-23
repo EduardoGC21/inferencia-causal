@@ -1,93 +1,256 @@
 {
-  "pages": 17,
-  "sha256": "5774c704ccc262168dda0c69735b25075decb3e1dede1d80ed79f5f68af7849d",
+  "pages": 22,
+  "sha256": "ccef327f33b61c935b9d2303093035d905aa8eb9ecf9f96ad947b01763a8e551",
   "overfull": 0,
   "undefined": 0,
+  "body_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "references_pages": [
+    8
+  ],
+  "appendix_pages": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+  ],
   "page_starts": [
     {
       "page": 1,
-      "characters": 3206,
-      "head": "Violencia criminal y accidentes registrados"
+      "words": 378,
+      "first_lines": [
+        "Narcoataques y siniestros viales registrados",
+        "Cambios en siniestros viales tras el inicio local de narcoataques en municipios mexicanos,",
+        "2019–2025",
+        "Eduardo Garcia Cortez Clave única: 207480"
+      ]
     },
     {
       "page": 2,
-      "characters": 3632,
-      "head": "2.     Datos y muestra"
+      "words": 501,
+      "first_lines": [
+        "2. Datos",
+        "Accidentes y exposición. Se utilizan los microdatos definitivos de ATUS de 2019–2025 y los",
+        "últimos meses de 2018 para revisar la cobertura previa (Instituto Nacional de Estadística y",
+        "Geografía, 2025a, 2026a). En 2019–2025 hay 2 518 436 registros con fecha válida. Se conservan filas"
+      ]
     },
     {
       "page": 3,
-      "characters": 3456,
-      "head": "3.    Estrategia empírica"
+      "words": 491,
+      "first_lines": [
+        "Cuadro 1. Comparabilidad previa de la muestra final",
+        "Variable                     Tratados: media (DE)                    Controles            DME      DME 1:1",
+        "1:muchos           1:muchos",
+        "Población                        229 998,60 (243 845,81)           225 349,52 (281        0,013     0,005"
+      ]
     },
     {
       "page": 4,
-      "characters": 3640,
-      "head": "3.1.    Inferencia y separación de estimandos"
+      "words": 501,
+      "first_lines": [
+        "El matching 1:muchos utiliza todos los candidatos: cada tratado pesa uno y reparte otro peso total",
+        "de uno entre sus controles. El matching 1:1 elige el candidato más cercano según población, empleo",
+        "y automóviles, después de comprobar el mismo mínimo de candidatos y estados. Se permite",
+        "reutilizar controles; sus pesos acumulan las contribuciones de cada tratado."
+      ]
     },
     {
       "page": 5,
-      "characters": 2746,
-      "head": "Trayectoria y falsificaciones. La figura 1 muestra ambas escalas y matchings. La semana previa"
+      "words": 448,
+      "first_lines": [
+        "4. Resultados",
+        "Efecto inmediato y escala. En los Días 0–1, M0 con emparejamiento 1:muchos estima -0,107 en",
+        "log(1 + Y ), con intervalo de confianza del 95 % de [-0,195; -0,019], agrupado por estado y fecha.",
+        "Equivale a -0,130 desviaciones estándar diarias previas y a una caída aproximada del 10,2 % en la"
+      ]
     },
     {
       "page": 6,
-      "characters": 3583,
-      "head": "Calendario y controles. Las cinco fechas propuestas no son feriados laborales generales LFT: son"
+      "words": 275,
+      "first_lines": [
+        "Trayectoria y falsificaciones. La figura 1 muestra una caída alrededor del inicio, mayor en los",
+        "Días 0–1. También aparecen diferencias previas: Sem. -1 tiene una estimación logarítmica de -0,034",
+        "[-0,079; 0,011], y los Días -2 y -5 presentan -0,116 y -0,085. Estas señales limitan la atribución al",
+        "ataque. Los intervalos corresponden a cada punto, no a toda la trayectoria."
+      ]
     },
     {
       "page": 7,
-      "characters": 3975,
-      "head": "Referencias"
+      "words": 391,
+      "first_lines": [
+        "Persistencia y sensibilidades. Las estimaciones logarítmicas son -0,018 en Días 2–6 y -0,041 en",
+        "Sem. +1. Sus intervalos, agrupados por estado y fecha, incluyen cero; los efectos mínimos",
+        "detectables, con una prueba bilateral al 5 % y potencia del 80 %, son 0,072 y 0,061, respectivamente.",
+        "La menor magnitud estimada no prueba que el cambio desaparezca desde el Día 2. La señal de Sem."
+      ]
     },
     {
       "page": 8,
-      "characters": 3228,
-      "head": "A.     Fuentes y especificaciones progresivas"
+      "words": 320,
+      "first_lines": [
+        "Referencias",
+        "Amapola Periodismo. (2024, 8 de febrero). Chilpancingo: tres días de parálisis por la violencia.",
+        "https:",
+        "//amapolaperiodismo.com/2024/02/08/chilpancingo-tres-dias-de-paralisis-por-la-violencia/"
+      ]
     },
     {
       "page": 9,
-      "characters": 3315,
-      "head": "Cuadro 7: d0..1: M0–M3, muestra fija"
+      "words": 435,
+      "first_lines": [
+        "Apéndice A. Fuentes y especificaciones progresivas",
+        "Regresiones complementarias en niveles.",
+        "Panel B del cuadro 2. Resultado: cambio en el número de accidentes registrados",
+        "Variable / estadístico               M0                        M1                   M2                      M3"
+      ]
     },
     {
       "page": 10,
-      "characters": 3049,
-      "head": "B.    Persistencia y placebo"
+      "words": 301,
+      "first_lines": [
+        "Fuentes y selección de la muestra.",
+        "Cuadro A1. Uniones antes del emparejamiento",
+        "Fuente                  Rol             Unidas / elegibles           %         Valor utilizable / elegibles",
+        "EIC 2015             Tratados                   7/7               100,0                    7/7"
+      ]
     },
     {
       "page": 11,
-      "characters": 2790,
-      "head": "C.     Sensibilidades y calendario"
+      "words": 444,
+      "first_lines": [
+        "Cuadro A4. Días 0–1: M0 –M3 , muestra fija",
+        "Controles               Modelo        Trat.      N           log(1 + Y ), IC: estado y   Niveles, IC: estado y",
+        "fecha                    fecha",
+        "Completos, calibre      Base (M0 )     82      13 977          -0,099 [-0,186; -0,012]    -0,426 [-0,893; 0,041]"
+      ]
     },
     {
       "page": 12,
-      "characters": 1296,
-      "head": "Cuadro 12: Soporte de los escenarios"
+      "words": 361,
+      "first_lines": [
+        "Apéndice B. Contrastes principales, persistencia y placebo",
+        "Cuadro B1. Contrastes principales, emparejamiento 1:muchos",
+        "Escala                  Tramo              β̂ (EE)             IC 95 %: estado y                  β/σ         MDE:",
+        "fecha                                   estado y"
+      ]
     },
     {
       "page": 13,
-      "characters": 3099,
-      "head": "Cuadro 13: Cohortes finales y calendario oficial"
+      "words": 238,
+      "first_lines": [
+        "Cuadro B3. Placebo 28 días antes: efectos por periodo",
+        "Escala       Horizonte      1:muchos, IC: estado y            pE     1:1, IC: estado y fecha     pE",
+        "fecha",
+        "Log             Día 0          -0,041 [-0,138; 0,056]        0,248     -0,078 [-0,225; 0,069]   0,219"
+      ]
     },
     {
       "page": 14,
-      "characters": 2494,
-      "head": "D.     Inferencia y potencia"
+      "words": 364,
+      "first_lines": [
+        "Apéndice C. Sensibilidades y calendario",
+        "Cuadro C1. Días 0–1: exclusiones, IC: estado y fecha",
+        "Exclusión / muestra         Matching Trat. Fechas      Log, IC: estado y fecha      Niveles, IC: estado y",
+        "fecha"
+      ]
     },
     {
       "page": 15,
-      "characters": 2650,
-      "head": "Cuadro 16: Omisión de estados, M0 y 1:muchos"
+      "words": 176,
+      "first_lines": [
+        "Cuadro C2. Soporte de los escenarios",
+        "Escenario                             Matching         Trat.   Cont.   Fechas   Episodios",
+        "Principal                              1:muchos         77     3 536     32        31",
+        "Principal                                 1:1           77       77      32        31"
+      ]
     },
     {
       "page": 16,
-      "characters": 3227,
-      "head": "E.    T05 y trazabilidad del rediseño"
+      "words": 283,
+      "first_lines": [
+        "Cuadro C3. Cohortes finales y calendario oficial",
+        "Inicio                  Trat.       LFT en días 0–1         SEP en días 0–1         Cinco fechas",
+        "2019-10-17                 1               No                      No                   No",
+        "2019-11-30                 1               No                      No                   No"
+      ]
     },
     {
       "page": 17,
-      "characters": 2471,
-      "head": "F.                        Culiacán y reproducción"
+      "words": 384,
+      "first_lines": [
+        "Cuadro C4. Días 0–1 con idénticos pares y pesos: base e IC agrupados por estado y fecha",
+        "Matching          Escala               Día -2                    Tres semanas                 Sem. -1",
+        "1:muchos           Log          0,013 [-0,074; 0,100]         -0,107 [-0,195; -0,019]   -0,064 [-0,167; 0,039]",
+        "1:muchos          Niveles       0,185 [-0,296; 0,666]         -0,397 [-0,865; 0,072]    -0,191 [-0,725; 0,343]"
+      ]
+    },
+    {
+      "page": 18,
+      "words": 254,
+      "first_lines": [
+        "Cuadro D1. Días 0–1: agrupamiento, CRV3 y MDE",
+        "Matching       Escala            Inferencia               Días 0–1, IC 95 %                gl       MDE",
+        "1:muchos        Log            CRV1 estatal              -0,107 [-0,152; -0,062]           31       0,064",
+        "1:muchos        Log         CRV1: estado y fecha         -0,107 [-0,195; -0,019]           31       0,125"
+      ]
+    },
+    {
+      "page": 19,
+      "words": 165,
+      "first_lines": [
+        "Cuadro D3. Omisión de estados, M0 y 1:muchos",
+        "Estado omitido                                Log, días 0–1                Niveles, días 0–1",
+        "Aguascalientes                                    -0,121                         -0,371",
+        "Baja California                                   -0,100                         -0,383"
+      ]
+    },
+    {
+      "page": 20,
+      "words": 343,
+      "first_lines": [
+        "Apéndice E. Construcción del catálogo y reproducción",
+        "Catálogo de ataques. Las búsquedas originales cubrieron tres regiones (norte, occidente y",
+        "centro, sur y oriente) y tres periodos (2019–2021, 2022–2023 y 2024–2025). Tres subagentes de IA",
+        "registraron consultas, enlaces, fechas de publicación y consulta, lugares y evidencia; los cotejos entre"
+      ]
+    },
+    {
+      "page": 21,
+      "words": 168,
+      "first_lines": [
+        "Apéndice F. Contexto geográfico de la muestra",
+        "Figura 2. Municipios tratados y controles de la muestra principal. Naranja: 54 municipios tratados; azul:",
+        "765 municipios de control. Un municipio puede aparecer en ambos grupos en fechas distintas: ocurre en 47",
+        "casos. El gris indica que no pertenece al grupo de ese panel. El color muestra participación, no tamaño del"
+      ]
+    },
+    {
+      "page": 22,
+      "words": 199,
+      "first_lines": [
+        "Apéndice G. Análisis exploratorio por horario y gravedad",
+        "El cuadro G1 compara, por gravedad, el cambio de accidentes registrados de noche con el de día en",
+        "los Días 0–1 de la muestra principal. Se define el día de 06:00 a 17:59 y la noche de 18:00 a 05:59.",
+        "Cada cifra resta dos cambios estimados, no los conteos nocturnos y diurnos. Un valor negativo"
+      ]
     }
   ]
 }

@@ -1,11 +1,53 @@
-# Violencia criminal y accidentes registrados
+# Narcoataques y siniestros viales registrados
+
+## Reporte aprobado y compilación editorial
+
+Se incorporaron las 21 propuestas aprobadas en Markdown. El cuerpo ocupa siete
+páginas a 11 puntos; las referencias están en la página 8 y los apéndices en
+las páginas 9–22. La selección de tratados y controles se identifica como
+matching 1:muchos o 1:1. Las cifras de los modelos se conservan.
+
+Para trasladar una nueva versión aprobada del Markdown a LaTeX, desde este
+checkout:
+
+```powershell
+python reporte/convertir_markdown.py reporte/reporte.md reporte/main.tex ../tasks/revision-editorial/compilacion
+python -m choques compilar
+```
+
+Estos comandos solo actualizan el escrito; no ejecutan estimaciones ni el
+flujo completo. La compilación utiliza Biber y conserva idénticos `main.pdf`
+y `reporte.pdf`. Las figuras locales están en `reporte/figuras/`.
+`codigo_R/analisis.R`, ya incorporado a main, se conserva sin cambios.
+
+La [verificación editorial](reporte/verificacion/revision-editorial.json)
+identifica el PDF final. Los manifiestos de reproducción analítica anteriores
+conservan su alcance histórico; no certifican una nueva ejecución del flujo
+completo para esta edición.
 
 ## Diseño final: Ruta B
 
-La entrega final es [reporte/main.pdf](reporte/main.pdf). El diseño se aprobó
+La entrega final es [reporte/reporte.pdf](reporte/reporte.pdf), con [Markdown](reporte/reporte.md) y [LaTeX](reporte/main.tex). `reporte/main.pdf` conserva una copia idéntica del PDF. El diseño se aprobó
 el 21 de noviembre de 2026 después de observar T05 y la auditoría. La rama
 `diseno-causal-final` parte de `e283e2d76190b496644133c7e1e5c0b004a4e99f`,
 que contiene `0335513`. T08 queda fuera del alcance.
+
+El escrito identifica a Eduardo Garcia Cortez, clave única 207480, y al profesor
+Mauricio Romero. La [verificación del syllabus](reporte/cumplimiento-syllabus.md)
+localiza las cinco secciones obligatorias y sus evidencias: siete páginas de
+cuerpo, una de referencias APA y catorce de apéndices (22 en total), con fuente de 11 puntos.
+Los párrafos se alinean a la izquierda, sin justificación ni sangría inicial.
+El apéndice incluye el mapa de municipios tratados y controles.
+El reporte se concentra en jornadas extensas con inicio local definido.
+La comparación semanal de la crisis prolongada de Culiacán se retiró del cuerpo
+y del apéndice por su exposición distinta y problemas de cobertura. Su código
+y sus fuentes se conservan. Esta edición no excluye municipios ni cambia las
+estimaciones del análisis principal.
+La sección Datos y el apéndice E identifican la búsqueda web asistida por tres
+subagentes de IA que originó el catálogo de ataques, sus cotejos entre agentes
+y sus límites. Esta procedencia corresponde al tratamiento; los accidentes
+y las covariables provienen de fuentes oficiales. Las bitácoras no se presentan
+como constancia de una validación humana exhaustiva.
 
 La [matriz de auditoría y verificación](reporte/auditoria-final.md) vincula cada
 requisito con su código, salidas y evidencia de cierre.
@@ -165,8 +207,8 @@ y [bibliografía](reporte/referencias.bib). Ejecuta los comandos desde
 `Proyecto/repo`. El entorno reutilizado usa Python 3.13.2 en
 Windows x64. Las dependencias directas están fijadas en `pyproject.toml`
 y las transitivas activas en `requirements-lock.txt`. La estimación usa
-PyFixest 0.70.0. Se compiló con MiKTeX-pdfTeX 4.18 (MiKTeX 24.1) y BibTeX.
-Tener `pdflatex` y `bibtex` en el PATH. La verificación limpia también
+PyFixest 0.70.0. Se compila con MiKTeX-pdfTeX 4.18 (MiKTeX 24.1), Biber y
+`biblatex-apa` para APA 7. Tener `pdflatex` y `biber` en el PATH. La verificación limpia también
 usa `pdftotext`; la revisión visual, `pdftoppm` y `pdfinfo`.
 
 La carpeta `Proyecto` se organiza así.

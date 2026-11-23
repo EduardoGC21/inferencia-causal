@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 
 
@@ -19,7 +20,7 @@ def run(config):
                            stdout=log, stderr=subprocess.STDOUT)
 
         compile_step(latex)
-        compile_step(["bibtex", "main"])
+        compile_step(["biber", "main"])
         for attempt in range(5):
             compile_step(latex)
             final = (report / "main.log").read_text(encoding="utf-8", errors="replace")
@@ -27,4 +28,5 @@ def run(config):
                 break
         else:
             raise ValueError("La compilación no estabilizó las referencias cruzadas")
-    print(f"PDF compilado: {report / 'main.pdf'}")
+    shutil.copy2(report / "main.pdf", report / "reporte.pdf")
+    print(f"PDF compilado: {report / 'reporte.pdf'}")

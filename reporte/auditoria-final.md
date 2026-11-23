@@ -1,10 +1,45 @@
-# Evidencia de cierre de Ruta B
+# Evidencia de Ruta B y de la entrega escrita
+
+## Revisión editorial vigente
+
+La entrega aprobada está en [reporte.pdf](reporte.pdf), [reporte.md](reporte.md)
+y [main.tex](main.tex). Tiene siete páginas de cuerpo, una de referencias y
+catorce de apéndices; 22 en total. Mantiene fuente de 11 puntos, párrafos a
+la izquierda y citas y referencias APA. La figura geográfica está en el
+apéndice F; el cruce exploratorio por horario y gravedad, en el G.
+[Cumplimiento del syllabus](cumplimiento-syllabus.md) localiza las secciones.
+
+Se incorporaron las 21 propuestas aprobadas y la etiqueta «Matching» para
+describir la selección de tratados y controles. Se revisaron las 22 páginas
+del PDF y su coincidencia con el Markdown. La compilación normal con Biber
+produce `main.pdf` y `reporte.pdf` idénticos; las imágenes renderizadas
+coinciden con la versión inspeccionada.
+
+[revision-editorial.json](verificacion/revision-editorial.json) identifica
+esta entrega. No se reestimaron modelos ni se ejecutó el flujo completo en
+la revisión. Los manifiestos de 117 productos y 38 fuentes son registros
+de la reproducción anterior, cuyo PDF tiene SHA-256
+`fcfeab43aff0209365029ba62d5ebbdcdc9adc64eb4f616455d6bd4fc5d269d7`.
+
+La comparación semanal de la crisis prolongada de Culiacán permanece fuera
+del reporte. Las jornadas puntuales de 2019 y 2023 siguen en el análisis.
+
+## Registro de ejecución analítica y verificación anterior
 
 Rama `diseno-causal-final`, base `e283e2d76190b496644133c7e1e5c0b004a4e99f`.
 Autorización: `run`, 21/11/2026, después del plan; posteriormente se autorizó
 publicar los cambios mediante PR. La base contiene el commit
-auditado `0335513294fbeaaf160d8bdbca3da8b6f6b56456`. No se reescribe el historial
-ni se hace merge del PR. T08 está fuera del alcance.
+auditado `0335513294fbeaaf160d8bdbca3da8b6f6b56456`. Se conservó el historial.
+Esa entrega se integró mediante el PR 2, con merge
+`785c153dabd3567d76c21e1ff3ccae62f9162a90`. T08 está fuera del alcance.
+
+La revisión de portada y syllabus usa la rama `portada-syllabus-final`, sobre
+ese merge, en el mismo worktree con datos separados. Identifica a Eduardo Garcia
+Cortez, clave única 207480, al profesor Mauricio Romero y el título solicitado.
+La [matriz del syllabus](cumplimiento-syllabus.md) localiza cada requisito en
+el PDF. Se añadió N en Datos y una tabla breve M0–M3 en Resultados; los 53 CSV
+de resultados numéricos conservan sus huellas anteriores. No se modificaron
+estimaciones, muestras ni criterios de selección.
 
 El documento rector es `Proyecto/tasks/auditoria-final/auditoria-final.md`.
 Las rutas de datos siguientes se refieren a las carpetas hermanas de este
@@ -50,7 +85,7 @@ worktree, no a las salidas mutables del repositorio principal.
 | Requisito | Implementación | Resultado o evidencia verificable |
 | --- | --- | --- |
 | H1: seis fuentes, tasas de unión y datos | `municipios.py`, `informe_final.py`; Sección 2 y Apéndice A; seis entradas bibliográficas | `causal_uniones.csv`; tablas `causal_uniones.tex` y `causal_uniones_aux.tex`, con numeradores, denominadores y universos |
-| H1: balance y progresión | M0 tratamiento/fecha; M1 log población; M2 empleo/mil; M3 autos/mil; muestras y pesos fijos | `causal_balance.csv`, `causal_modelos.tex`, `causal_balance_prepost.tex`; muestra completa con calibre, mismos tratados y ambos matchings |
+| H1: balance y progresión | M0 tratamiento/fecha; M1 log población; M2 empleo/mil; M3 autos/mil; muestras y pesos fijos | `causal_balance.csv`, `causal_modelos.tex`, `causal_progresion_principal.tex` y `causal_balance_prepost.tex`; progresión principal también en el cuerpo, p. 5 |
 | H1: cruce horario, notación y rutas | Resultados, cruce exploratorio; potencial `Y_{i,t+h}(0)` formalizado; rutas desde carpeta contenedora | Cuadro de noche menos día; `causal_cruce.csv`; suma de nueve celdas comprobada en ejecución |
 | H2: calibre individual | `modelos.caliber_mask`, `seleccion.match`, `causal.select_pre` | Prueba de tratados heterogéneos en una fecha; `causal_vinculos.csv`, `causal_descartes.csv` |
 | H2: Morelia y precipicio antiguo | Referencia antigua preservada; filtros nuevos desde universo elegible | `causal_morelia_donantes.csv`; 10 antiguos, 14 tras calibre nuevo, 12 tras covariables, 12 al excluir señales |
@@ -74,8 +109,8 @@ worktree, no a las salidas mutables del repositorio principal.
 | Syllabus §6: contexto y ATT antes de estimador | Sección 1 y estimando formal en Sección 3 | Pregunta, cifras, mecanismo, literatura y población objetivo en PDF |
 | Syllabus §6: supuestos y sesgo | Sección 3, diferencia de brechas contrafactuales | Supuestos no comprobables separados de diagnósticos; selección, interferencia y medición explícitas |
 | Syllabus §6: resultados y validez externa | Secciones 4-5 y apéndices | Figura, EE, N, progresión, σ, unidades, MDE, robustez; alcance a registros y jornadas con soporte |
-| Syllabus §6: extensión y tipografía | Article 11pt; apéndice separado | Seis páginas de texto, una de referencias y diez de apéndice; 17/17 páginas inspeccionadas; `revision-visual.json` |
-| Paquete reproducible y fuentes públicas | CLI real, lock, originales fijados, `reproducir.py` | Copia limpia definitiva: 116/116 productos SHA-256 idénticos, incluido PDF binario; 38 fuentes de código/configuración cotejadas sin cambios |
+| Syllabus §6: extensión y tipografía | Article 11pt; apéndice separado | Siete páginas de texto, una de referencias y diez de apéndice; 18/18 páginas inspeccionadas; `revision-visual.json` |
+| Paquete reproducible y fuentes públicas | CLI real, lock, originales fijados, `reproducir.py` | Copia limpia definitiva: 117/117 productos SHA-256 idénticos, incluido PDF binario; 38 fuentes de código/configuración cotejadas sin cambios |
 | Preservación de T05 y cambios ajenos | Archivos congelados sin modificaciones; referencia histórica separada | Ambas huellas originales y locales idénticas; main limpio, `diff --check` aprobado; `preservacion.json` |
 
 ## Verificación final
@@ -85,23 +120,27 @@ worktree, no a las salidas mutables del repositorio principal.
 - `python -m choques compilar`: salida 0. Tras la revisión cruzada se repitieron
   `analizar` y `compilar` para explicitar el placebo estatal. Log final: cero overfull
   hboxes, cero referencias o citas indefinidas.
-- PDF: 17 páginas. Texto 1-6, referencias 7, apéndices 8-17; 11pt. El syllabus
-  sólo excluye explícitamente el apéndice: aun contando referencias son siete
-  páginas, dentro del intervalo 6-8. Se inspeccionaron directamente los 17 PNG
-  a 110 dpi: sin recortes, solapamientos ni glifos ausentes. En la versión
-  definitiva se reinspeccionaron las páginas 16 y 17; los PNG de las otras quince
-  conservan exactamente las huellas de la inspección anterior. La tabla de soporte
-  tiene una página propia en el apéndice.
+- Revisión de portada y syllabus: `configuracion`, `py_compile`, `analizar` y
+  `compilar` terminaron con salida 0. La copia limpia volvió a ejecutar las ocho
+  etapas con el código actual, incluidas las ocho pruebas unitarias y las suites
+  sintéticas de `validar`. El registro anterior de `todo` corresponde al cierre
+  de Ruta B; los cambios posteriores sólo afectan presentación y documentación.
+- PDF actualizado: 18 páginas. Texto 1-7, referencias 8, apéndices 9-18; 11pt.
+  El syllabus sólo excluye explícitamente el apéndice: aun con referencias son
+  ocho páginas, dentro del intervalo 6-8. Se inspeccionaron directamente los
+  18 PNG a 110 dpi: sin recortes, solapamientos ni glifos ausentes. La tabla de
+  soporte tiene una página propia en el apéndice.
 - SHA-256 del PDF inspeccionado:
-  `5774c704ccc262168dda0c69735b25075decb3e1dede1d80ed79f5f68af7849d`.
+  `fcfeab43aff0209365029ba62d5ebbdcdc9adc64eb4f616455d6bd4fc5d269d7`.
 - Git: rama y base verificadas, commit auditado ancestro de HEAD; main limpio,
-  avances posteriores conservados. T05 original y copia conservan sus dos huellas
-  iniciales. Los cambios se proponen mediante PR por instrucción del estudiante.
-- `python reproducir.py`: versión definitiva aprobada, **116/116 productos
+  en `785c153dabd3567d76c21e1ff3ccae62f9162a90`. T05 original y copia conservan
+  sus dos huellas iniciales. La revisión editorial permanece local y revisable
+  en `portada-syllabus-final`; no se publicaron estos cambios.
+- `python reproducir.py`: versión definitiva aprobada, **117/117 productos
   con SHA-256 idéntico (100%)**, incluido PDF binario y validación sintética
   sin normalización. Los 38 archivos de código/configuración se conservaron
   idénticos a los copiados durante la ejecución. Copia:
-  `worktrees/diseno-causal-final/worktrees/reproduccion-mfondo4z`, relativa a
+  `worktrees/diseno-causal-final/worktrees/reproduccion-rjg8q7fb`, relativa a
   Proyecto. Se reconstruyeron descargar, consolidar, preparar, validar, estimar,
   analizar, graficar y compilar; las ocho etapas terminaron con salida 0.
 - `pip check`: salida 0; openpyxl 3.1.5 y xlrd 2.0.2 en `Proyecto/.venv`.
