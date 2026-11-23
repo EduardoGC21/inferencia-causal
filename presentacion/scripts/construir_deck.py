@@ -214,7 +214,7 @@ add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 
 """Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. Dejo fuera la semana menos uno para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local, h el día relativo y r conserva el día de la semana. Aplico logaritmo de uno más Y a cada conteo antes de promediar las tres referencias. Resto esa base del valor observado. Cada tramo promedia cambios diarios. El Día 0 puede incluir horas anteriores al inicio.""",
 "Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.", "Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.")
 
-add("regresion", "Estrategia empírica", "La regresión compara cambios", 50, f"""
+add("regresion", "Estrategia empírica", "Cómo estimamos el coeficiente de tratamiento", 50, f"""
 <div class="math-band reg-equation">{reg_eq}</div>
 <p class="reg-reading"><strong>{math(r"\beta_h^g")} mide la diferencia entre cambios.</strong></p>
 <p class="reg-models">{m0} usa tratamiento y efectos fijos (FE) de fecha. {math(r"M_1\text{–}M_3")} añaden covariables.</p>""",
