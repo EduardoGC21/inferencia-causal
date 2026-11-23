@@ -220,7 +220,7 @@ add("regresion", "Estrategia empírica", "Estimación por mínimos cuadrados pon
 """La variable dependiente es el cambio que acabamos de construir. D vale uno para el tratado y cero para un control. Lambda es el efecto fijo de fecha y descuenta cambios comunes a cada inicio. Beta es la diferencia entre cambios. Buscamos estimar el efecto promedio del tratamiento sobre los tratados, el ATT. X reúne covariables previas, gamma sus coeficientes y u el residuo. La regresión usa mínimos cuadrados ponderados. En M cero, cada tratado pesa uno y distribuye una unidad de peso entre sus controles. Equivale a promediar 77 contrastes, uno por par tratado. M uno añade logaritmo de población, M dos empleo por mil habitantes y M tres autos por mil. La muestra y los pesos explícitos se conservan.""",
 "Veamos las trayectorias que dan origen a ese contraste.", "Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.")
 
-add("eventos", "Estrategia empírica", "DiD día por día", 60, f"""
+add("eventos", "Estrategia empírica", "Promedios y cambios de tratados y controles", 60, f"""
 <p class="lead">1:muchos · 77 pares tratados y 3 536 de control</p>
 <div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span><span>{outcome}</span></div>
 <div class="series-layout">
