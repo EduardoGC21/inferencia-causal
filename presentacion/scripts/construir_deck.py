@@ -221,26 +221,25 @@ add("regresion", "Estrategia empírica", "Estimación por mínimos cuadrados pon
 "Veamos las trayectorias que dan origen a ese contraste.", "Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.")
 
 add("eventos", "Estrategia empírica", "Promedios y cambios de tratados y controles", 60, f"""
-<p class="lead">1:muchos · 77 pares tratados y 3 536 de control</p>
-<div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span><span>{outcome}</span></div>
+<div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span></div>
 <div class="series-layout">
   <figure><figcaption>Promedio observado</figcaption>{figure("eventos-observados", "Promedios observados por grupo, del día −28 al 13.")}</figure>
   <figure><figcaption>Cambio medio respecto a la base</figcaption>{figure("eventos-cambios", "Cambios medios de tratados y controles en log(1+Y), del día −7 al 13.")}</figure>
 </div>
-<p class="axis-caption">Días respecto al inicio local · Día 0 en línea punteada</p>""",
-"""A la izquierda, cada línea promedia los valores observados de logaritmo de uno más Y. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.""",
-"Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.", "Conteos diarios limpios y pares y pesos guardados. Las 21 diferencias de cambios reproducen los coeficientes de M₀.", sources)
+<p class="axis-caption">Días respecto al inicio local</p>""",
+"""A la izquierda, cada línea promedia el logaritmo de uno más el conteo de siniestros por municipio y día. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.""",
+"Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.", "Emparejamiento 1:muchos con 77 pares tratados y 3 536 de control. Las 21 diferencias de cambios reproducen los coeficientes de M₀.", sources)
 
 add("trayectoria", "Supuestos", "Diagnóstico de tendencias paralelas", 45, f"""
-<p class="lead">{outcome} <span class="chart-meta"> · {m0} · 1:muchos · Intervalos puntuales del 95 %</span></p>
-<figure class="wide-chart">{figure("trayectoria-principal", "Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.")}</figure>
-<p class="axis-caption">Días respecto al inicio local</p>
+<figure class="wide-chart">{figure("trayectoria-principal", "Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.")}
+  <figcaption class="axis-caption">Días respecto al inicio local · Intervalos puntuales del 95 %</figcaption>
+</figure>
 <div class="diagnostic">
   <p><strong>Tendencias paralelas:</strong> cambios comparables en ausencia del ataque.</p>
   <p><strong>Prueba previa por semanas:</strong> rechaza por estado; es inconclusa por estado y fecha.</p>
 </div>""",
 """Cada punto es la diferencia entre los cambios de tratados y controles. Es el coeficiente estimado, beta gorro. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.""",
-"Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
+"Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Modelo M₀, 1:muchos. Intervalos puntuales del 95 % por estado y fecha. Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
 
 add("resultados", "Resultados", "Añadir covariables cambia poco la estimación inicial", 35, f"""
 <p class="lead">Días 0–1 · 1:muchos · Cambio en {log} · Efectos fijos de fecha</p>

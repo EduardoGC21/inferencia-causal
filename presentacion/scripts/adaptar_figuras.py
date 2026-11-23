@@ -11,6 +11,7 @@ from PIL import Image
 
 ASSETS = Path(__file__).resolve().parents[1] / "assets"
 INK, BLUE, AMBER, MUTED = "#142e4b", "#235ca0", "#a04a21", "#555f70"
+LOG_CRASHES = "log(1 + siniestros registrados)"
 POINTS = list(range(-7, 14))
 effects = pd.read_csv(ASSETS / "datos/efectos.csv", dtype={"tramo": str})
 
@@ -47,7 +48,7 @@ def save(fig, name):
 
 
 def descriptive(series, field, name, first, ticks):
-    fig, ax = canvas(552, 334, .22, .97, bottom=.13)
+    fig, ax = canvas(552, 362, .22, .97, bottom=.13)
     for group, color, marker, line in [
         ("tratados", AMBER, "o", "-"), ("controles", BLUE, "s", (0, (4, 2))),
     ]:
@@ -55,11 +56,11 @@ def descriptive(series, field, name, first, ticks):
                 marker=marker, markersize=2.5, linestyle=line, linewidth=1.65)
     days(ax, first, ticks)
     if field == "observado":
-        ax.set_ylabel("Promedio de log(1 + Y)")
+        ax.set_ylabel(f"Promedio de\n{LOG_CRASHES}")
         ax.set_yticks([.50, .60, .70, .80])
         ax.set_ylim(.47, .88)
     else:
-        ax.set_ylabel("Cambio en log(1 + Y)")
+        ax.set_ylabel(f"Cambio en\n{LOG_CRASHES}")
         ax.axhline(0, color=MUTED, linewidth=1, alpha=.67)
         ax.set_yticks([-.20, -.10, 0, .10])
         ax.set_ylim(-.215, .14)
@@ -67,9 +68,9 @@ def descriptive(series, field, name, first, ticks):
     save(fig, name)
 
 
-def trajectory(scale, methods, name):
-    fig, ax = canvas(1128, 332, .112, .984, bottom=.15)
-    unit = "log(1 + Y)" if scale == "log1p" else "registros por municipio y día"
+def trajectory(scale, methods, name, *, height=332):
+    fig, ax = canvas(1128, height, .112, .984, bottom=.15)
+    unit = LOG_CRASHES if scale == "log1p" else "registros por municipio y día"
     ax.set_ylabel(f"Diferencia de cambios\nen {unit}")
     for j, (method, color, marker, line) in enumerate(methods):
         data = effects.loc[
@@ -113,7 +114,7 @@ series = pd.read_csv(ASSETS / "datos/series-eventos.csv", index_col="h")
 descriptive(series, "observado", "eventos-observados", -28, [-28, -21, -14, -7, 0, 7, 13])
 descriptive(series, "cambio", "eventos-cambios", -7, [-7, -5, -2, 0, 3, 7, 10, 13])
 methods = [("emparejada", INK, "o", "-"), ("emparejada_1a1", BLUE, "s", "--")]
-trajectory("log1p", methods[:1], "trayectoria-principal")
+trajectory("log1p", methods[:1], "trayectoria-principal", height=364)
 trajectory("log1p", methods, "trayectoria-dos-matchings")
 trajectory("niveles", methods, "trayectoria-niveles")
 duration()

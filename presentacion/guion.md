@@ -96,13 +96,13 @@ Veamos las trayectorias que dan origen a ese contraste.
 
 **Explicación oral**
 
-A la izquierda, cada línea promedia los valores observados de logaritmo de uno más Y. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.
+A la izquierda, cada línea promedia el logaritmo de uno más el conteo de siniestros por municipio y día. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.
 
 **Transición**
 
 Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.
 
-**Referencia para consulta.** Conteos diarios limpios y pares y pesos guardados. Las 21 diferencias de cambios reproducen los coeficientes de M₀.
+**Referencia para consulta.** Emparejamiento 1:muchos con 77 pares tratados y 3 536 de control. Las 21 diferencias de cambios reproducen los coeficientes de M₀.
 
 ## Diagnóstico de tendencias paralelas
 
@@ -116,7 +116,7 @@ Cada punto es la diferencia entre los cambios de tratados y controles. Es el coe
 
 Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.
 
-**Referencia para consulta.** Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.
+**Referencia para consulta.** Modelo M₀, 1:muchos. Intervalos puntuales del 95 % por estado y fecha. Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.
 
 ## Añadir covariables cambia poco la estimación inicial
 
