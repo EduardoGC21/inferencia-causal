@@ -62,25 +62,25 @@ def cell(text, expanded):
 
 widths = {
     1: [.26, .26, .19, .145, .145],
-    2: [.17, .15, .20, .24, .12, .12],
+    2: [.17, .24, .27, .16, .16],
     3: [.235, .19125, .19125, .19125, .19125],
     4: [.24, .38, .38],
     5: [.14, .14, .25, .08, .39],
     6: [.25, .25, .10, .40],
     7: [.62, .19, .19],
-    8: [.19, .14, .07, .11, .245, .245],
+    8: [.22, .16, .08, .12, .42],
     9: [.37, .21, .21, .21],
     10: [.23, .11, .07, .197, .197, .196],
-    11: [.12, .13, .285, .09, .285, .09],
-    12: [.24, .10, .06, .07, .265, .265],
+    11: [.15, .245, .09, .09, .245, .09, .09],
+    12: [.31, .13, .09, .10, .37],
     13: [.39, .14, .09, .10, .14, .14],
     14: [.22, .10, .23, .23, .22],
-    15: [.12, .12, .2533, .2533, .2534],
-    16: [.12, .12, .20, .34, .07, .15],
-    17: [.11, .10, .15, .09, .12, .09, .13, .21],
-    18: [.38, .31, .31],
+    15: [.14, .2867, .2866, .2867],
+    16: [.15, .23, .39, .08, .15],
+    17: [.13, .18, .12, .12, .10, .13, .22],
+    18: [.34, .16, .34, .16],
 }
-layout_keys = {'1': 1, 'B1': 2, '2': 3, 'G1': 4, 'A1': 5, 'A2': 6, 'A3': 7, 'A4': 8, 'A5': 9, 'B2': 10, 'B3': 11, 'C1': 12, 'C2': 13, 'C3': 14, 'C4': 15, 'D1': 16, 'D2': 17, 'D3': 18}
+layout_keys = {'1': 1, 'B1': 2, '2': 3, 'G1': 4, 'A1': 5, 'A2': 6, 'A3': 7, 'A4': 9, 'A5': 8, 'B2': 10, 'B3': 11, 'C1': 12, 'C2': 13, 'C3': 14, 'C4': 15, 'D1': 16, 'D2': 17, 'D3': 18}
 
 def table(raw, number, line):
     parsed = [[v.strip() for v in row.strip().strip("|").split("|")] for row in raw]
@@ -127,7 +127,7 @@ preamble = r"""\documentclass[11pt,letterpaper]{article}
   numbers=left,numberstyle=\tiny,numbersep=8pt,xleftmargin=2.6em,
   columns=fullflexible,keepspaces=true,showstringspaces=false,upquote=true,
   breaklines=true,breakatwhitespace=false,breakindent=1.5em,tabsize=2,
-  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ñ}{{\~n}}1 {ó}{{\'o}}1 {—}{{\textemdash}}1
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ñ}{{\~n}}1 {ó}{{\'o}}1 {—}{{\textemdash}}1 {–}{{\textendash}}1 {·}{{\textperiodcentered}}1
 }
 \usepackage[hidelinks]{hyperref}
 \hypersetup{pdftitle={Narcoataques y siniestros viales registrados},pdfauthor={Eduardo Garcia Cortez},pdfsubject={Inferencia Causal, ITAM; profesor Mauricio Romero}}
@@ -195,6 +195,10 @@ while i < len(lines):
         continue
     if s.startswith("### "):
         heading = s[4:]
+        if heading.startswith("Persistencia, bases alternativas"):
+            out.append(r"\Needspace{20\baselineskip}")
+        if heading == "Sensibilidad a la base de comparación":
+            out.append(r"\Needspace{14\baselineskip}")
         command = r"\subsection*" if heading.startswith(("3.1.", "Listado completo")) or heading == "Sensibilidad a la base de comparación" else r"\paragraph"
         out.append(command+"{"+inline(heading)+"}")
         blocks.append({"type":"heading","line":line,"source":s})
@@ -221,20 +225,12 @@ while i < len(lines):
         continue
     if s.startswith("**Cuadro "):
         number = re.match(r"\*\*Cuadro ([A-Z]?\d+)", s)[1]
+        if number == "A5":
+            out.append(r"\Needspace{24\baselineskip}")
         out += [r"\par\medskip\noindent\begin{minipage}{\linewidth}",
                 r"\begin{center}\small "+inline(s)+r"\end{center}"]
         table_box = True
         blocks.append({"type":"table_caption","line":line,"source":s,"number":number})
-        i += 1
-        continue
-    if s.startswith("**Panel "):
-        if s.startswith("**Panel B del cuadro 2."):
-            number = "2"
-        if not table_box:
-            out.append(r"\par\medskip\noindent\begin{minipage}{\linewidth}")
-            table_box = True
-        out.append(inline(s)+r"\par\medskip")
-        blocks.append({"type":"panel","line":line,"source":s})
         i += 1
         continue
     if s.startswith("|"):
@@ -277,7 +273,7 @@ while i < len(lines):
     if s.startswith("!["):
         raise ValueError(f"Imagen no procesada en la línea {line}")
     paragraph, end = [s], i+1
-    while end < len(lines) and lines[end].strip() and not lines[end].strip().startswith(("#","|","$$","**Cuadro ","**Figura ","**Panel ")):
+    while end < len(lines) and lines[end].strip() and not lines[end].strip().startswith(("#","|","$$","**Cuadro ","**Figura ")):
         paragraph.append(lines[end].strip())
         end += 1
     text = " ".join(paragraph)
@@ -289,7 +285,7 @@ while i < len(lines):
             following+=1
         if following<len(lines) and lines[following].strip()=="$":
             out.append(r"\Needspace{8\baselineskip}")
-        is_table_note=text.startswith(("Cada celda de coeficientes presenta", "Emparejamiento 1:muchos:", "El $R^2$ ponderado incluye", "Cada celda presenta", "Registros por municipio y día; IC"))
+        is_table_note=text.startswith(("Cada celda de coeficientes presenta", "Emparejamiento 1:muchos:", "Cada celda presenta", "Registros por municipio y día; IC"))
         if is_table_note:
             out.append(r"{\fontsize{9}{11}\selectfont "+inline(text)+r"\par}")
         else:

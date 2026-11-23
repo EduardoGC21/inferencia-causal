@@ -257,7 +257,7 @@ def support(config, expected_sha=None):
 def run(config):
     paths = config["paths"]
     output = paths["outputs"] / "modelos"
-    project = config["root"].parent
+    project = paths["tasks"].parent
     release = paths["tasks"] / "revision-auditoria" / "revision_auditada.json"
     revision = json.loads(release.read_text(encoding="utf-8"))
     fingerprints = revision["sha256"]

@@ -3,8 +3,8 @@ import pandas as pd
 from scipy.stats import f, t
 
 
-def estimate(frame, columns, outcomes, design, *, baseline=None, inference=True):
-    """Weighted differences, or the two-row panel when baseline is supplied."""
+def estimate(frame, columns, outcomes, design, *, inference=True):
+    """Weighted changes, including exact between-block contrasts of the daily panel."""
     y = np.asarray(outcomes, dtype=float)
     x = frame[columns].to_numpy(dtype=float)
     n, k = x.shape
@@ -22,29 +22,10 @@ def estimate(frame, columns, outcomes, design, *, baseline=None, inference=True)
     groups = frame.indice.to_numpy()
     entity = frame.estado.to_numpy()
     values = np.column_stack([x, y])
-    date_cells = groups
-    if baseline is not None:
-        baseline = np.asarray(baseline, dtype=float)
-        if baseline.shape != y.shape or not np.isfinite(baseline).all():
-            raise ValueError("El panel largo requiere una base finita por par y horizonte")
-        if frame.duplicated(["clave", "indice"]).any():
-            raise ValueError("El panel largo requiere un par único por municipio y fecha")
-        # Dos bloques de N filas, en el mismo orden de pares: Post=0 y Post=1.
-        post = np.repeat([0, 1], n)
-        values = np.column_stack([np.tile(x, (2, 1)) * post[:, None],
-                                  np.vstack([baseline, y])])
-        weights = np.tile(weights, 2)
-        groups = np.tile(groups, 2)
-        entity = np.tile(entity, 2)
-        date_cells = [groups, post]
     weighted = pd.DataFrame(values).mul(weights, axis=0)
-    sums = weighted.groupby(date_cells).transform("sum").to_numpy()
-    masses = pd.Series(weights).groupby(date_cells).transform("sum").to_numpy()
+    sums = weighted.groupby(groups).transform("sum").to_numpy()
+    masses = pd.Series(weights).groupby(groups).transform("sum").to_numpy()
     within = values - sums / masses[:, None]
-    if baseline is not None:
-        # Cada par pertenece a una sola fecha y tiene igual peso en ambos
-        # periodos. Quitar su media preserva las medias fecha × periodo nulas.
-        within -= np.tile((within[:n] + within[n:]) / 2, (2, 1))
     within *= np.sqrt(weights)[:, None]
     xw, yw = within[:, :k], within[:, k:]
     # Keep treatment and each independent variable in block order.
@@ -64,8 +45,8 @@ def estimate(frame, columns, outcomes, design, *, baseline=None, inference=True)
     influence = xw @ np.linalg.inv(xw.T @ xw)
     scores = (residual[:, :, None] * influence[:, None, :]).reshape(len(within), -1)
     retained = (np.arange(n_outcomes)[:, None] * k + independent).ravel()
-    # Ambas filas comparten estado y fecha. La corrección usa N pares y el
-    # rango del modelo en cambios; los efectos de par absorben N parámetros.
+    # N pares y rango del contraste entre bloques. Los efectos semanales
+    # se ajustan en el componente diario ortogonal a los regresores del cambio.
     correction = (n - 1) / (n - dates - len(independent))
 
     def meat(keys):

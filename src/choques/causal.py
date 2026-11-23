@@ -23,34 +23,51 @@ MODEL_COLUMNS = ["tratado", "log_poblacion", "empleo_mil", "autos_mil"]
 AUDIT_DATES = pd.to_datetime(["2019-12-31", "2023-01-05", "2023-04-09", "2024-01-07", "2025-04-23"])
 
 
-def baseline_offsets(h):
-    """r=t+(h mod 7); tres fechas del mismo día dentro de [-28,-8]."""
-    return tuple(h % 7 - k for k in (28, 21, 14))
+BASE_DAYS = tuple(range(-28, -7))
+WEEKLY_SPANS = {"wk-4": tuple(range(-28, -21)), "wk-3": tuple(range(-21, -14)),
+                "wk-1": SPANS["wk-1"]}
+ALTERNATE_DAYS = {"-2": (-2,), "wk-1": SPANS["wk-1"]}
 
 
-def transform(values, scale):
-    values = np.asarray(values, dtype=float)
-    if not np.isfinite(values).all() or (values < 0).any():
-        raise ValueError("El resultado requiere conteos finitos y no negativos")
-    if scale not in ("niveles", "log1p"):
-        raise ValueError("Escala desconocida")
-    return np.log1p(values) if scale == "log1p" else values
+def panel_changes(frame, daily, base, spans):
+    """Project the daily weekday indicators, then form adjusted block means."""
+    date, dates = pd.factorize(frame.indice, sort=True)
+    weekdays = dates.day_of_week.to_numpy()
+    weight = frame.peso.to_numpy(dtype=float)
+    mass = np.bincount(date, weights=weight)
+    # Monday is the omitted category. Aggregate by cohort only for the
+    # weekday normal equations: calendar and daily weights are common there.
+    blocks = {}
+    for days in dict.fromkeys((base, *spans.values())):
+        y = np.stack([daily[h] for h in days])
+        if not np.isfinite(y).all():
+            raise ValueError("El panel requiere conteos diarios finitos")
+        day = (weekdays[None, :] + np.array(days)[:, None]) % 7
+        indicators = np.eye(7)[day, 1:]
+        profile = indicators.mean(axis=0)
+        centered = indicators - profile
+        gram = np.einsum("dgk,dgl,g->kl", centered, centered, mass) / len(days)
+        cohort_y = np.zeros((len(days), len(dates), y.shape[2]))
+        np.add.at(cohort_y.transpose(1, 0, 2), date, (y * weight[None, :, None]).transpose(1, 0, 2))
+        rhs = np.einsum("dgk,dgo->ko", centered, cohort_y) / len(days)
+        blocks[days] = (y.mean(axis=0), profile, gram, rhs)
 
-
-def contrasts(matrix, sample, scale, base="tres_semanas", spans=HORIZONS, *, panel=False):
-    days = set(h for span in spans.values() for h in span)
-    references = {h: baseline_offsets(h) if base == "tres_semanas" else
-                  tuple(range(-7, 0)) if base == "wk-1" else (-2,) for h in days}
-    needed = days | {b for refs in references.values() for b in refs}
-    values = {h: transform(matrix.extract(sample, h), scale) for h in sorted(needed)}
-    baselines = {h: np.mean([values[b] for b in references[h]], axis=0) for h in days}
-
-    def aggregate(series):
-        return np.column_stack([np.mean([series[h] for h in span], axis=0) for span in spans.values()])
-
-    if panel:
-        return aggregate(baselines), aggregate(values)
-    return aggregate({h: values[h] - baselines[h] for h in days})
+    baseline, profile_base, gram_base, rhs_base = blocks[base]
+    changes, audits = [], []
+    for label, days in spans.items():
+        after, profile_after, gram_after, rhs_after = blocks[days]
+        gram = gram_base + gram_after
+        rank = np.linalg.matrix_rank(gram, hermitian=True)
+        if len(base) >= 7 and rank != 6:
+            raise ValueError(f"Día de la semana sin rango completo en {label}: {rank}/6")
+        gamma = np.linalg.lstsq(gram, rhs_base + rhs_after, rcond=None)[0]
+        adjustment = (profile_after - profile_base) @ gamma
+        changes.append(after - baseline - adjustment[date])
+        audits.append(dict(tramo=label, dias_base=len(base), dias_tramo=len(days),
+                           filas=len(frame) * (len(base) + len(days)),
+                           rango_dia_semana=rank,
+                           **{f"d{j}": value for j, value in enumerate(gamma[:, 0], 1)}))
+    return np.concatenate(changes, axis=1), audits
 
 
 def published_matrix(matrix, counts):
@@ -138,16 +155,14 @@ def select_pre(matrix, published, events, reported, invalid, changes, design,
             pd.concat(audits, ignore_index=True))
 
 
-def jackknife(frame, columns, outcomes, design, *, baseline=None, beta=None):
+def jackknife(frame, columns, outcomes, design, *, beta):
     """CRV3 con pesos fijos y efectos fijos reestimados en cada réplica."""
-    if beta is None:
-        beta, _, _ = estimate(frame, columns, outcomes, design, baseline=baseline, inference=False)
     states = sorted(frame.estado.unique())
     replicas = []
     for state in states:
         keep = frame.estado.ne(state).to_numpy()
         b, _, _ = estimate(frame.loc[keep].reset_index(drop=True), columns, outcomes[keep], design,
-                           baseline=None if baseline is None else baseline[keep], inference=False)
+                           inference=False)
         replicas.append(b)
     replicas = np.asarray(replicas)
     delta = (replicas - beta).reshape(len(states), -1)
@@ -155,15 +170,18 @@ def jackknife(frame, columns, outcomes, design, *, baseline=None, beta=None):
     return variance, states, replicas
 
 
-def results(matrix, sample, design, scale, base, models=(0,), with_jackknife=False):
+def results(daily, sample, design, base, models=(0,), with_jackknife=False):
     sample = sample.reset_index(drop=True)
-    y = contrasts(matrix, sample, scale, base)
+    spans = HORIZONS
+    y, audits = panel_changes(sample, daily, ALTERNATE_DAYS.get(base, BASE_DAYS), spans)
     totals = modelos.summarize(sample)
-    treated = sample.loc[sample.tratado.eq(1)]
-    pre = np.concatenate([matrix.extract(treated, h) for h in range(-28, -7)])
-    sigma = transform(pre, scale).std(ddof=1) if len(pre) > 1 else np.nan
+    treated = sample.tratado.eq(1).to_numpy()
+    pre = np.concatenate([daily[h][treated, 0] for h in BASE_DAYS])
+    if (pre < 0).any():
+        raise ValueError("El resultado principal requiere conteos no negativos")
+    sigma = pre.std(ddof=1) if len(pre) > 1 else np.nan
     mean = pre.mean() if len(pre) else np.nan
-    rows, omitted = [], []
+    rows, omitted, terms = [], [], []
     for model in models:
         columns = MODEL_COLUMNS[:model + 1]
         frame = sample.assign(log_poblacion=np.log(sample.poblacion)) if model else sample
@@ -172,62 +190,58 @@ def results(matrix, sample, design, scale, base, models=(0,), with_jackknife=Fal
             v, states, replicates = jackknife(frame, columns, y, design, beta=b)
             covariances["CRV3"], dfs["CRV3"] = v, len(states) - 1
             for g, state in enumerate(states):
-                for j, span in enumerate(HORIZONS):
+                for j, span in enumerate(spans):
                     omitted.append(dict(estado_omitido=state, modelo=f"M{model}", tramo=span,
                                         efecto=replicates[g, j, 0], identificada=bool(np.isfinite(replicates[g, j, 0]))))
         for cluster, v in covariances.items():
-            for j, span in enumerate(HORIZONS):
+            for j, span in enumerate(spans):
                 variance = np.nan if v is None else v[j * len(columns), j * len(columns)]
                 stats = interval(b[j, 0], variance, dfs[cluster], design["alpha"])
-                rows.append(dict(modelo=f"M{model}", tramo=span, agrupacion=cluster, base=base, escala=scale,
+                rows.append(dict(modelo=f"M{model}", tramo=span, agrupacion=cluster, base=base, escala="niveles",
                                  **totals, **stats, sigma_pre=sigma, media_pre=mean,
                                  estado_inferencia="sin_identificar" if not np.isfinite(b[j, 0]) else
                                  "sin_covarianza" if v is None else "varianza_negativa" if variance < 0 else
                                  "varianza_cero" if variance == 0 else "calculada",
                                  efecto_sigma=stats["efecto"] / sigma if sigma > 0 else np.nan,
                                  mde=mde(dfs[cluster], stats["ee"], design["alpha"], design["power"])))
-    return rows, omitted
+            if cluster == "entidad_fecha" and with_jackknife:
+                j = list(spans).index("d0..1")
+                for k, term in enumerate(columns):
+                    idx = j * len(columns) + k
+                    stats = interval(b[j, k], np.nan if v is None else v[idx, idx], dfs[cluster], design["alpha"])
+                    terms.append(dict(modelo=f"M{model}", termino=term, tramo="d0..1",
+                                      agrupacion=cluster, **stats))
+    return rows, omitted, audits, terms
 
 
-def weekly_tests(matrix, sample, design, scale, *, panel=False):
-    # wk-2 se omite: las cuatro semanas normalizadas por su promedio son redundantes.
-    ref = np.mean([transform(matrix.extract(sample, h), scale) for h in range(-14, -7)], axis=0)
-    spans = {"wk-4": range(-28, -21), "wk-3": range(-21, -14), "wk-1": range(-7, 0)}
-    y = np.column_stack([np.mean([transform(matrix.extract(sample, h), scale) for h in days], axis=0)
-                         for days in spans.values()])
-    baseline = np.broadcast_to(ref[:, None], y.shape)
-    b, covariances, dfs = (estimate(sample, ["tratado"], y, design, baseline=baseline) if panel else
-                           estimate(sample, ["tratado"], y - baseline, design))
+def weekly_tests(daily, sample, design):
+    # Referencia propia y disjunta para las tres restricciones de Wald.
+    y, audits = panel_changes(sample, daily, tuple(range(-14, -7)), WEEKLY_SPANS)
+    b, covariances, dfs = estimate(sample, ["tratado"], y, design)
     rows = []
     for cluster, v in covariances.items():
         eig = np.linalg.eigvalsh(v) if v is not None and np.isfinite(v).all() else [np.nan]
-        rows.append(dict(escala=scale, agrupacion=cluster, referencia="wk-2 [-14,-8]", restricciones="wk-4;wk-3;wk-1",
+        common = dict(escala="niveles", agrupacion=cluster, referencia="wk-2 [-14,-8]")
+        rows.append(dict(**common, restricciones="wk-4;wk-3;wk-1",
                          rango=np.linalg.matrix_rank(v) if v is not None else 0,
                          condicion=np.linalg.cond(v) if v is not None else np.nan,
                          autovalor_min=min(eig), **wald(b[:, 0], v, dfs[cluster])))
-        for j, label in enumerate(spans):
-            rows.append(dict(escala=scale, agrupacion=cluster, referencia="wk-2 [-14,-8]", restricciones=label,
+        for j, label in enumerate(WEEKLY_SPANS):
+            rows.append(dict(**common, restricciones=label,
                              **interval(b[j, 0], np.nan if v is None else v[j, j], dfs[cluster], design["alpha"])))
-    return rows
+    return rows, audits
 
 
-def cross_outcomes(crossed, frame, *, panel=False):
-    """Días 0–1 por franja y gravedad, y contraste noche menos día."""
-    def at(h):
+def cross_outcomes(crossed, frame):
+    """Conteos diarios de nueve celdas y tres restas de noche menos día."""
+    daily = {}
+    for h in (*BASE_DAYS, *SPANS["d0..1"]):
         keys = pd.MultiIndex.from_arrays([frame.clave, frame.indice + pd.Timedelta(days=h)])
-        return crossed.reindex(keys, fill_value=0).to_numpy(dtype=float)
-
-    def with_night_gap(values):
+        values = crossed.reindex(keys, fill_value=0).to_numpy(dtype=float)
         day, night, _ = np.split(values, 3, axis=1)
-        return np.column_stack([values, night - day])
-
-    observed = [at(h) for h in (0, 1)]
-    baseline = [np.mean([at(b) for b in baseline_offsets(h)], axis=0) for h in (0, 1)]
-    activity = np.sum(observed + baseline, axis=0).any(axis=0)
-    present = np.r_[activity, activity[:3] | activity[3:6]]
-    if panel:
-        return with_night_gap(np.mean(baseline, axis=0)), with_night_gap(np.mean(observed, axis=0)), present
-    return with_night_gap(np.mean(np.subtract(observed, baseline), axis=0)), present
+        daily[h] = np.column_stack([values, night - day])
+    activity = np.sum(list(daily.values()), axis=0)[:, :9].any(axis=0)
+    return daily, np.r_[activity, activity[:3] | activity[3:6]]
 
 
 def calendar_flags(root, dates):
@@ -247,9 +261,10 @@ def calendar_flags(root, dates):
     return pd.DataFrame(answer)
 
 
-def run(config):
+def run(config, *, smoke=False):
     paths, design = config["paths"], config["design"]
     out = paths["outputs"] / "modelos"
+    out.mkdir(parents=True, exist_ok=True)
     matrix, events = modelos.load(paths)
     counts = pd.read_parquet(paths["processed"] / "conteos_diarios.parquet")
     published = published_matrix(matrix, counts)
@@ -267,6 +282,10 @@ def run(config):
                                     "anticipation": 0, "pre_only": not persistence}, state_rates)
         coverage_all.append(coverage(attached.assign(especificacion=scenario)))
         many, loss, edges = match(attached, rules)
+        if smoke:
+            from .cotejo_panel import check_startup
+            check_startup(many, published, design, paths["outputs"] / "qa")
+            return
         one, nearest = one_to_one(many, edges)
         level, _, level_edges = match(attached, rules, covariates=[])
         common, _, common_edges = match(attached.dropna(subset=COVARIATES), rules, covariates=[])
@@ -332,27 +351,33 @@ def run(config):
         for method, frame, edge in [("emparejada", many, edges), ("emparejada_1a1", one, nearest)]:
             supports.append(dict(escenario=scenario, muestra=method, **modelos.summarize(frame)))
             links_all.append(edge.assign(escenario=scenario, muestra=method))
-    rows, loo, tests, sample_records = [], [], [], []
+    rows, loo, tests, sample_records, ranks, terms = [], [], [], [], [], []
     for scenario, groups in samples.items():
         for method, frame in groups.items():
             sample_records.append(frame.assign(escenario=scenario, muestra=method))
             if frame.empty:
                 continue
-            for scale in ("log1p", "niveles"):
-                bases = ("tres_semanas", "-2", "wk-1") if scenario == "principal" else ("tres_semanas",)
-                for base in bases:
-                    models = range(4) if method in ("emparejada", "emparejada_1a1", "mismos_tratados", "comun_m0_m3") and base == "tres_semanas" and scenario == "principal" else (0,)
-                    fits, omissions = results(published, frame, design, scale, base, models,
-                                              with_jackknife=scenario == "principal" and base == "tres_semanas")
-                    rows.extend(dict(r, escenario=scenario, muestra=method) for r in fits)
-                    loo.extend(dict(r, escala=scale, muestra=method) for r in omissions)
-                if scenario in ("principal", "persistencia", "placebo"):
-                    tests.extend(dict(r, escenario=scenario, muestra=method) for r in weekly_tests(published, frame, design, scale))
+            daily = {h: published.extract(frame, h)[:, None] for h in range(-28, 14)}
+            bases = ("tres_semanas", "-2", "wk-1") if scenario == "principal" else ("tres_semanas",)
+            for base in bases:
+                models = range(4) if method != "sin_covariables" and base == "tres_semanas" and scenario == "principal" else (0,)
+                fits, omissions, diagnostics, coefficients = results(
+                    daily, frame, design, base, models,
+                    with_jackknife=scenario == "principal" and base == "tres_semanas")
+                rows.extend(dict(r, escenario=scenario, muestra=method) for r in fits)
+                loo.extend(dict(r, escala="niveles", muestra=method) for r in omissions)
+                ranks.extend(dict(r, escenario=scenario, muestra=method, base=base) for r in diagnostics)
+                terms.extend(dict(r, escenario=scenario, muestra=method) for r in coefficients)
+            if scenario in ("principal", "persistencia", "placebo"):
+                joint, diagnostics = weekly_tests(daily, frame, design)
+                tests.extend(dict(r, escenario=scenario, muestra=method) for r in joint)
+                ranks.extend(dict(r, escenario=scenario, muestra=method, base="wald_wk-2") for r in diagnostics)
     outputs = {"efectos": pd.DataFrame(rows), "omision_estado": pd.DataFrame(loo),
                "wald_semanal": pd.DataFrame(tests), "soporte": pd.DataFrame(supports),
                "muestras": pd.concat(sample_records, ignore_index=True), "vinculos": pd.concat(links_all, ignore_index=True),
                "descartes": pd.concat(losses, ignore_index=True), "elegibilidad": pd.concat(audits, ignore_index=True),
-               "uniones": pd.concat(coverage_all, ignore_index=True), "balance": pd.concat(balances, ignore_index=True)}
+               "uniones": pd.concat(coverage_all, ignore_index=True), "balance": pd.concat(balances, ignore_index=True),
+               "dia_semana": pd.DataFrame(ranks), "coeficientes": pd.DataFrame(terms)}
     for name, data in outputs.items():
         data.to_csv(out / f"causal_{name}.csv", index=False)
     from .conteos import CROSS
@@ -360,9 +385,11 @@ def run(config):
     cross_rows = []
     for method in ("emparejada", "emparejada_1a1"):
         frame = samples["principal"][method]
-        outcomes, present = cross_outcomes(crossed, frame)
-        np.testing.assert_allclose(outcomes[:, :len(CROSS)].sum(axis=1),
-                                   contrasts(published, frame, "niveles", spans={"d0..1": (0, 1)})[:, 0], atol=1e-12)
+        daily, present = cross_outcomes(crossed, frame)
+        for h, values in daily.items():
+            np.testing.assert_array_equal(values[:, :len(CROSS)].sum(axis=1),
+                                          published.extract(frame, h))
+        outcomes, _ = panel_changes(frame, daily, BASE_DAYS, {"d0..1": SPANS["d0..1"]})
         labels = list(CROSS) + [("noche_menos_dia", g) for g in ("fatal", "heridos", "danos")]
         b, cov, dfs = estimate(frame, ["tratado"], outcomes, design)
         for j, (hour, severity) in enumerate(labels):
@@ -377,10 +404,11 @@ def run(config):
     dates = []
     for scenario in ("principal", "placebo"):
         for index in samples[scenario]["emparejada"].indice.unique():
-            for h in range(-7, 14):
-                refs = [index + pd.Timedelta(days=b) for b in baseline_offsets(h)]
-                dates.append(dict(escenario=scenario, indice=index, inicio_real=index + pd.Timedelta(days=28 if scenario == "placebo" else 0),
-                                  h=h, resultado=index + pd.Timedelta(days=h), b1=refs[0], b2=refs[1], b3=refs[2]))
+            for h in BASE_DAYS:
+                day = index + pd.Timedelta(days=h)
+                dates.append(dict(escenario=scenario, indice=index,
+                                  inicio_real=index + pd.Timedelta(days=28 if scenario == "placebo" else 0),
+                                  h=h, fecha=day, dia_semana=day.day_of_week))
     pd.DataFrame(dates).to_csv(out / "causal_fechas_base.csv", index=False)
     pd.DataFrame([dict(registros_fecha_invalida=len(invalid),
                        mes_desconocido=int((~invalid.mes.between(1, 12).fillna(False)).sum()),
