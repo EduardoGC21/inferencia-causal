@@ -12,9 +12,10 @@ data = "INEGI (ATUS y covariables), Consejo Nacional de Población (CONAPO) y ca
 sources = "INEGI (ATUS y covariables), CONAPO y catálogo propio."
 
 
-def add(id, chapter, title, seconds, body, speech, transition, locator, source=None, style=""):
+def add(id, chapter, title, seconds, body, speech, transition, locator, source=None, style="", *, table_note=""):
     slides.append(dict(id=id, chapter=chapter, title=title, seconds=seconds, body=body,
-                       speech=speech, transition=transition, locator=locator, source=source, style=style))
+                       speech=speech, transition=transition, locator=locator, source=source,
+                       style=style, table_note=table_note))
 
 
 def math(tex, block=False):
@@ -241,10 +242,10 @@ add("trayectoria", "Supuestos", "Diagnóstico de tendencias paralelas", 45, f"""
 "Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Modelo M₀, 1:muchos. Intervalos puntuales del 95 % por estado y fecha. Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
 
 add("resultados", "Resultados", "Añadir covariables cambia poco la estimación inicial", 35, f"""
-{models_table()}
-<p class="table-caption">Días 0–1 · 1:muchos · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.</p>""",
+{models_table()}""",
 """En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Y. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.""",
-"Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares municipio–fecha, efectos fijos de fecha y el cambio en log(1+Y). Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
+"Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares municipio–fecha, efectos fijos de fecha y el cambio en log(1+Y). Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources,
+table_note="Días 0–1 · 1:muchos · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.")
 
 add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 40, f"""
 <figure>{figure("duracion.svg", "La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.")}
@@ -264,10 +265,10 @@ for label, row in [
     sensitivity_rows.append((short[0], row["tratados"], *short[1:]))
 
 add("sensibilidades", "Resultados", "Sensibilidad del resultado", 30, f"""
-{table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}
-<p class="table-caption">Días 0–1 · {m0} · 1:muchos</p>""",
+{table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}""",
 """Con los mismos pares y pesos, usar la semana previa como base atenúa la caída y el intervalo incluye cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.""",
-"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources)
+"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources,
+table_note=f"Días 0–1 · {m0} · 1:muchos")
 
 add("conclusion", "Conclusión", "La mayor caída relativa aparece al inicio", 20, """
 <p class="closing-summary">La caída destaca en los días 0–1. Después, las estimaciones son menores y la duración sigue abierta.</p>
@@ -349,6 +350,9 @@ for slide in slides:
                "**Explicación oral**", "", slide["speech"], "", "**Transición**", "", slide["transition"], "",
                f"**Referencia para consulta.** {slide['locator']}", ""]
     source = f'<p class="source">Elaboración propia con datos de: {slide["source"]}</p>' if slide["source"] else ""
+    footer = source
+    if slide["table_note"]:
+        footer = f'<footer class="table-footer"><p class="table-caption">{slide["table_note"]}</p>{source}</footer>'
     back = ('<a class="back-link" href="#/respaldos">← Índice de respaldos</a>'
             if kind == "backup" and id != "respaldos" else
             '<a class="back-link" href="#/conclusion">← Conclusión</a>' if id == "respaldos" else "")
@@ -359,7 +363,7 @@ for slide in slides:
   <div class="slide-surface">
     <header><p class="eyebrow">{slide['chapter']}</p><{'h1' if id == 'pregunta' else 'h2'}>{escape(title)}</{'h1' if id == 'pregunta' else 'h2'}></header>
     {slide['body']}
-    {source}
+    {footer}
     {back}
   </div>
   <aside class="notes">{notes}</aside>
