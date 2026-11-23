@@ -249,7 +249,7 @@ add("resultados", "Resultados", "Añadir covariables cambia poco la estimación 
 """En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Y. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.""",
 "Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
 
-add("duracion", "Resultados", "La duración queda abierta", 40, f"""
+add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 40, f"""
 <p class="lead">{m0} · 1:muchos · {outcome}</p>
 <div class="duration-layout">
   <figure>{figure("duracion", "Caída mayor para 0 a 1; los intervalos de 2 a 6 y 7 a 13 incluyen cero.")}

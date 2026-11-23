@@ -132,7 +132,7 @@ Veamos si la caída persiste después del primer tramo.
 
 **Referencia para consulta.** Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.
 
-## La duración queda abierta
+## La caída estimada es mayor en los días 0 y 1
 
 **Identificador** `duracion` · **Tiempo** 6:30–7:10 (40 s)
 
