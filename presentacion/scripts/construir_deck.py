@@ -260,7 +260,7 @@ add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 
 sensitivity_rows = []
 for label, row in [
     ("Base principal: tres fechas", result()), ("Base: semana anterior", result(base="wk-1")),
-    ("Base: Día −2", result(base="-2")), ("Sin feriados ni recesos escolares", result(escenario="sin_laborales_escolares")),
+    ("Sin feriados ni recesos escolares", result(escenario="sin_laborales_escolares")),
     ("Placebo: inicio 28 días antes", result(escenario="placebo")),
 ]:
     short, = rows([(label, row)])
@@ -269,7 +269,7 @@ for label, row in [
 add("sensibilidades", "Resultados", "Sensibilidad del resultado", 30, f"""
 <p class="lead">Días 0–1 · {m0}, 1:muchos, {log} · intervalos por estado y fecha</p>
 {table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}""",
-"""Con los mismos pares y pesos, la semana previa atenúa la caída y el día menos dos cambia el signo. Ambos intervalos incluyen cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.""",
+"""Con los mismos pares y pesos, usar la semana previa como base atenúa la caída y el intervalo incluye cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.""",
 "¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources)
 
 add("conclusion", "Conclusión", "La mayor caída relativa aparece al inicio", 20, """

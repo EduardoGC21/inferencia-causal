@@ -152,7 +152,7 @@ La base y el calendario también afectan la lectura del resultado inicial.
 
 **Explicación oral**
 
-Con los mismos pares y pesos, la semana previa atenúa la caída y el día menos dos cambia el signo. Ambos intervalos incluyen cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.
+Con los mismos pares y pesos, usar la semana previa como base atenúa la caída y el intervalo incluye cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.
 
 **Transición**
 
