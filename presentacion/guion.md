@@ -76,7 +76,7 @@ Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus c
 
 **Referencia para consulta.** Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.
 
-## Cómo estimamos el coeficiente de tratamiento
+## Estimación por mínimos cuadrados ponderados
 
 **Identificador** `regresion` · **Tiempo** 3:20–4:10 (50 s)
 
