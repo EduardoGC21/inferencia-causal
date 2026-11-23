@@ -70,13 +70,14 @@
   display: grid;
   grid-template-columns: 1.1fr 49px 1fr;
   gap: 10px;
-  align-items: center;
+  align-content: center;
+  align-items: first baseline;
   background: var(--wash);
   padding: 11px 22px;
   min-height: 91px;
 }
 .context-path + .context-path { margin-top: 12px; }
-.context-arrow { text-align: center; font-size: var(--title); line-height: 1; color: var(--blue); }
+.context-arrow { text-align: center; color: var(--blue); transform: scaleX(1.5); }
 
 .map-context { display: grid; grid-template-columns: repeat(3, 1fr); gap: 27px; margin-bottom: 22px; }
 #datos header { margin-bottom: 22px; }

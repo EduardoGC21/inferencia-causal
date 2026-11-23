@@ -8,4 +8,4 @@
 
 - Se revisaron las gráficas y las tablas en las páginas 7–11 y 17–18 del PDF. Las gráficas conservan trazos vectoriales y rótulos seleccionables. Las tres tablas se revisaron a 2048 píxeles de ancho y conservan texto seleccionable con fuentes incrustadas.
 
-Huella SHA-256 del PDF revisado: `e5b7b9a6850b01b3ef13868af964e044ef80251c1b8a59667e42c4551878f4ae`.
+Huella SHA-256 del PDF revisado: `beb443900eb368393a72dcc1ad6aaa2ab003d7cea723d7f3e2c0791af815dd98`.
