@@ -27,7 +27,7 @@ es -0,348 siniestros por municipio y día, con intervalo del 95 % de
 - La comparación de las medias observadas y los cambios usa los conteos
   limpios y los pesos de la muestra 1:muchos. Las 21 diferencias entre
   cambios reproducen los coeficientes diarios de `M0`. La prueba semanal
-  utiliza como referencia la semana -2. [Criterios de las figuras](scripts/contratos-visuales.md)
+  utiliza la base común de los días -28 a -8. [Criterios de las figuras](scripts/contratos-visuales.md)
 - La tabla de regresiones usa los coeficientes, errores estándar y valores
   p del cuadro 2 del reporte. Los respaldos incluyen la comparación con
   el emparejamiento 1:1 y la inferencia por estado y fecha. [Cotejo](../reporte/verificacion/niveles-base-semanal.md)
@@ -42,7 +42,7 @@ Desde la raíz de este árbol de trabajo:
 ~~~powershell
 $py = "../../.venv/Scripts/python.exe"
 $data = "../../data"
-$modelos = "$data/outputs/niveles-base-semanal/python/modelos"
+$modelos = "$data/outputs/niveles-base-semanal/solo-base/python/modelos"
 & $py presentacion/scripts/extraer_resultados.py $modelos "$data/processed/conteos_diarios.parquet"
 & $py presentacion/scripts/adaptar_figuras.py
 & $py presentacion/scripts/construir_deck.py

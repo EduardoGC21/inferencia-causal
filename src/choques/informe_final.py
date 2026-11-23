@@ -41,21 +41,23 @@ def tables(config):
     mod, tab = out / "modelos", out / "tablas"
     tab.mkdir(parents=True, exist_ok=True)
     e = pd.read_csv(mod / "causal_efectos.csv", dtype={"tramo": str})
-    def get(scenario="principal", method="emparejada", scale="niveles", span="d0..1", cluster="entidad", model="M0", base="tres_semanas"):
-        rows = e.loc[e.escenario.eq(scenario) & e.muestra.eq(method) & e.escala.eq(scale) & e.tramo.eq(span)
-                     & e.agrupacion.eq(cluster) & e.modelo.eq(model) & e.base.eq(base)]
+    if set(e.base) != {"tres_semanas"} or set(e.escala) != {"niveles"}:
+        raise ValueError("Las tablas requieren niveles y la base de 21 días")
+
+    def get(scenario="principal", method="emparejada", span="d0..1", cluster="entidad", model="M0"):
+        rows = e.loc[e.escenario.eq(scenario) & e.muestra.eq(method) & e.tramo.eq(span)
+                     & e.agrupacion.eq(cluster) & e.modelo.eq(model)]
         return rows.iloc[0] if len(rows) else None
 
     main = get()
-    two, level = get(cluster="entidad_fecha"), get(scale="niveles")
+    two, level = get(cluster="entidad_fecha"), get()
     macros = {}
     def put(name, value, digits=3):
         macros[name] = (pvalue(value) if name.endswith('P') else fmt(value,digits)) if isinstance(value,(int,float,np.number)) else str(value)
-    for name, row in [("Main",main),("Doble",two),("Nivel",level),("NivelDoble",get(scale="niveles",cluster="entidad_fecha")),
+    for name, row in [("Main",main),("Doble",two),("Nivel",level),("NivelDoble",get(cluster="entidad_fecha")),
                       ("Previa",get(span="wk-1")),("PreviaDoble",get(span="wk-1",cluster="entidad_fecha")),
                       ("MenosDos",get(span="-2")),("MenosCinco",get(span="-5")),
-                      ("CRVTres",get(cluster="CRV3")),("Placebo",get(scenario="placebo",cluster="entidad_fecha")),
-                      ("BaseSemana",get(base="wk-1",cluster="entidad_fecha"))]:
+                      ("CRVTres",get(cluster="CRV3")),("Placebo",get(scenario="placebo",cluster="entidad_fecha"))]:
         for field in ("efecto","ee","ic_inf","ic_sup","p","mde","efecto_sigma"):
             put(name+field.replace('_','').title(), row[field] if row is not None else np.nan)
     for field,name in [("tratados","Trat"),("controles","Cont"),("fechas","Fechas"),("episodios","Epis"),
@@ -64,7 +66,7 @@ def tables(config):
     put("EstadosEf",main.estados_tratados_efectivos,1)
     put("MediaPre",level.media_pre,2);put("SigmaPre",level.sigma_pre,2)
     put("MdePctNivel",100*level.mde/level.media_pre,1)
-    put("MdePctNivelDoble",100*get(scale="niveles",cluster="entidad_fecha").mde/level.media_pre,1)
+    put("MdePctNivelDoble",100*get(cluster="entidad_fecha").mde/level.media_pre,1)
     direction = "una caída" if main.efecto < 0 else "un aumento"
     evidence = ("El contraste inmediato es negativo y su intervalo de dos vías excluye cero."
                 if two.ic_sup < 0 else "El intervalo inmediato de dos vías incluye cero; la evidencia no permite afirmar una reducción con ese criterio.")
@@ -180,29 +182,15 @@ def tables(config):
             rows.append([METHOD[method],'Estatal' if item.agrupacion=='entidad' else 'Estado y fecha',
                          fmt(item.f,3),pvalue(item.p),fmt(item.rango,0),fmt(item.condicion,1),texesc(item.estado)])
     table(tab/'causal_previos.tex',['Matching','Agrupación','F','p','Rango','Condición','Cálculo'],rows)
-    # Referencia b=-2 separa cambio de base, muestra e inventario.
-    legacy=pd.read_csv(mod/'comparaciones_municipales.csv')
-    rows=[]
-    for method in ['emparejada','emparejada_1a1']:
-        old=legacy.loc[legacy.diseno.eq('principal') & legacy.muestra.eq(method) & legacy.h.eq(0)].iloc[0]
-        a=get(method=method,scale='niveles',span='d0',base='-2')
-        b=get(method=method,scale='niveles',span='d0')
-        rows.append([METHOD[method],fmt(old.tratados,0),result(old),fmt(a.tratados,0),result(a),result(b)])
-    table(tab/'causal_trazabilidad.tex',['Matching','Trat. antes','Antes: día 0, base -2','Trat. final','Final: día 0, base -2','Final: día 0, base limpia'],rows)
-    rows=[[METHOD[method]]+[result(get(method=method,base=base,cluster='entidad_fecha'))
-                           for base in ['-2','tres_semanas','wk-1']]
-          for method in ['emparejada','emparejada_1a1']]
-    table(tab/'causal_bases.tex',['Matching','Día -2','Tres semanas','Sem. -1'],rows)
-    # Donantes de Morelia: listas completas y todas las etapas reproducibles.
-    final_edges=pd.read_csv(mod/'causal_vinculos.csv',dtype={'tratado_clave':str,'control_clave':str},parse_dates=['indice'])
-    old_edges=pd.read_csv(mod/'reparto_controles.csv',dtype={'tratado_clave':str,'control_clave':str},parse_dates=['indice'])
-    morelia=[]
-    for scenario,frame,field in [('auditada',old_edges,'diseno'),('principal',final_edges,'escenario'),('sin_senales',final_edges,'escenario')]:
-        subset=frame.loc[frame[field].eq('principal' if scenario=='auditada' else scenario) & frame.muestra.eq('emparejada') & frame.tratado_clave.eq('16053') & frame.indice.eq('2025-04-23')]
-        for r in subset.itertuples(): morelia.append(dict(escenario=scenario,control_clave=r.control_clave,contribucion=r.contribucion))
-    pd.DataFrame(morelia).to_csv(mod/'causal_morelia_donantes.csv',index=False)
-    for scenario,name in [('auditada','MoreliaAntes'),('principal','MoreliaDespues'),('sin_senales','MoreliaSenales')]:
-        put(name,len([r for r in morelia if r['escenario']==scenario]),0)
+    # Donantes de Morelia en el modelo principal y sin señales en controles.
+    final_edges=pd.read_csv(mod/'causal_vinculos.csv',
+                            dtype={'tratado_clave':str,'control_clave':str},parse_dates=['indice'])
+    morelia=final_edges.loc[final_edges.escenario.isin(['principal','sin_senales'])
+                            & final_edges.muestra.eq('emparejada') & final_edges.tratado_clave.eq('16053')
+                            & final_edges.indice.eq('2025-04-23'), ['escenario','control_clave','contribucion']]
+    morelia.to_csv(mod/'causal_morelia_donantes.csv',index=False)
+    for scenario,name in [('principal','MoreliaDespues'),('sin_senales','MoreliaSenales')]:
+        put(name,morelia.escenario.eq(scenario).sum(),0)
     losses=pd.read_csv(mod/'causal_descartes.csv',dtype={'clave':str},parse_dates=['indice'])
     more=losses.loc[losses.escenario.eq('principal') & losses.clave.eq('16053') & losses.indice.eq('2025-04-23')].iloc[0]
     put('MoreliaUniverso',more.controles_auditados,0);put('MoreliaCalibre',more.despues_pre_nivel,0)
@@ -221,11 +209,6 @@ def tables(config):
     pick=loo.loc[loo.muestra.eq('emparejada') & loo.modelo.eq('M0') & loo.tramo.eq('d0..1')].sort_values('estado_omitido')
     table(tab/'causal_omision.tex',['Estado omitido','Días 0–1'],
           [[STATE_NAMES[int(r.estado_omitido)],fmt(r.efecto,3)] for r in pick.itertuples()])
-    cul=pd.read_csv(mod/'culiacan_soporte.csv').iloc[0]
-    gap=pd.read_csv(mod/'culiacan.csv')
-    observed=gap.loc[gap.semana.ge(0) & gap.brecha.notna()]
-    for name,value in [('CulDonantes',cul.comparadores_usados),('CulObs',cul.semanas_post_observadas),('CulTotal',cul.semanas_post_totales)]: put(name,value,0)
-    put('CulBrecha',observed.brecha.mean(),2)
     # Cobertura/territorio como operaciones de unión distintas del matching estadístico.
     sample=pd.read_csv(mod/'causal_muestras.csv', low_memory=False)
     pool=sample.loc[sample.escenario.eq('principal') & sample.muestra.eq('emparejada')]

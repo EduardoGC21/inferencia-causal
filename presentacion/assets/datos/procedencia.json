@@ -27,23 +27,23 @@
   "diferencia_maxima": 2.886579864025407e-15,
   "archivos": [
     {
-      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/python/modelos/causal_efectos.csv",
-      "sha256": "d0190af6cff865c1aab656632568b457d1b4e85c457df0f8b1663fd02ee82bfd"
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_efectos.csv",
+      "sha256": "fc18e1388962592a78000b09ca2d5550d42427110c348fc03de58698055ef1e5"
     },
     {
-      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/python/modelos/causal_coeficientes.csv",
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_coeficientes.csv",
       "sha256": "a7955b836e9c22560d4313e45c4e7776bff9e7a3377f25e59435fb74156dd9f7"
     },
     {
-      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/python/modelos/causal_wald_semanal.csv",
-      "sha256": "b2221c29430cb17a87f1ceb1874421e90a7ec0b9375273f9fcb357dcd3eea671"
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_wald_semanal.csv",
+      "sha256": "589776265fc26739499d3872c2e0e4f3ce4a8419c57a9e1e8a2047cbfd150da5"
     },
     {
-      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/python/modelos/causal_balance.csv",
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_balance.csv",
       "sha256": "253a48e020ed273cba79e730a63e047ef2d5525f75c49f79d7bea10ce0fd0384"
     },
     {
-      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/python/modelos/causal_muestras.csv",
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_muestras.csv",
       "sha256": "153ce7364191eb19214a22e0c420e24ba6006e931213ea14e03abdd2ebc597b9"
     },
     {
@@ -52,15 +52,15 @@
     },
     {
       "ruta_desde_repo": "reporte/reporte.md",
-      "sha256": "d1114643fe524b2d3ffcb1304a76059cddb93ac2d9a30ef87c8c8dbdc7cf6867"
+      "sha256": "7cb073dd67b91e27422df605fe6f71c96bfbe05bf27e4cf3c6c62970bc278203"
     },
     {
       "ruta_desde_repo": "reporte/reporte.pdf",
-      "sha256": "864b4cc86ff899bd1471c540f0707c6446d25379a7d9ca1491612310467be46b"
+      "sha256": "1d804f55aaa344a8499f6f7dda1c57231f5d4478a38bc6b992672a1185c81374"
     },
     {
       "ruta_desde_repo": "reporte/main.tex",
-      "sha256": "27a95b6d9a64d6d2f7564b95bc161f9b78650a919994d304797bdae021cdc965"
+      "sha256": "204b125b359604c9c555c12e5dd27f90284211d3d832061e98f68dc46aab1cbe"
     },
     {
       "ruta_desde_repo": "reporte/figuras/mapa-municipios.png",

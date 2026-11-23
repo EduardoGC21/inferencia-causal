@@ -23,8 +23,8 @@ wald_path = args.modelos / "causal_wald_semanal.csv"
 balance_path = args.modelos / "causal_balance.csv"
 effects = pd.read_csv(effects_path, dtype={"tramo": str})
 sel = effects.loc[effects.muestra.isin(["emparejada", "emparejada_1a1"])]
-if set(sel.escala) != {"niveles"}:
-    raise ValueError("La presentación requiere la ejecución en niveles")
+if set(sel.escala) != {"niveles"} or set(sel.base) != {"tres_semanas"}:
+    raise ValueError("La presentación requiere niveles y una sola base de 21 días")
 
 primary = sel.query("escenario == 'principal' and muestra == 'emparejada' and modelo == 'M0' "
                     "and base == 'tres_semanas' and agrupacion == 'entidad_fecha'").set_index("tramo")

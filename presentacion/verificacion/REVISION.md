@@ -5,7 +5,8 @@ Le siguen una diapositiva de referencias y cinco respaldos.
 
 - El calendario muestra los 21 días exactos de la base, del -28 al -8. La
   ecuación usa $Y_{i,d}$ y distingue el ajuste por día de la semana de los
-  efectos fijos de par y de inicio por bloque.
+  efectos fijos de par y de inicio por bloque. La prueba semanal, el
+  placebo y las sensibilidades usan la misma regla de base.
 - Los 21 contrastes de la trayectoria descriptiva reproducen los coeficientes
   diarios en niveles con diferencia máxima de $2,89\times 10^{-15}$. La
   tabla de resultados toma las cifras del mismo archivo que alimenta el
@@ -19,4 +20,4 @@ Le siguen una diapositiva de referencias y cinco respaldos.
   estimación en la página 9 y el intervalo principal en la página 12.
   [PDF revisado](../presentacion.pdf)
 
-Huella SHA-256 del PDF revisado: `ab3e72e124e933280ddbef52b09314f7dcc2487712a06dfff70e84c47d9d05b4`.
+Huella SHA-256 del PDF revisado: `3e9e00d6bb645b5817c04ac22de491c50c97841cdd1f4483a3a6e16c40bf733d`.

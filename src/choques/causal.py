@@ -1,6 +1,5 @@
 """Ruta B aprobada después de observar T05. Las salidas causal_* son el diseño final.
 
-Las salidas sin ese prefijo conservan la referencia auditada de 73 tratados.
 El resultado es el número de registros publicados con fecha válida en el release,
 incluidos ceros de registros en municipios con cobertura predicha previamente.
 """
@@ -26,10 +25,9 @@ AUDIT_DATES = pd.to_datetime(["2019-12-31", "2023-01-05", "2023-04-09", "2024-01
 BASE_DAYS = tuple(range(-28, -7))
 WEEKLY_SPANS = {"wk-4": tuple(range(-28, -21)), "wk-3": tuple(range(-21, -14)),
                 "wk-1": SPANS["wk-1"]}
-ALTERNATE_DAYS = {"-2": (-2,), "wk-1": SPANS["wk-1"]}
 
 
-def panel_changes(frame, daily, base, spans):
+def panel_changes(frame, daily, spans):
     """Project the daily weekday indicators, then form adjusted block means."""
     date, dates = pd.factorize(frame.indice, sort=True)
     weekdays = dates.day_of_week.to_numpy()
@@ -38,7 +36,7 @@ def panel_changes(frame, daily, base, spans):
     # Monday is the omitted category. Aggregate by cohort only for the
     # weekday normal equations: calendar and daily weights are common there.
     blocks = {}
-    for days in dict.fromkeys((base, *spans.values())):
+    for days in dict.fromkeys((BASE_DAYS, *spans.values())):
         y = np.stack([daily[h] for h in days])
         if not np.isfinite(y).all():
             raise ValueError("El panel requiere conteos diarios finitos")
@@ -52,19 +50,19 @@ def panel_changes(frame, daily, base, spans):
         rhs = np.einsum("dgk,dgo->ko", centered, cohort_y) / len(days)
         blocks[days] = (y.mean(axis=0), profile, gram, rhs)
 
-    baseline, profile_base, gram_base, rhs_base = blocks[base]
+    baseline, profile_base, gram_base, rhs_base = blocks[BASE_DAYS]
     changes, audits = [], []
     for label, days in spans.items():
         after, profile_after, gram_after, rhs_after = blocks[days]
         gram = gram_base + gram_after
         rank = np.linalg.matrix_rank(gram, hermitian=True)
-        if len(base) >= 7 and rank != 6:
+        if rank != 6:
             raise ValueError(f"Día de la semana sin rango completo en {label}: {rank}/6")
         gamma = np.linalg.lstsq(gram, rhs_base + rhs_after, rcond=None)[0]
         adjustment = (profile_after - profile_base) @ gamma
         changes.append(after - baseline - adjustment[date])
-        audits.append(dict(tramo=label, dias_base=len(base), dias_tramo=len(days),
-                           filas=len(frame) * (len(base) + len(days)),
+        audits.append(dict(tramo=label, dias_base=len(BASE_DAYS), dias_tramo=len(days),
+                           filas=len(frame) * (len(BASE_DAYS) + len(days)),
                            rango_dia_semana=rank,
                            **{f"d{j}": value for j, value in enumerate(gamma[:, 0], 1)}))
     return np.concatenate(changes, axis=1), audits
@@ -170,10 +168,10 @@ def jackknife(frame, columns, outcomes, design, *, beta):
     return variance, states, replicas
 
 
-def results(daily, sample, design, base, models=(0,), with_jackknife=False):
+def results(daily, sample, design, models=(0,), with_jackknife=False):
     sample = sample.reset_index(drop=True)
     spans = HORIZONS
-    y, audits = panel_changes(sample, daily, ALTERNATE_DAYS.get(base, BASE_DAYS), spans)
+    y, audits = panel_changes(sample, daily, spans)
     totals = modelos.summarize(sample)
     treated = sample.tratado.eq(1).to_numpy()
     pre = np.concatenate([daily[h][treated, 0] for h in BASE_DAYS])
@@ -197,7 +195,7 @@ def results(daily, sample, design, base, models=(0,), with_jackknife=False):
             for j, span in enumerate(spans):
                 variance = np.nan if v is None else v[j * len(columns), j * len(columns)]
                 stats = interval(b[j, 0], variance, dfs[cluster], design["alpha"])
-                rows.append(dict(modelo=f"M{model}", tramo=span, agrupacion=cluster, base=base, escala="niveles",
+                rows.append(dict(modelo=f"M{model}", tramo=span, agrupacion=cluster, base="tres_semanas", escala="niveles",
                                  **totals, **stats, sigma_pre=sigma, media_pre=mean,
                                  estado_inferencia="sin_identificar" if not np.isfinite(b[j, 0]) else
                                  "sin_covarianza" if v is None else "varianza_negativa" if variance < 0 else
@@ -215,13 +213,14 @@ def results(daily, sample, design, base, models=(0,), with_jackknife=False):
 
 
 def weekly_tests(daily, sample, design):
-    # Referencia propia y disjunta para las tres restricciones de Wald.
-    y, audits = panel_changes(sample, daily, tuple(range(-14, -7)), WEEKLY_SPANS)
+    # Las diferencias de las semanas -4, -3 y -2 frente a la base común
+    # suman cero. Omitir -2 conserva dos restricciones independientes.
+    y, audits = panel_changes(sample, daily, WEEKLY_SPANS)
     b, covariances, dfs = estimate(sample, ["tratado"], y, design)
     rows = []
     for cluster, v in covariances.items():
         eig = np.linalg.eigvalsh(v) if v is not None and np.isfinite(v).all() else [np.nan]
-        common = dict(escala="niveles", agrupacion=cluster, referencia="wk-2 [-14,-8]")
+        common = dict(escala="niveles", agrupacion=cluster, referencia="tres_semanas [-28,-8]")
         rows.append(dict(**common, restricciones="wk-4;wk-3;wk-1",
                          rango=np.linalg.matrix_rank(v) if v is not None else 0,
                          condicion=np.linalg.cond(v) if v is not None else np.nan,
@@ -358,20 +357,19 @@ def run(config, *, smoke=False):
             if frame.empty:
                 continue
             daily = {h: published.extract(frame, h)[:, None] for h in range(-28, 14)}
-            bases = ("tres_semanas", "-2", "wk-1") if scenario == "principal" else ("tres_semanas",)
-            for base in bases:
-                models = range(4) if method != "sin_covariables" and base == "tres_semanas" and scenario == "principal" else (0,)
-                fits, omissions, diagnostics, coefficients = results(
-                    daily, frame, design, base, models,
-                    with_jackknife=scenario == "principal" and base == "tres_semanas")
-                rows.extend(dict(r, escenario=scenario, muestra=method) for r in fits)
-                loo.extend(dict(r, escala="niveles", muestra=method) for r in omissions)
-                ranks.extend(dict(r, escenario=scenario, muestra=method, base=base) for r in diagnostics)
-                terms.extend(dict(r, escenario=scenario, muestra=method) for r in coefficients)
+            primary = scenario == "principal"
+            models = range(4) if primary and method != "sin_covariables" else (0,)
+            fits, omissions, diagnostics, coefficients = results(
+                daily, frame, design, models, with_jackknife=primary)
+            rows.extend(dict(r, escenario=scenario, muestra=method) for r in fits)
+            loo.extend(dict(r, escala="niveles", muestra=method) for r in omissions)
+            ranks.extend(dict(r, escenario=scenario, muestra=method, base="tres_semanas") for r in diagnostics)
+            terms.extend(dict(r, escenario=scenario, muestra=method) for r in coefficients)
             if scenario in ("principal", "persistencia", "placebo"):
                 joint, diagnostics = weekly_tests(daily, frame, design)
                 tests.extend(dict(r, escenario=scenario, muestra=method) for r in joint)
-                ranks.extend(dict(r, escenario=scenario, muestra=method, base="wald_wk-2") for r in diagnostics)
+                ranks.extend(dict(r, escenario=scenario, muestra=method, base="tres_semanas")
+                             for r in diagnostics if r["tramo"] not in HORIZONS)
     outputs = {"efectos": pd.DataFrame(rows), "omision_estado": pd.DataFrame(loo),
                "wald_semanal": pd.DataFrame(tests), "soporte": pd.DataFrame(supports),
                "muestras": pd.concat(sample_records, ignore_index=True), "vinculos": pd.concat(links_all, ignore_index=True),
@@ -389,7 +387,7 @@ def run(config, *, smoke=False):
         for h, values in daily.items():
             np.testing.assert_array_equal(values[:, :len(CROSS)].sum(axis=1),
                                           published.extract(frame, h))
-        outcomes, _ = panel_changes(frame, daily, BASE_DAYS, {"d0..1": SPANS["d0..1"]})
+        outcomes, _ = panel_changes(frame, daily, {"d0..1": SPANS["d0..1"]})
         labels = list(CROSS) + [("noche_menos_dia", g) for g in ("fatal", "heridos", "danos")]
         b, cov, dfs = estimate(frame, ["tratado"], outcomes, design)
         for j, (hour, severity) in enumerate(labels):

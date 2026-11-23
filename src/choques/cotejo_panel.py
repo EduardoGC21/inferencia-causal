@@ -53,7 +53,7 @@ def check_startup(sample, matrix, design, output):
     assert absorbed == 0
     daily_x = np.vstack(rows)
     assert np.linalg.matrix_rank(daily_x) - np.linalg.matrix_rank(daily_x[:, :-6]) == 6
-    changes, audit = panel_changes(frame, daily, BASE_DAYS, {"d0..1": span})
+    changes, audit = panel_changes(frame, daily, {"d0..1": span})
     collapsed, _, _ = estimate(frame, ["tratado"], changes, design)
     sw = np.sqrt(weights.reshape(-1, 1))
     explicit = np.linalg.lstsq(daily_x * sw, np.vstack(outcome) * sw, rcond=None)[0][-7:, 0]
@@ -114,15 +114,19 @@ def run(python, replica, output, previous=None):
                       STATS + ["n", "tratados", "controles", "fechas", "mde", "efecto_sigma", "media_pre", "sigma_pre"],
                       ["estado_inferencia"])
     assert set(effects.index.get_level_values("escala")) == {"niveles"}
+    assert set(effects.index.get_level_values("base")) == {"tres_semanas"}
     compare("coeficientes", FIT + ["modelo", "tramo", "agrupacion", "termino"], STATS)
-    compare("wald_semanal", FIT + ["escala", "agrupacion", "referencia", "restricciones"],
+    weekly = compare("wald_semanal", FIT + ["escala", "agrupacion", "referencia", "restricciones"],
             STATS + ["f", "gl_num", "gl_den", "rango", "condicion", "autovalor_min"], ["estado"])
+    assert set(weekly.index.get_level_values("referencia")) == {"tres_semanas [-28,-8]"}
     compare("omision_estado", ["muestra", "escala", "modelo", "tramo", "estado_omitido"],
             ["efecto"], ["identificada"])
     compare("cruce", ["muestra", "tramo", "franja", "gravedad", "agrupacion"], STATS, ["estado"])
     ranks = compare("dia_semana", PANEL, ["dias_base", "dias_tramo", "filas", "rango_dia_semana"]
                     + [f"d{j}" for j in range(1, 7)])
-    assert ranks.loc[ranks.dias_base.ge(7), "rango_dia_semana"].eq(6).all()
+    assert ranks.dias_base.eq(21).all()
+    assert ranks.rango_dia_semana.eq(6).all()
+    assert set(ranks.index.get_level_values("base")) == {"tres_semanas"}
     dates = compare("fechas_base", ["escenario", "indice", "h"], ["dia_semana"], ["inicio_real", "fecha"])
     for _, date in dates.reset_index().groupby(["escenario", "indice"], sort=False):
         assert date.h.tolist() == list(range(-28, -7))

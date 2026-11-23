@@ -102,7 +102,7 @@ Accidentes previos & 2,05 (3,41) & 2,09 (3,45) & -0,011 & 0,012 \\
 \end{tabular}\par
 \endgroup
 
-\RaggedRight Desviación estándar (DE) ponderada entre pares. Las diferencias de medias estandarizadas (DME) utilizan como escala común la raíz del promedio de varianzas de ambos grupos de la referencia con calibre individual. El nivel previo es la media de $[-28,-15]$; su DE entre pares difiere de la DE de niveles diarios que estandariza los efectos.\par
+\RaggedRight Desviación estándar (DE) ponderada entre pares. Las diferencias de medias estandarizadas (DME) utilizan como escala común la raíz del promedio de varianzas de ambos grupos de la referencia con calibre individual. El calibre usa la media de $[-28,-15]$; su DE entre pares difiere de la DE de niveles diarios que estandariza los efectos.\par
 
 \end{minipage}\par\medskip
 
@@ -133,7 +133,7 @@ Se excluyen municipios con exposición documentada entre los Días -49 y -1: la 
 
 Los controles proceden de estados ajenos al episodio. También se excluyen municipios con antecedentes documentados y estados con señales previas sin municipio identificable. Se exige estabilidad territorial desde el inicio de la base hasta la víspera del ataque. La selección principal no utiliza ataques posteriores.\par
 
-El nivel previo es la media de los Días -28 a -15. Se exige $(\bar Y_c+0.5)/(\bar Y_i+0.5)\in[0.5,2]$, donde $\bar Y_i$ y $\bar Y_c$ son las medias del tratado y del candidato. La población, el empleo y los automóviles por mil habitantes también deben estar, por separado, entre la mitad y el doble del valor tratado. Se requieren al menos diez candidatos de cinco estados por tratado.\par
+El calibre usa la media de los días -28 a -15. Se exige $(\bar Y_c+0.5)/(\bar Y_i+0.5)\in[0.5,2]$, donde $\bar Y_i$ y $\bar Y_c$ son las medias del tratado y del candidato. La población, el empleo y los automóviles por mil habitantes también deben estar, por separado, entre la mitad y el doble del valor tratado. Se requieren al menos diez candidatos de cinco estados por tratado.\par
 
 El emparejamiento 1:muchos utiliza todos los candidatos: cada tratado pesa uno y reparte otro peso total de uno entre sus controles. El emparejamiento 1:1 elige el candidato más cercano según población, empleo y automóviles, después de comprobar el mismo mínimo de candidatos y estados. Se permite reutilizar controles; sus pesos acumulan las contribuciones de cada tratado.\par
 
@@ -216,17 +216,15 @@ La figura 1 muestra los contrastes de los días -7 a +13. Los días -3 y -2 pres
 
 \end{minipage}\par\medskip
 
-La prueba conjunta de Wald contrasta las semanas -4, -3 y -1 con la semana -2. En el emparejamiento 1:muchos, el valor $p$ es 0,035 por estado y 0,081 por estado y fecha de inicio. La primera agrupación rechaza la hipótesis conjunta al 5 \%. Con la segunda, el resultado es compatible con diferencias previas nulas en el conjunto de semanas. El apéndice D documenta las tres restricciones y esta referencia propia.\par
+La prueba conjunta de Wald contrasta las semanas -4, -3 y -1 con la base de los días -28 a -8. En el emparejamiento 1:muchos, el valor $p$ es 0,035 por estado y 0,081 por estado y fecha de inicio. La primera agrupación rechaza la hipótesis conjunta al 5 \%. Con la segunda, el resultado es compatible con diferencias previas nulas en el conjunto de semanas. El apéndice D explica por qué bastan tres restricciones.\par
 
 El placebo asigna un inicio ficticio 28 días antes del observado y reconstruye los criterios de inclusión, el emparejamiento y la base. En los días 0 y 1 estima -0,191 siniestros por municipio y día (IC [-0,569; 0,188]). El intervalo inmediato incluye cero. Los días 2 a 6 y la semana 0 del placebo presentan intervalos por estado que quedan por debajo de cero en el emparejamiento 1:muchos. El cuadro B3 presenta los seis tramos y los valores $p$ de ambas agrupaciones.\par
 
 \Needspace{20\baselineskip}
 
-\paragraph{Persistencia, bases alternativas y calendario.}
+\paragraph{Persistencia y calendario.}
 
 Las estimaciones son -0,145 en los días 2 a 6 (IC [-0,353; 0,063]) y -0,079 en la semana +1 (IC [-0,317; 0,158]). Los intervalos incluyen cero y admiten reducciones de magnitud relevante. El cuadro B2 compara estos resultados con los de la muestra que exige continuidad e introduce aislamiento posterior.\par
-
-Con la semana inmediatamente anterior como base, se estiman -0,191 siniestros por municipio y día en los días 0 y 1 (IC [-0,725; 0,343]). Con la base de un solo día, el día -2, se estiman 0,185 (IC [-0,296; 0,666]). Los dos ejercicios conservan los pares y pesos del análisis principal. El cuadro C4 detalla la identificación del día de la semana en cada caso.\par
 
 El calendario puede alterar la circulación (Cámara de Diputados, 2025; Secretaría de Educación de Veracruz, 2026). Excluir las fechas con un feriado de la Ley Federal del Trabajo (LFT) o un receso de la Secretaría de Educación Pública (SEP) en el día 0 o 1 reduce la muestra a 25 tratados y 15 fechas. El contraste inmediato estima -0,595 siniestros por municipio y día (IC [-1,288; 0,098]). El apéndice C enumera las exclusiones y el soporte de cada escenario.\par
 
@@ -619,29 +617,7 @@ Sin dos señales en controles & 1:1 & 77 & 77 & 32 & 31 \\
 
 El calendario es nacional de educación básica, con fines de semana contiguos hasta la reanudación. No representa cada institución o adaptación estatal. La LFT sigue el artículo 74, incluido el cambio presidencial de 2024. Ninguna cohorte estimada coincide en días 0--1 con una jornada electoral ordinaria.\par
 
-\Needspace{14\baselineskip}
-
-\subsection*{Sensibilidad a la base de comparación}
-
-El cuadro C4 conserva los mismos pares y pesos y compara tres bases para el contraste de los días 0 y 1. La base principal usa los días -28 a -8 y la semana -1 usa los días -7 a -1. Ambas identifican seis efectos de día de la semana. Con el día -2, la base tiene una fila por par. La variación entre los días 0 y 1 aporta seis contrastes de día de la semana en la muestra principal. El contraste del día 0 contra el día -2 queda sin variación diaria para estimar estos efectos.\par
-
-\par\medskip\noindent\begin{minipage}{\linewidth}
-
-\begin{center}\small \textbf{Cuadro C4.} Días 0--1 con idénticos pares y pesos: base e IC agrupados por estado y fecha\end{center}
-
-\begingroup\centering
-\fontsize{9}{11}\selectfont
-\begin{tabular}{@{}>{\RaggedRight\arraybackslash}p{64.865pt}>{\centering\arraybackslash}p{132.833pt}>{\centering\arraybackslash}p{132.787pt}>{\centering\arraybackslash}p{132.833pt}@{}}
-\toprule
-\textbf{Método} & \textbf{Día -2} & \textbf{Tres semanas} & \textbf{Sem. -1} \\
-\midrule
-1:muchos & 0,185 [-0,296; 0,666] & -0,348 [-0,834; 0,139] & -0,191 [-0,725; 0,343] \\
-1:1 & 0,299 [-0,395; 0,992] & -0,311 [-0,820; 0,198] & 0,015 [-0,597; 0,626] \\
-\bottomrule
-\end{tabular}\par
-\endgroup
-
-\end{minipage}\par\medskip
+\clearpage
 
 \section*{Apéndice D. Inferencia y potencia}
 
@@ -697,17 +673,17 @@ El efecto mínimo detectable (MDE) es la magnitud que la prueba detectaría con 
 \toprule
 \textbf{Método} & \textbf{Agrupación} & \textbf{F} & \textbf{p} & \textbf{Rango} & \textbf{Condición} & \textbf{Cálculo} \\
 \midrule
-1:muchos & Estatal & 3,238 & 0,035 & 3 & 11,2 & calculada \\
-1:muchos & Estado y fecha & 2,459 & 0,081 & 3 & 12,4 & calculada \\
-1:1 & Estatal & 1,369 & 0,273 & 3 & 14,3 & calculada \\
-1:1 & Estado y fecha & 1,043 & 0,389 & 3 & 15,0 & calculada \\
+1:muchos & Estatal & 3,238 & 0,035 & 3 & 8,1 & calculada \\
+1:muchos & Estado y fecha & 2,459 & 0,081 & 3 & 5,1 & calculada \\
+1:1 & Estatal & 1,369 & 0,273 & 3 & 29,8 & calculada \\
+1:1 & Estado y fecha & 1,043 & 0,389 & 3 & 15,3 & calculada \\
 \bottomrule
 \end{tabular}\par
 \endgroup
 
 \end{minipage}\par\medskip
 
-La prueba usa la semana -2 como referencia de las semanas -4, -3 y -1. Cada contraste usa siete conteos diarios por bloque. La prueba conjunta incorpora la covarianza entre los tres coeficientes. El cuadro señala los casos de covarianza indefinida o singular.\par
+La prueba compara las semanas -4, -3 y -1 con la base común de los días -28 a -8. Cada contraste compara siete conteos diarios con el promedio de los 21 días de la base. Las diferencias de las semanas -4, -3 y -2 respecto a ese promedio suman cero. La semana -2 queda implícita. La prueba conjunta incorpora la covarianza entre los tres coeficientes.\par
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 
@@ -820,7 +796,7 @@ Se incluye el archivo completo \path{codigo_R/analisis.R}. La obtención y limpi
 
 La ejecución ordinaria ajusta el panel diario con conteos en niveles, la base de 21 días y efectos fijos del día de la semana. El argumento \path{--arranque} verifica fechas, pesos y rango del modelo en dos fechas reales. El programa exporta los efectos, el diagnóstico semanal, las sensibilidades y el contraste por franja y gravedad.\par
 
-El subcomando \texttt{python -m choques cotejar-panel} coteja muestras, pesos, estimaciones e inferencia de Python y R. El registro \path{reporte/verificacion/niveles-base-semanal.json} identifica las salidas y las diferencias máximas por estadístico. La comparación descriptiva semanal de Culiacán se conserva como salida histórica independiente.\par
+El subcomando \texttt{python -m choques cotejar-panel} coteja muestras, pesos, estimaciones e inferencia de Python y R. El registro \path{reporte/verificacion/niveles-base-semanal.json} identifica las salidas y las diferencias máximas por estadístico.\par
 
 \paragraph{Código, datos y ejecución.}
 

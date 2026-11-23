@@ -110,13 +110,13 @@ Ahora veamos esa distancia y sus intervalos de confianza.
 
 **Explicación oral**
 
-Cada punto compara el cambio de tratados y controles. En los días menos tres y menos dos, los intervalos puntuales quedan por debajo de cero. Para la prueba conjunta uso la semana menos dos como referencia de las semanas menos cuatro, menos tres y menos uno. Se rechaza al cinco por ciento con agrupación estatal. Con la agrupación por estado y fecha, el valor p es 0,081. Las diferencias previas limitan cuánto podemos atribuir al inicio del ataque.
+Cada punto compara el cambio de tratados y controles. En los días menos tres y menos dos, los intervalos puntuales quedan por debajo de cero. La prueba conjunta compara las semanas menos cuatro, menos tres y menos uno con la base común. Las tres semanas de la base suman cero frente a su promedio, así que la semana menos dos queda implícita. Se rechaza al cinco por ciento con agrupación estatal. Con la agrupación por estado y fecha, el valor p es 0,081. Las diferencias previas limitan cuánto podemos atribuir al inicio del ataque.
 
 **Transición**
 
 Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.
 
-**Referencia para consulta.** Reporte, §3–4, figura 1 y apéndice D. La gráfica usa el modelo M₀, emparejamiento 1:muchos y base de 21 días. La prueba semanal tiene su propia referencia.
+**Referencia para consulta.** Reporte, §3–4, figura 1 y apéndice D. La gráfica usa el modelo M₀, emparejamiento 1:muchos y base de 21 días. La prueba semanal compara tres semanas con la base de 21 días.
 
 ## Añadir covariables cambia poco la estimación inicial
 
@@ -142,7 +142,7 @@ Cada punto resume un tramo. Se estiman menos 0,348 en los dos primeros días, me
 
 **Transición**
 
-La base y el calendario también afectan la lectura del contraste inicial.
+Veamos la sensibilidad al calendario y al inicio ficticio.
 
 **Referencia para consulta.** Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.
 
@@ -152,13 +152,13 @@ La base y el calendario también afectan la lectura del contraste inicial.
 
 **Explicación oral**
 
-Al usar la semana previa, la caída estimada es menor. Con el día menos dos como base, cambia de signo. Ambos ejercicios mantienen los pares y pesos. Excluir feriados y recesos deja 25 tratados. El placebo ubica el inicio 28 días antes y estima una caída menor. Los intervalos de estas comparaciones incluyen cero.
+Excluir feriados y recesos deja 25 tratados. El placebo ubica el inicio 28 días antes, reconstruye los pares y estima una caída menor. Los tres intervalos incluyen cero. Cada comparación usa la misma regla de base, los días menos veintiocho a menos ocho respecto a su inicio.
 
 **Transición**
 
 ¿Qué se puede sostener con ese conjunto de resultados?
 
-**Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C4. Siniestros registrados por municipio y día. Intervalos agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
+**Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C3. Siniestros registrados por municipio y día. Intervalos agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
 
 ## La mayor caída estimada aparece al inicio
 
@@ -210,7 +210,7 @@ Volver a la conclusión cuando termine la discusión.
 
 **Explicación oral**
 
-El nivel de accidentes se calcula en Días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.
+El filtro de comparabilidad usa la media de los días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.
 
 **Transición**
 

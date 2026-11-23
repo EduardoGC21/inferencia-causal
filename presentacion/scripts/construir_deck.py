@@ -237,8 +237,8 @@ add("trayectoria", "Supuestos", "Los grupos ya difieren antes del inicio", 45, f
   <p><strong>Tendencias paralelas:</strong> cambios comparables en ausencia del ataque.</p>
   <p><strong>Prueba semanal:</strong> p = {wald_state} por estado y p = {wald_two} por estado y fecha.</p>
 </div>""",
-"""Cada punto compara el cambio de tratados y controles. En los días menos tres y menos dos, los intervalos puntuales quedan por debajo de cero. Para la prueba conjunta uso la semana menos dos como referencia de las semanas menos cuatro, menos tres y menos uno. Se rechaza al cinco por ciento con agrupación estatal. Con la agrupación por estado y fecha, el valor p es 0,081. Las diferencias previas limitan cuánto podemos atribuir al inicio del ataque.""",
-"Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Reporte, §3–4, figura 1 y apéndice D. La gráfica usa el modelo M₀, emparejamiento 1:muchos y base de 21 días. La prueba semanal tiene su propia referencia.", sources)
+"""Cada punto compara el cambio de tratados y controles. En los días menos tres y menos dos, los intervalos puntuales quedan por debajo de cero. La prueba conjunta compara las semanas menos cuatro, menos tres y menos uno con la base común. Las tres semanas de la base suman cero frente a su promedio, así que la semana menos dos queda implícita. Se rechaza al cinco por ciento con agrupación estatal. Con la agrupación por estado y fecha, el valor p es 0,081. Las diferencias previas limitan cuánto podemos atribuir al inicio del ataque.""",
+"Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Reporte, §3–4, figura 1 y apéndice D. La gráfica usa el modelo M₀, emparejamiento 1:muchos y base de 21 días. La prueba semanal compara tres semanas con la base de 21 días.", sources)
 
 add("resultados", "Resultados", "Añadir covariables cambia poco la estimación inicial", 35, f"""
 {models_table()}
@@ -253,12 +253,11 @@ add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 
 </figure>
 <p class="duration-reading">Los tres intervalos incluyen cero.</p>""",
 """Cada punto resume un tramo. Se estiman menos 0,348 en los dos primeros días, menos 0,145 en los días dos a seis y menos 0,079 en la segunda semana, en siniestros registrados por municipio y día. Los tres intervalos incluyen cero. Los posteriores admiten caídas de magnitud relevante. La muestra que exige continuidad del reporte y aislamiento posterior cambia los pares disponibles. Con estos datos la duración sigue abierta.""",
-"La base y el calendario también afectan la lectura del contraste inicial.", "Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.", sources)
+"Veamos la sensibilidad al calendario y al inicio ficticio.", "Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.", sources)
 
 sensitivity_rows = []
 for label, row in [
-    ("Base principal: días −28 a −8", result()), ("Base: semana anterior", result(base="wk-1")),
-    ("Base: día −2", result(base="-2")),
+    ("Muestra principal", result()),
     ("Sin feriados ni recesos escolares", result(escenario="sin_laborales_escolares")),
     ("Placebo: inicio 28 días antes", result(escenario="placebo")),
 ]:
@@ -267,9 +266,9 @@ for label, row in [
 
 add("sensibilidades", "Resultados", "Sensibilidad del resultado", 30, f"""
 {table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}""",
-"""Al usar la semana previa, la caída estimada es menor. Con el día menos dos como base, cambia de signo. Ambos ejercicios mantienen los pares y pesos. Excluir feriados y recesos deja 25 tratados. El placebo ubica el inicio 28 días antes y estima una caída menor. Los intervalos de estas comparaciones incluyen cero.""",
-"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. Siniestros registrados por municipio y día. Intervalos agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources,
-table_note=f"Días 0–1 · {m0} · 1:muchos · Siniestros registrados por municipio y día")
+"""Excluir feriados y recesos deja 25 tratados. El placebo ubica el inicio 28 días antes, reconstruye los pares y estima una caída menor. Los tres intervalos incluyen cero. Cada comparación usa la misma regla de base, los días menos veintiocho a menos ocho respecto a su inicio.""",
+"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C3. Siniestros registrados por municipio y día. Intervalos agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources,
+table_note=f"Días 0–1 · {m0} · 1:muchos · Base días −28 a −8 · Siniestros registrados por municipio y día")
 
 add("conclusion", "Conclusión", "La mayor caída estimada aparece al inicio", 20, f"""
 <div class="closing-results">
@@ -323,13 +322,13 @@ add("soporte", "Discusión", "Soporte, balance y pesos", 0, f"""
   <div class="math-band">{math(r"w_{it}=1\quad(\mathrm{Treat}_{it}=1),\qquad w_{ct}=\sum_{i:\,c\in C_{it}}\frac{1}{|C_{it}|}",True)}</div></div>
 </div>
 <p class="takeaway">La mayor diferencia estandarizada observada en 1:muchos es 0,082 en valor absoluto.</p>""",
-"""El nivel de accidentes se calcula en Días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.""",
+"""El filtro de comparabilidad usa la media de los días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.""",
 "Volver al índice de respaldos.", "Reporte, cuadro 1, §3 y apéndices A y D.", sources)
 
 add("inferencia", "Discusión", "La agrupación permite errores dependientes", 0, f"""
 <div class="backup-grid">
   <div><h3>Intervalos puntuales</h3><p>Estado: dependencia entre municipios del mismo estado.</p><p>Fecha: dependencia entre municipios con el mismo inicio.</p><p>Omisión de estados: sensibilidad a la concentración del peso.</p></div>
-  <div><h3>Diagnóstico previo por semanas</h3><p>Compara las semanas −4, −3 y −1 con la −2.</p><p>Por estado: p = {wald_state}.<br>Por estado y fecha: p = {wald_two}.</p></div>
+  <div><h3>Diagnóstico previo por semanas</h3><p>Compara las semanas −4, −3 y −1 con la base de los días −28 a −8.</p><p>Por estado: p = {wald_state}.<br>Por estado y fecha: p = {wald_two}.</p></div>
 </div>
 <p class="takeaway">La agrupación cambia la precisión. El diagnóstico examina una fuente de sesgo.</p>""",
 """Se suma la covarianza por estado y por fecha y se resta la de su intersección. En los días cero y uno el panel tiene 83 099 filas. La corrección de muestra finita cuenta 3 613 pares y el rango del contraste entre bloques. Las desviaciones diarias dentro de cada bloque se cancelan al sumar las contribuciones a la varianza del contraste. La inferencia principal tiene 31 grados de libertad. El intervalo alternativo omite un estado por turno. Con la agrupación por estado y fecha, el efecto mínimo detectable del contraste inmediato es 0,690 siniestros registrados por municipio y día.""",

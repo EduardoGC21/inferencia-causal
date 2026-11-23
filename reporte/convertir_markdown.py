@@ -75,12 +75,11 @@ widths = {
     12: [.31, .13, .09, .10, .37],
     13: [.39, .14, .09, .10, .14, .14],
     14: [.22, .10, .23, .23, .22],
-    15: [.14, .2867, .2866, .2867],
     16: [.15, .23, .39, .08, .15],
     17: [.13, .18, .12, .12, .10, .13, .22],
     18: [.34, .16, .34, .16],
 }
-layout_keys = {'1': 1, 'B1': 2, '2': 3, 'G1': 4, 'A1': 5, 'A2': 6, 'A3': 7, 'A4': 9, 'A5': 8, 'B2': 10, 'B3': 11, 'C1': 12, 'C2': 13, 'C3': 14, 'C4': 15, 'D1': 16, 'D2': 17, 'D3': 18}
+layout_keys = {'1': 1, 'B1': 2, '2': 3, 'G1': 4, 'A1': 5, 'A2': 6, 'A3': 7, 'A4': 9, 'A5': 8, 'B2': 10, 'B3': 11, 'C1': 12, 'C2': 13, 'C3': 14, 'D1': 16, 'D2': 17, 'D3': 18}
 
 def table(raw, number, line):
     parsed = [[v.strip() for v in row.strip().strip("|").split("|")] for row in raw]
@@ -182,7 +181,7 @@ while i < len(lines):
             out.append(r"\endgroup")
             references = False
         heading = s[3:]
-        if heading == "Referencias" or (heading.startswith("Apéndice ") and not heading.startswith("Apéndice D.")):
+        if heading == "Referencias" or heading.startswith("Apéndice "):
             out.append(r"\clearpage")
         if heading.startswith("2. "):
             out.append(r"\Needspace{8\baselineskip}")
@@ -195,11 +194,9 @@ while i < len(lines):
         continue
     if s.startswith("### "):
         heading = s[4:]
-        if heading.startswith("Persistencia, bases alternativas"):
+        if heading.startswith("Persistencia y calendario"):
             out.append(r"\Needspace{20\baselineskip}")
-        if heading == "Sensibilidad a la base de comparación":
-            out.append(r"\Needspace{14\baselineskip}")
-        command = r"\subsection*" if heading.startswith(("3.1.", "Listado completo")) or heading == "Sensibilidad a la base de comparación" else r"\paragraph"
+        command = r"\subsection*" if heading.startswith(("3.1.", "Listado completo")) else r"\paragraph"
         out.append(command+"{"+inline(heading)+"}")
         blocks.append({"type":"heading","line":line,"source":s})
         i += 1

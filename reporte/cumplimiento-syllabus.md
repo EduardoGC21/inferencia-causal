@@ -8,7 +8,7 @@ al PDF del árbol de trabajo.
 
 | Requisito | Ubicación en la versión revisada |
 | --- | --- |
-| Texto de 6–8 páginas y fuente de 11–12 puntos | Siete páginas de cuerpo (1–7), `article` a 11 puntos, referencias en p. 8 y apéndices en pp. 9–48 |
+| Texto de 6–8 páginas y fuente de 11–12 puntos | Siete páginas de cuerpo (1–7), `article` a 11 puntos, referencias en p. 8 y apéndices en pp. 9–45 |
 | Notación canónica del curso | Sección 3, pp. 3–4. Resultados potenciales $\bar Y_{ith}(1)$ y $\bar Y_{ith}(0)$, efecto objetivo $\tau_{\mathrm{ATT},h}$ y coeficiente $\tau_{\mathrm{DD},h}$ de Tratado × Después. La regresión incluye conteos diarios $Y_{i,d}$ y efectos fijos del día de la semana. |
 | Contexto, pregunta, mecanismos y literatura | Sección 1, p. 1: dos antecedentes académicos y una fuente de contexto; ATT antes del estimador |
 | Datos, fuentes, periodo, unidad y N | P. 2: ATUS 2019–2025 e historia de 2018; 3 613 pares municipio–fecha, 77 tratados, 3 536 controles, 31 episodios y 32 fechas |
@@ -24,7 +24,7 @@ al PDF del árbol de trabajo.
 | Al menos una figura | Figura 1, p. 6: trayectoria diaria en niveles para ambos métodos de emparejamiento. Mapa en p. 19 |
 | Robustez y falsificaciones | Pp. 6–7: diferencias previas, placebo, duración, base alternativa y calendario; apéndices B–D |
 | Conclusión, validez externa, límites y relevancia de política | Sección 5, p. 7 |
-| Apéndices, código y datos públicos | Apéndices A–H, pp. 9–48. Fuentes y reproducción en p. 18. Apéndice H, pp. 21–48, con el código R completo (1 542 líneas), instrucciones y enlaces. |
+| Apéndices, código y datos públicos | Apéndices A–H, pp. 9–45. Fuentes y reproducción en p. 18. Apéndice H, pp. 21–45, con el código R completo (1 354 líneas), instrucciones y enlaces. |
 | Presentación de 8–10 minutos | [Presentación](../presentacion/presentacion.pdf) y [guion](../presentacion/guion.md) para ocho minutos de exposición. |
 
 El estudiante confirmó la autorización del profesor para utilizar Python.

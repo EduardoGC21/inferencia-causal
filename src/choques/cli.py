@@ -10,9 +10,9 @@ STAGES = {
     "preparar": [("panel", "run"), ("conteos", "prepare"), ("municipios", "prepare")],
     "validar": [("validacion", "run")],
     "soporte": [("modelos", "support"), ("comparaciones", "support")],
-    "estimar": [("modelos", "run"), ("comparaciones", "run"), ("causal", "run")],
-    "analizar": [("analisis", "run"), ("causal", "tables")],
-    "graficar": [("graficas", "run"), ("causal", "figures")],
+    "estimar": [("causal", "run")],
+    "analizar": [("causal", "tables")],
+    "graficar": [("causal", "figures")],
     "compilar": [("escrito", "run")],
     "cotejar-panel": [("cotejo_panel", "run")],
 }
@@ -71,6 +71,6 @@ def main():
         for module, function in steps:
             selected = config
             legacy = root / "config" / "legado.toml"
-            if module in ("modelos", "comparaciones", "analisis", "graficas") and legacy.exists():
+            if module in ("modelos", "comparaciones") and legacy.exists():
                 selected = config | {"design": tomllib.loads(legacy.read_text(encoding="utf-8"))["design"]}
             getattr(import_module(f".{module}", __package__), function)(selected)

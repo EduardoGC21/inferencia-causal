@@ -212,7 +212,7 @@ for (fuente in c("saic", "vmrc")) {
   tablas_municipales[[fuente]] <- tabla
 }
 
-adjuntar_covariables <- function(muestra, persistencia = FALSE, auditada = FALSE) {
+adjuntar_covariables <- function(muestra, persistencia = FALSE) {
   campos_fuente <- list(
     censo = c("poblacion", "poblacion_estado", "auto_vivienda", "auto_vivienda_estado"),
     saic = c("empleo", "empleo_estado", "empleo_mil", "empleo_mil_alt",
@@ -225,10 +225,10 @@ adjuntar_covariables <- function(muestra, persistencia = FALSE, auditada = FALSE
   for (i in seq_along(indices)) {
     indice <- indices[i]
     cohorte <- muestra[muestra$indice == indice, ]
-    fin <- indice + if (auditada) 16 else if (persistencia) 14 else -1
+    fin <- indice + if (persistencia) 14 else -1
     inicio <- indice - 28
     cohorte$territorio <- territorios(cohorte$clave,
-                                     if (!auditada && !persistencia) fin else indice, TRUE)
+                                     if (!persistencia) fin else indice, TRUE)
     cohorte$territorio_ventana <- territorios(cohorte$clave, inicio, TRUE) ==
       territorios(cohorte$clave, fin, TRUE)
     for (fuente in names(campos_fuente)) {
@@ -594,12 +594,11 @@ resumir <- function(muestra) {
 # 7. Panel diario en niveles y pruebas previas -----------------------------
 
 dias_base <- -28:-8
-bases_alternas <- list("-2" = -2, "wk-1" = -7:-1)
 tramos_semanales <- list("wk-4" = -28:-22, "wk-3" = -21:-15, "wk-1" = -7:-1)
 dia_semana <- function(fecha) (as.integer(fecha) + 3L) %% 7L  # Lunes = 0.
 promedio_vectores <- function(lista) Reduce("+", lista) / length(lista)
 
-cambios_panel <- function(muestra, diario, base, horizontes) {
+cambios_panel <- function(muestra, diario, horizontes) {
   fechas_indice <- sort(unique(muestra$indice))
   grupo <- match(muestra$indice, fechas_indice)
   pesos <- muestra$peso
@@ -621,7 +620,7 @@ cambios_panel <- function(muestra, diario, base, horizontes) {
     }, centrados, y))
     list(media = promedio_vectores(y), perfil = perfil, gram = gram, rhs = rhs)
   }
-  inicial <- bloque(base)
+  inicial <- bloque(dias_base)
   calculos <- lapply(seq_along(horizontes), function(j) {
     dias <- horizontes[[j]]
     final <- bloque(dias)
@@ -629,12 +628,12 @@ cambios_panel <- function(muestra, diario, base, horizontes) {
     espectro <- eigen(gram, symmetric = TRUE)
     retenidos <- espectro$values > 6 * max(abs(espectro$values)) * .Machine$double.eps
     rango <- sum(retenidos)
-    stopifnot(length(base) < 7 || rango == 6)
+    stopifnot(rango == 6)
     vectores <- espectro$vectors[, retenidos, drop = FALSE]
     gamma <- vectores %*% (crossprod(vectores, inicial$rhs + final$rhs) / espectro$values[retenidos])
     ajuste <- ((final$perfil - inicial$perfil) %*% gamma)[grupo, , drop = FALSE]
-    diagnostico <- data.frame(tramo = names(horizontes)[j], dias_base = length(base),
-                              dias_tramo = length(dias), filas = nrow(muestra) * (length(base) + length(dias)),
+    diagnostico <- data.frame(tramo = names(horizontes)[j], dias_base = length(dias_base),
+                              dias_tramo = length(dias), filas = nrow(muestra) * (length(dias_base) + length(dias)),
                               rango_dia_semana = rango, as.list(setNames(gamma[, 1], paste0("d", 1:6))))
     list(y = final$media - inicial$media - ajuste, diagnostico = diagnostico)
   })
@@ -672,7 +671,7 @@ comprobar_arranque <- function(muestra) {
   }))
   rank <- rango_matriz(x) - rango_matriz(x[, seq_len(ncol(x) - 6)])
   stopifnot(absorbidos == 0, rank == 6)
-  ajuste <- cambios_panel(elegidos, diario, dias_base, list("d0..1" = 0:1))
+  ajuste <- cambios_panel(elegidos, diario, list("d0..1" = 0:1))
   reducido <- c(estimar(elegidos, "tratado", ajuste$y, FALSE)$b[1, 1],
                 unlist(ajuste$diagnosticos[paste0("d", 1:6)]))
   completo <- tail(lm.wfit(x, unlist(diario), as.vector(pesos))$coefficients, 7)
@@ -684,10 +683,9 @@ comprobar_arranque <- function(muestra) {
   cat("Arranque: 21 días, masa por bloque y seis efectos de día de la semana comprobados.\n")
 }
 
-resultados <- function(muestra, diario, base, modelos = 0, crv3 = FALSE) {
+resultados <- function(muestra, diario, modelos = 0, crv3 = FALSE) {
   horizonte <- tramos
-  inicial <- if (base == "tres_semanas") dias_base else bases_alternas[[base]]
-  panel <- cambios_panel(muestra, diario, inicial, horizonte)
+  panel <- cambios_panel(muestra, diario, horizonte)
   y <- panel$y
   resumen <- resumir(muestra)
   previa <- unlist(lapply(diario[as.character(dias_base)], function(z) z[muestra$tratado == 1, 1]))
@@ -724,7 +722,7 @@ resultados <- function(muestra, diario, base, modelos = 0, crv3 = FALSE) {
                                 ifelse(varianza == 0, "varianza_cero", "calculada")))
       filas[[length(filas) + 1]] <- cbind(
         data.frame(modelo = paste0("M", modelo), tramo = names(horizonte), agrupacion,
-                   base, escala = "niveles"), resumen[rep(1, ncol(y)), ], estadisticas,
+                   base = "tres_semanas", escala = "niveles"), resumen[rep(1, ncol(y)), ], estadisticas,
         sigma_pre = sigma, media_pre = media, estado_inferencia = estado,
         efecto_sigma = estadisticas$efecto / sigma,
         mde = mde(ajuste$gl[agrupacion], estadisticas$ee))
@@ -742,7 +740,9 @@ resultados <- function(muestra, diario, base, modelos = 0, crv3 = FALSE) {
 }
 
 pruebas_semanales <- function(muestra, diario) {
-  panel <- cambios_panel(muestra, diario, -14:-8, tramos_semanales)
+  # Las tres semanas de base suman cero frente a su propio promedio.
+  # Al omitir la semana -2 conservamos tres restricciones independientes.
+  panel <- cambios_panel(muestra, diario, tramos_semanales)
   ajuste <- estimar(muestra, "tratado", panel$y)
   filas <- list()
   for (agrupacion in names(ajuste$v)) {
@@ -753,13 +753,13 @@ pruebas_semanales <- function(muestra, diario) {
       max(d) / min(d)
     }
     filas[[length(filas) + 1]] <- cbind(data.frame(
-      escala = "niveles", agrupacion, referencia = "wk-2 [-14,-8]", restricciones = "wk-4;wk-3;wk-1",
+      escala = "niveles", agrupacion, referencia = "tres_semanas [-28,-8]", restricciones = "wk-4;wk-3;wk-1",
       rango = if (is.null(v)) 0 else rango_matriz(v), condicion, autovalor_min = eigen_min),
       wald(ajuste$b[, 1], v, ajuste$gl[agrupacion]))
     individuales <- intervalo(ajuste$b[, 1], if (is.null(v)) rep(NA_real_, 3) else diag(v),
                               ajuste$gl[agrupacion])
     filas[[length(filas) + 1]] <- cbind(data.frame(
-      escala = "niveles", agrupacion, referencia = "wk-2 [-14,-8]", restricciones = names(tramos_semanales)),
+      escala = "niveles", agrupacion, referencia = "tres_semanas [-28,-8]", restricciones = names(tramos_semanales)),
       individuales)
   }
   list(pruebas = unir_filas(filas), diagnosticos = panel$diagnosticos)
@@ -951,24 +951,23 @@ for (escenario in names(muestras)) {
     offsets <- -28:13
     diario <- setNames(lapply(offsets, function(h) matrix(extraer(muestra, h), ncol = 1)), offsets)
     stopifnot(all(vapply(diario, function(z) all(z >= 0), logical(1))))
-    bases <- if (escenario == "principal") c("tres_semanas", "-2", "wk-1") else "tres_semanas"
-    for (base in bases) {
-      modelos <- if (metodo != "sin_covariables" && escenario == "principal" && base == "tres_semanas") 0:3 else 0
-      ajuste <- resultados(muestra, diario, base, modelos,
-                            crv3 = escenario == "principal" && base == "tres_semanas")
-      llave <- paste(escenario, metodo, base)
-      efectos[[llave]] <- transform(ajuste$efectos, escenario = escenario, muestra = metodo)
-      rangos[[llave]] <- transform(ajuste$diagnosticos, escenario = escenario, muestra = metodo, base = base)
-      if (nrow(ajuste$omisiones)) {
-        omisiones[[llave]] <- transform(ajuste$omisiones, escala = "niveles", muestra = metodo)
-        terminos[[llave]] <- transform(ajuste$terminos, escenario = escenario, muestra = metodo)
-      }
+    principal <- escenario == "principal"
+    modelos <- if (metodo != "sin_covariables" && principal) 0:3 else 0
+    ajuste <- resultados(muestra, diario, modelos, crv3 = principal)
+    llave <- paste(escenario, metodo)
+    efectos[[llave]] <- transform(ajuste$efectos, escenario = escenario, muestra = metodo)
+    rangos[[llave]] <- transform(ajuste$diagnosticos, escenario = escenario, muestra = metodo,
+                                 base = "tres_semanas")
+    if (nrow(ajuste$omisiones)) {
+      omisiones[[llave]] <- transform(ajuste$omisiones, escala = "niveles", muestra = metodo)
+      terminos[[llave]] <- transform(ajuste$terminos, escenario = escenario, muestra = metodo)
     }
     if (escenario %in% c("principal", "persistencia", "placebo")) {
-      llave <- paste(escenario, metodo, "wald_wk-2")
       previo <- pruebas_semanales(muestra, diario)
       pruebas[[llave]] <- transform(previo$pruebas, escenario = escenario, muestra = metodo)
-      rangos[[llave]] <- transform(previo$diagnosticos, escenario = escenario, muestra = metodo, base = "wald_wk-2")
+      nuevos <- previo$diagnosticos[!previo$diagnosticos$tramo %in% names(tramos), ]
+      rangos[[paste(llave, "previo")]] <- transform(nuevos, escenario = escenario, muestra = metodo,
+                                                  base = "tres_semanas")
     }
   }
 }
@@ -1010,7 +1009,7 @@ for (metodo in c("emparejada", "emparejada_1a1")) {
   }), offsets)
   actividad <- colSums(Reduce("+", diario)[, 1:9]) > 0
   presente <- c(actividad, actividad[1:3] | actividad[4:6])
-  panel <- cambios_panel(muestra, diario, dias_base, tramos["d0..1"])
+  panel <- cambios_panel(muestra, diario, tramos["d0..1"])
   ajuste <- estimar(muestra, "tratado", panel$y)
   for (agrupacion in names(ajuste$v)) {
     v <- ajuste$v[[agrupacion]]
@@ -1044,86 +1043,9 @@ guardar(data.frame(registros_fecha_invalida = nrow(invalidos),
                     regla = "conteo de filas publicadas con fecha valida; elegibilidad predicha hasta t-1"),
          "causal_medicion")
 
-# 11. Referencia auditada anterior para el cuadro de trazabilidad -----------
-# Esta rama conserva el calibre alrededor de la media de la fecha y exige
-# continuidad hasta +15 y aislamiento hasta +16. No selecciona el diseño final.
-
-cat("Reconstrucción de la referencia auditada\n")
-seleccionar_auditada <- function() {
-  partes <- list()
-  indices <- sort(unique(focales$inicio))
-  territoriales <- c("25001", "25006", "25010", "25011", "25017", "25019", "25020")
-  for (i in seq_along(indices)) {
-    indice <- indices[i]
-    cohorte <- focales[focales$inicio == indice, ]
-    local <- claves %in% cohorte$clave
-    derecha <- indice + 16
-    izquierda <- indice - 49
-    conocidos <- activos[activos$inicio <= derecha & activos$hasta >= izquierda, ]
-    bloqueados_t <- character()
-    for (j in seq_len(nrow(cohorte))) {
-      fila <- cohorte[j, ]
-      otro <- conocidos$id_episodio != fila$id_episodio
-      conflicto <- (conocidos$clave == fila$clave & otro) |
-        (conocidos$clave == "" & conocidos$cve_ent == fila$cve_ent & otro)
-      if (any(conflicto, na.rm = TRUE)) bloqueados_t <- c(bloqueados_t, fila$clave)
-    }
-    geografia <- unique(activos$cve_ent[activos$id_episodio %in% cohorte$id_episodio])
-    quiebre <- claves %in% territoriales & derecha >= as.Date("2024-11-01")
-    ventana <- fechas >= indice - 28 & fechas <= indice + 15
-    calendario <- sum(ventana) == 44 && izquierda >= min(fechas) && derecha <= max(fechas)
-    completa <- rowSums(continuidad[, ventana, drop = FALSE] &
-                         is.finite(valores_panel[, ventana, drop = FALSE])) == sum(ventana) & calendario
-    nivel <- rowMeans(valores_panel[, fechas >= indice - 28 & fechas < indice - 14, drop = FALSE])
-    t <- local & !claves %in% bloqueados_t & !quiebre & completa
-    c <- !local & !estados %in% geografia &
-      !claves %in% conocidos$clave[conocidos$clave != ""] &
-      !estados %in% conocidos$cve_ent[conocidos$clave == ""] & !quiebre & completa
-    if (!any(t)) next
-    razon <- (nivel + 0.5) / (mean(nivel[t]) + 0.5)
-    c <- c & !is.na(razon) & razon >= 0.5 & razon <= 2
-    if (sum(c) < min_controles || length(unique(estados[c])) < min_estados) next
-    elegidas <- t | c
-    episodio <- cohorte$id_episodio[match(claves[elegidas], cohorte$clave)]
-    episodio[is.na(episodio)] <- ""
-    partes[[i]] <- data.frame(clave = claves[elegidas], estado = estados[elegidas], indice,
-                             tratado = as.integer(t[elegidas]), id_episodio = episodio,
-                             peso = ifelse(t[elegidas], 1, sum(t) / sum(c)), pre_nivel = nivel[elegidas])
-  }
-  unir_filas(partes)
-}
-auditada <- seleccionar_auditada()
-comprobar_pesos(auditada)
-y_auditada <- extraer(auditada, 0, valores_panel) - extraer(auditada, -2, valores_panel)
-b_auditada <- estimar(auditada, "tratado", matrix(y_auditada, ncol = 1))
-stopifnot(nrow(auditada[auditada$tratado == 1, ]) == 73,
-          abs(b_auditada$b[1, 1] - 0.237468) < 0.000001)
-guardar(cbind(resumir(auditada), intervalo(b_auditada$b[1, 1], b_auditada$v$entidad[1, 1],
-                                         b_auditada$gl["entidad"])), "referencia_sin_emparejar")
-auditada <- adjuntar_covariables(auditada, auditada = TRUE)
-muchos_antes <- emparejar(auditada, individual = FALSE)
-uno_antes <- uno_a_uno(muchos_antes$muestra, muchos_antes$vinculos)
-grupos_antes <- list(emparejada = muchos_antes$muestra, emparejada_1a1 = uno_antes$muestra)
-referencia <- list()
-for (metodo in names(grupos_antes)) {
-  muestra <- grupos_antes[[metodo]]
-  horizontes <- c(-14:-3, 0:15)
-  y <- sapply(horizontes, function(h) extraer(muestra, h, valores_panel) - extraer(muestra, -2, valores_panel))
-  ajuste <- estimar(muestra, "tratado", y)
-  estatal <- intervalo(ajuste$b[, 1], diag(ajuste$v$entidad), ajuste$gl["entidad"])
-  doble <- intervalo(ajuste$b[, 1], diag(ajuste$v$entidad_fecha), ajuste$gl["entidad_fecha"])
-  referencia[[metodo]] <- cbind(data.frame(muestra = metodo, h = horizontes),
-                               resumir(muestra)[rep(1, length(horizontes)), ], estatal,
-                               ee_doble = doble$ee, gl_doble = doble$gl,
-                               ic_doble_inf = doble$ic_inf, ic_doble_sup = doble$ic_sup)
-}
-referencia <- unir_filas(referencia)
-guardar(referencia, "referencia_auditada")
-
 morelia <- list()
-for (escenario in c("auditada", "principal", "sin_senales")) {
-  enlaces <- if (escenario == "auditada") muchos_antes$vinculos else
-    vinculos_finales[vinculos_finales$escenario == escenario & vinculos_finales$muestra == "emparejada", ]
+for (escenario in c("principal", "sin_senales")) {
+  enlaces <- vinculos_finales[vinculos_finales$escenario == escenario & vinculos_finales$muestra == "emparejada", ]
   enlaces <- enlaces[enlaces$tratado_clave == "16053" & enlaces$indice == as.Date("2025-04-23"), ]
   morelia[[escenario]] <- data.frame(escenario, control_clave = enlaces$control_clave,
                                     contribucion = enlaces$contribucion)
@@ -1131,75 +1053,7 @@ for (escenario in c("auditada", "principal", "sin_senales")) {
 morelia <- unir_filas(morelia)
 guardar(morelia, "causal_morelia_donantes")
 
-# 12. Culiacán: comparación semanal estrictamente descriptiva ---------------
-# Se conserva NA por falta de continuidad; se suma Eldorado a Culiacán desde
-# noviembre de 2024. Entrenamiento -25..-10, validación -9..-3 y base -2.
-
-cat("Comparación semanal de Culiacán\n")
-inicio_culiacan <- as.Date("2024-09-09")
-semana_dia <- as.integer(floor(as.numeric(fechas - inicio_culiacan) / 7))
-semanas <- sort(unique(semana_dia))
-semanas <- semanas[semanas >= -25 & sapply(semanas, function(s) sum(semana_dia == s)) == 7]
-valores <- valores_panel
-valores[!continuidad] <- NA_real_
-c <- match("25006", claves)
-e <- match("25019", claves)
-despues <- fechas >= as.Date("2024-11-01")
-valores[c, despues] <- valores[c, despues] + valores[e, despues]
-semanal <- sapply(semanas, function(s) rowSums(valores[, semana_dia == s, drop = FALSE]))
-rm(valores)
-entrenar <- semanas >= -25 & semanas <= -10
-base_cul <- semanas == -2
-validar <- semanas > -10 & semanas < -1 & !base_cul
-post_observado <- semanas >= 0 & is.finite(semanal[c, ])
-comun <- entrenar | validar | base_cul | post_observado
-expuestos <- activos[activos$hasta >= inicio_culiacan - 25 * 7 - 21 & activos$inicio <= max(fechas), ]
-elegibles <- which(estados != "25" &
-                    !estados %in% expuestos$cve_ent[expuestos$clave == ""] &
-                    !claves %in% expuestos$clave[expuestos$clave != ""] &
-                    rowSums(is.finite(semanal[, comun, drop = FALSE])) == sum(comun))
-primera_semana <- inicio_culiacan + 7 * min(semanas[comun])
-ultima_semana <- inicio_culiacan + 7 * max(semanas[comun]) + 6
-divisiones <- cambios[cambios$codigo == "M" & cambios$fecha >= primera_semana & cambios$fecha <= ultima_semana, ]
-permitida <- !claves %in% c(divisiones$origen, divisiones$destino)
-descartadas <- claves[elegibles[!permitida[elegibles]]]
-guardar(data.frame(clave = descartadas, desde = primera_semana, hasta = ultima_semana,
-                    motivo = "segregacion_M"), "culiacan_descartes_territoriales")
-elegibles <- elegibles[permitida[elegibles]]
-
-comparar_semanal <- function(fila, universo) {
-  diferencia <- sweep(semanal[universo, entrenar, drop = FALSE], 2, semanal[fila, entrenar], "-")
-  distancia <- sqrt(rowMeans(diferencia^2))
-  elegidos <- universo[order(distancia, seq_along(universo))[1:12]]
-  control <- colMeans(semanal[elegidos, , drop = FALSE])
-  diferencia <- semanal[fila, ] - control
-  list(elegidos = elegidos, control = control, brecha = diferencia - diferencia[base_cul])
-}
-stopifnot(all(-25:-2 %in% semanas), sum(base_cul) == 1,
-          all(is.finite(semanal[c, entrenar | validar | base_cul])), length(elegibles) >= 12)
-comparacion <- comparar_semanal(c, elegibles)
-control <- comparacion$control
-control[!is.finite(semanal[c, ])] <- NA_real_
-brecha <- comparacion$brecha
-brecha[semanas == -1] <- NA_real_
-culiacan <- data.frame(semana = semanas, inicio = inicio_culiacan + 7 * semanas,
-                       tratado = semanal[c, ], control, brecha)
-placebos_cul <- list()
-for (fila in c(c, if (length(elegibles) > 12) comparacion$elegidos else integer())) {
-  placebo <- comparar_semanal(fila, elegibles[elegibles != fila])$brecha
-  placebos_cul[[length(placebos_cul) + 1]] <- data.frame(
-    clave = claves[fila], rol = if (fila == c) "tratado" else "placebo",
-    rmse_pre_validacion = sqrt(mean(placebo[validar]^2)), brecha_media_post = mean(placebo[post_observado]))
-}
-soporte_cul <- data.frame(comparadores_elegibles = length(elegibles), comparadores_usados = 12,
-                          semanas_post_observadas = sum(post_observado),
-                          semanas_post_totales = sum(semanas >= 0), estado = "comparación descriptiva")
-guardar(culiacan, "culiacan")
-guardar(unir_filas(placebos_cul), "culiacan_placebos")
-guardar(data.frame(clave = claves[comparacion$elegidos]), "culiacan_controles")
-guardar(soporte_cul, "culiacan_soporte")
-
-# 13. Tablas del reporte ---------------------------------------------------
+# 11. Tablas del reporte ---------------------------------------------------
 # Se exportan CSV legibles y tablas LaTeX a resultados_R/tablas/.
 # No compila ni modifica el escrito: estas tablas permiten consultar y cotejar
 # las cifras del apéndice sin R Markdown.
@@ -1358,20 +1212,6 @@ for (metodo in c("emparejada", "emparejada_1a1")) {
 tabla("causal_inferencia", c("Método", "Inferencia", "d0..1, IC 95\\%", "gl", "MDE"), filas)
 tabla("causal_previos", c("Método", "Agrupación", "F", "p", "Rango", "$\\kappa$", "Estado"), previos)
 
-filas <- bases <- list()
-for (metodo in c("emparejada", "emparejada_1a1")) {
-  anterior <- referencia[referencia$muestra == metodo & referencia$h == 0, ]
-  a <- obtener(metodo = metodo, escala = "niveles", tramo = "d0", base = "-2")
-  b <- obtener(metodo = metodo, escala = "niveles", tramo = "d0")
-  filas[[metodo]] <- c(nombres_metodo[metodo], formato(anterior$tratados, 0), resultado(anterior),
-                       formato(a$tratados, 0), resultado(a), resultado(b))
-  bases[[metodo]] <- c(nombres_metodo[metodo],
-                       sapply(c("-2", "tres_semanas", "wk-1"), function(base) resultado(
-                         obtener(metodo = metodo, base = base, agrupacion = "entidad_fecha"))))
-}
-tabla("causal_trazabilidad", c("Método", "T auditada", "Auditada: d0, b=-2", "T final", "Final: d0, b=-2", "Final: d0, base limpia"), filas)
-tabla("causal_bases", c("Método", "b=-2", "Tres semanas", "wk-1"), bases)
-
 filas <- list()
 for (gravedad in gravedades) {
   fila <- c(c(fatal = "Fatal", heridos = "Con heridos", danos = "Solo daños")[[gravedad]])
@@ -1438,7 +1278,7 @@ stopifnot(n == obtener()$tratados)
 tabla("causal_perdidas", c("Paso, orden jerárquico", "T restantes", "T excluidos"), filas)
 
 # Cifras que aparecen fuera de las tablas: soporte, dispersión, porcentajes,
-# estados efectivos, Wald, donantes de Morelia y semanas observadas de Culiacán.
+# estados efectivos, Wald, donantes de Morelia.
 cifras <- list()
 anotar <- function(nombre, valor, decimales = 3) {
   cifras[[nombre]] <<- data.frame(nombre, valor, decimales, impreso = formato(valor, decimales))
@@ -1447,8 +1287,7 @@ selecciones <- list(Main = obtener(), Doble = obtener(agrupacion = "entidad_fech
                     Nivel = obtener(escala = "niveles"), NivelDoble = obtener(escala = "niveles", agrupacion = "entidad_fecha"),
                     Previa = obtener(tramo = "wk-1"), PreviaDoble = obtener(tramo = "wk-1", agrupacion = "entidad_fecha"),
                     MenosDos = obtener(tramo = "-2"), MenosCinco = obtener(tramo = "-5"),
-                    CRVTres = obtener(agrupacion = "CRV3"), Placebo = obtener("placebo", agrupacion = "entidad_fecha"),
-                    BaseSemana = obtener(base = "wk-1", agrupacion = "entidad_fecha"))
+                    CRVTres = obtener(agrupacion = "CRV3"), Placebo = obtener("placebo", agrupacion = "entidad_fecha"))
 for (nombre in names(selecciones)) {
   for (campo in c("efecto", "ee", "ic_inf", "ic_sup", "p", "mde", "efecto_sigma")) {
     anotar(paste(nombre, campo, sep = "_"), selecciones[[nombre]][[campo]])
@@ -1467,19 +1306,15 @@ for (agrupacion in c("entidad", "entidad_fecha")) {
                   pruebas$restricciones == "wk-4;wk-3;wk-1" & pruebas$agrupacion == agrupacion, ]
   anotar(paste0("Wald_", agrupacion, "_p"), r$p)
 }
-for (escenario in c("auditada", "principal", "sin_senales")) anotar(paste0("Morelia_", escenario), sum(morelia$escenario == escenario), 0)
+for (escenario in c("principal", "sin_senales")) anotar(paste0("Morelia_", escenario), sum(morelia$escenario == escenario), 0)
 r <- perdidas_finales[perdidas_finales$escenario == "principal" & perdidas_finales$clave == "16053" &
                          perdidas_finales$indice == as.Date("2025-04-23"), ]
 anotar("MoreliaUniverso", r$controles_auditados, 0)
 anotar("MoreliaCalibre", r$despues_pre_nivel, 0)
-anotar("CulDonantes", soporte_cul$comparadores_usados, 0)
-anotar("CulObs", soporte_cul$semanas_post_observadas, 0)
-anotar("CulTotal", soporte_cul$semanas_post_totales, 0)
-anotar("CulBrecha", mean(culiacan$brecha[culiacan$semana >= 0], na.rm = TRUE), 2)
 guardar(unir_filas(cifras), "cifras_reporte", "tablas")
 guardar(calidad, "calidad", "tablas")
 
-# 14. Gráficas del reporte -------------------------------------------------
+# 12. Trayectoria del reporte -------------------------------------------------
 # Se guardan PDF y PNG con los datos que acaban de estimarse en R.
 # Los intervalos son del 95% con agrupación por estado y fecha.
 
@@ -1509,32 +1344,9 @@ g_dinamica <- ggplot(datos_dinamica, aes(dia_grafica, efecto, color = metodo, gr
         panel.grid.major.x = element_blank(), strip.text = element_text(face = "bold"),
         plot.title = element_text(size = 11))
 
-datos_cul <- merge(data.frame(semana = seq(min(culiacan$semana), max(culiacan$semana))),
-                    culiacan, by = "semana", all.x = TRUE, sort = TRUE)
-datos_cul$brecha[datos_cul$semana == -1] <- NA_real_
-# Un grupo nuevo tras cada hueco impide unir visualmente semanas sin cobertura.
-datos_cul$segmento <- cumsum(is.na(datos_cul$brecha))
-guardar(datos_cul, "datos_culiacan", "figuras")
-g_culiacan <- ggplot(datos_cul, aes(semana, brecha)) +
-  annotate("rect", xmin = 1.5, xmax = 6.5, ymin = -Inf, ymax = Inf, fill = "#f2e5d9") +
-  geom_hline(yintercept = 0, color = "#686d70", linewidth = 0.3) +
-  geom_vline(aes(xintercept = 0, linetype = "Inicio de la crisis"), color = "#686d70", linewidth = 0.4) +
-  geom_vline(aes(xintercept = 7, linetype = "Cambio territorial"), color = "#974421", linewidth = 0.4) +
-  geom_line(aes(group = segmento), color = "#135a76", linewidth = 0.5, na.rm = TRUE) +
-  geom_point(color = "#135a76", size = 1.4, na.rm = TRUE) +
-  scale_linetype_manual(values = c("Inicio de la crisis" = "dashed", "Cambio territorial" = "dotted")) +
-  labs(title = "Brecha descriptiva semanal de Culiacán", x = "Semana respecto al inicio local",
-       y = "Accidentes por semana", linetype = NULL,
-       caption = "Sombreado: captación en revisión (25 de septiembre a 27 de octubre de 2024)") +
-  theme_minimal(base_size = 10) +
-  theme(legend.position = "bottom", panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank(), plot.title = element_text(size = 11, face = "bold"))
-
 for (extension in c("pdf", "png")) {
   ggsave(file.path(carpeta_salida, "figuras", paste0("causal_dinamica.", extension)),
          g_dinamica, width = 7.35, height = 3.5, dpi = 150, bg = "white")
-  ggsave(file.path(carpeta_salida, "figuras", paste0("culiacan.", extension)),
-         g_culiacan, width = 7.35, height = 3.4, dpi = 150, bg = "white")
 }
 writeLines(capture.output(sessionInfo()), file.path(carpeta_salida, "sesion_R.txt"))
 cat("\nAnálisis terminado:", nrow(efectos), "estimaciones finales.\n")
