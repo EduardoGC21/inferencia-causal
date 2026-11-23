@@ -131,7 +131,7 @@ add("datos", "Contexto y datos", "La muestra reúne 77 pares tratados", 50, f"""
 """El mapa cuenta municipios únicos. La unidad es el par municipio–episodio: un municipio reaparece si participa en otra fecha. El catálogo propio exige acciones coordinadas en tres o más lugares en 24 horas. La violencia puede continuar después del inicio local. Tres agentes de inteligencia artificial asistieron la búsqueda web, con cobertura desigual y sin validación humana exhaustiva. Los accidentes y las covariables provienen de fuentes oficiales. ATUS es la Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas del Instituto Nacional de Estadística y Geografía, INEGI. Un cero indica cero registros publicados con fecha válida. El conteo tampoco mide el riesgo por viaje.""",
 "Con esta unidad, podemos buscar municipios comparables para cada inicio.", "Reporte, §2 y apéndices A, E y F. Los 3 613 pares son 77 tratados y 3 536 controles.", data)
 
-add("matching", "Estrategia empírica", "Cómo aproximamos el contrafactual", 50, """
+add("matching", "Estrategia empírica", "Cómo elegimos los controles para comparar cambios", 50, """
 <div class="matching-flow">
   <div class="match-treated">
     <span class="dot treated" aria-hidden="true"></span>

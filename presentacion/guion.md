@@ -34,7 +34,7 @@ Con esta unidad, podemos buscar municipios comparables para cada inicio.
 
 **Referencia para consulta.** Reporte, §2 y apéndices A, E y F. Los 3 613 pares son 77 tratados y 3 536 controles.
 
-## Cómo aproximamos el contrafactual
+## Cómo elegimos los controles para comparar cambios
 
 **Identificador** `matching` · **Tiempo** 1:20–2:10 (50 s)
 
