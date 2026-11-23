@@ -76,7 +76,7 @@ Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus c
 
 **Referencia para consulta.** Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.
 
-## La fecha común permite comparar cambios
+## La regresión compara cambios
 
 **Identificador** `regresion` · **Tiempo** 3:20–4:10 (50 s)
 

@@ -109,7 +109,14 @@ log = math(r"\log(1+Y)")
 m0 = math("M_0")
 base_eq = math(r"B_{ith}^{g}=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k}),\qquad"
                r"\Delta_{ith}^{g}=g(Y_{i,t+h})-B_{ith}^{g}", True)
-reg_eq = math(r"\Delta_{ith}^{g}=\lambda_{th}+\beta_h^{g}D_{it}+X_{it}^{\prime}\gamma_h+u_{ith}", True)
+reg_eq = math(
+    r"\underbrace{\Delta_{ith}^{g}}_{\text{cambio}}"
+    r"=\underbrace{\lambda_{th}}_{\text{FE de fecha}}"
+    r"+\underbrace{\color{#235ca0}{\beta_h^{g}D_{it}}}_{\text{tratamiento}}"
+    r"+\underbrace{X_{it}^{\prime}\gamma_h}_{\text{covariables}}"
+    r"+\underbrace{u_{ith}}_{\text{residuo}}",
+    True,
+)
 
 add("pregunta", "Municipios de México · 2019–2025", "¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques?", 20, """
 <canvas class="cover-art" width="1100" height="1440" role="img" aria-label="Ilustración cenital de un choque entre dos autos en un cruce"></canvas>
@@ -201,18 +208,10 @@ add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 
 """Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. Dejo fuera la semana menos uno para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local, h el día relativo y r conserva el día de la semana. Aplico logaritmo de uno más Y a cada conteo antes de promediar las tres referencias. Resto esa base del valor observado. Cada tramo promedia cambios diarios. El Día 0 puede incluir horas anteriores al inicio.""",
 "Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.", "Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.")
 
-add("regresion", "Estrategia empírica", "La fecha común permite comparar cambios", 50, f"""
-<div class="reg-contrast">
-  <p><strong>Cambio del tratado</strong><br>Valor del día menos su base</p>
-  <span class="operator">−</span>
-  <p><strong>Cambio de sus controles</strong><br>Promedio ponderado en las mismas fechas</p>
-</div>
-<div class="math-band equation-main">{reg_eq}</div>
-<dl class="reg-terms">
-  <div><dt>{math(r"\lambda_{th}")} · Fecha</dt><dd>Absorbe el cambio común de cada fecha de inicio.</dd></div>
-  <div><dt>{math(r"\beta_h^g")} · Tratamiento</dt><dd>Compara cambios según el indicador {math(r"D_{it}")}.</dd></div>
-  <div><dt>{math(r"X_{it}")} · Ajuste</dt><dd>{m0} omite covariables. {math(r"M_1\text{–}M_3")} las incorporan.</dd></div>
-</dl>""",
+add("regresion", "Estrategia empírica", "La regresión compara cambios", 50, f"""
+<div class="math-band reg-equation">{reg_eq}</div>
+<p class="reg-reading"><strong>{math(r"\beta_h^g")} mide la diferencia entre cambios.</strong></p>
+<p class="reg-models">{m0} usa tratamiento y efectos fijos (FE) de fecha. {math(r"M_1\text{–}M_3")} añaden covariables.</p>""",
 """La variable dependiente es el cambio que acabamos de construir. D vale uno para el tratado y cero para un control. Lambda es el efecto fijo de fecha: descuenta cambios comunes en esas fechas, por ejemplo, una caída general de la circulación durante la pandemia. Beta es la diferencia entre cambios. X reúne covariables previas, gamma sus coeficientes y u el residuo. La regresión usa mínimos cuadrados ponderados. En M cero, cada tratado pesa uno y distribuye una unidad de peso entre sus controles. Equivale a promediar 77 contrastes, uno por par tratado. M uno añade logaritmo de población, M dos empleo por mil habitantes y M tres autos por mil. La muestra y los pesos explícitos se conservan.""",
 "Veamos las trayectorias que dan origen a ese contraste.", "Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.")
 

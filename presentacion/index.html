@@ -129,19 +129,11 @@
 </section>
 <section id="regresion" class="main " data-timing="50">
   <div class="slide-surface">
-    <header><p class="eyebrow">Estrategia empírica</p><h2>La fecha común permite comparar cambios</h2></header>
+    <header><p class="eyebrow">Estrategia empírica</p><h2>La regresión compara cambios</h2></header>
 
-<div class="reg-contrast">
-  <p><strong>Cambio del tratado</strong><br>Valor del día menos su base</p>
-  <span class="operator">−</span>
-  <p><strong>Cambio de sus controles</strong><br>Promedio ponderado en las mismas fechas</p>
-</div>
-<div class="math-band equation-main"><span class="equation" data-tex="\Delta_{ith}^{g}=\lambda_{th}+\beta_h^{g}D_{it}+X_{it}^{\prime}\gamma_h+u_{ith}"></span></div>
-<dl class="reg-terms">
-  <div><dt><span data-tex="\lambda_{th}"></span> · Fecha</dt><dd>Absorbe el cambio común de cada fecha de inicio.</dd></div>
-  <div><dt><span data-tex="\beta_h^g"></span> · Tratamiento</dt><dd>Compara cambios según el indicador <span data-tex="D_{it}"></span>.</dd></div>
-  <div><dt><span data-tex="X_{it}"></span> · Ajuste</dt><dd><span data-tex="M_0"></span> omite covariables. <span data-tex="M_1\text{–}M_3"></span> las incorporan.</dd></div>
-</dl>
+<div class="math-band reg-equation"><span class="equation" data-tex="\underbrace{\Delta_{ith}^{g}}_{\text{cambio}}=\underbrace{\lambda_{th}}_{\text{FE de fecha}}+\underbrace{\color{#235ca0}{\beta_h^{g}D_{it}}}_{\text{tratamiento}}+\underbrace{X_{it}^{\prime}\gamma_h}_{\text{covariables}}+\underbrace{u_{ith}}_{\text{residuo}}"></span></div>
+<p class="reg-reading"><strong><span data-tex="\beta_h^g"></span> mide la diferencia entre cambios.</strong></p>
+<p class="reg-models"><span data-tex="M_0"></span> usa tratamiento y efectos fijos (FE) de fecha. <span data-tex="M_1\text{–}M_3"></span> añaden covariables.</p>
 
 
   </div>
