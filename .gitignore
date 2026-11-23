@@ -8,3 +8,5 @@ reporte/*.blg
 reporte/*.out
 reporte/*.fls
 reporte/*.fdb_latexmk
+reporte/*.bcf
+reporte/*.run.xml

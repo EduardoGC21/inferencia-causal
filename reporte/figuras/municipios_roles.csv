@@ -1,0 +1,773 @@
+clave,municipio,tratado,control
+01001,Aguascalientes,True,True
+01002,Asientos,True,True
+01003,Calvillo,False,True
+01004,Cosío,True,True
+01005,Jesús María,True,True
+01006,Pabellón de Arteaga,False,True
+01007,Rincón de Romos,True,True
+01010,El Llano,False,True
+01011,San Francisco de los Romo,True,False
+02003,Tecate,True,True
+02004,Tijuana,False,True
+02005,Playas de Rosarito,True,True
+03001,Comondú,False,True
+03002,Mulegé,False,True
+03008,Los Cabos,False,True
+04002,Campeche,False,True
+04003,Carmen,False,True
+04004,Champotón,False,True
+04005,Hecelchakán,False,True
+04006,Hopelchén,False,True
+04008,Tenabo,False,True
+04009,Escárcega,False,True
+04010,Calakmul,False,True
+04011,Candelaria,False,True
+04012,Seybaplaya,False,True
+05002,Acuña,False,True
+05003,Allende,False,True
+05006,Castaños,False,True
+05007,Cuatro Ciénegas,False,True
+05009,Francisco I. Madero,False,True
+05010,Frontera,False,True
+05017,Matamoros,False,True
+05018,Monclova,False,True
+05019,Morelos,False,True
+05020,Múzquiz,False,True
+05021,Nadadores,False,True
+05022,Nava,False,True
+05024,Parras,False,True
+05025,Piedras Negras,False,True
+05028,Sabinas,False,True
+05030,Saltillo,False,True
+05031,San Buenaventura,False,True
+05032,San Juan de Sabinas,False,True
+05033,San Pedro,False,True
+05035,Torreón,False,True
+05037,Villa Unión,True,False
+06001,Armería,False,True
+06002,Colima,True,True
+06003,Comala,False,True
+06004,Coquimatlán,False,True
+06005,Cuauhtémoc,False,True
+06006,Ixtlahuacán,False,True
+06007,Manzanillo,False,True
+06009,Tecomán,False,True
+06010,Villa de Álvarez,False,True
+07002,Acala,False,True
+07009,Arriaga,False,True
+07015,Cacahoatán,False,True
+07017,Cintalapa de Figueroa,False,True
+07019,Comitán de Domínguez,False,True
+07021,Copainalá,False,True
+07027,Chiapa de Corzo,False,True
+07037,Huehuetán,False,True
+07040,Huixtla,False,True
+07048,Juárez,False,True
+07061,Ocozocoautla de Espinosa,False,True
+07065,Palenque,False,True
+07068,Pichucalco,False,True
+07078,San Cristóbal de las Casas,False,True
+07086,Suchiapa,False,True
+07087,Suchiate,False,True
+07089,Tapachula,False,True
+07097,Tonalá,False,True
+07101,Tuxtla Gutiérrez,False,True
+07107,Villa Corzo,False,True
+07108,Villaflores,False,True
+08001,Ahumada,False,True
+08002,Aldama,False,True
+08003,Allende,False,True
+08004,Aquiles Serdán,False,True
+08005,Ascensión,False,True
+08009,Bocoyna,False,True
+08010,Buenaventura,False,True
+08011,Camargo,False,True
+08013,Casas Grandes,False,True
+08017,Cuauhtémoc,False,True
+08019,Chihuahua,False,True
+08021,Delicias,False,True
+08027,Guachochi,False,True
+08031,Guerrero,False,True
+08032,Hidalgo del Parral,False,True
+08035,Janos,False,True
+08036,Jiménez,False,True
+08037,Juárez,False,True
+08038,Julimes,False,True
+08039,López,False,True
+08040,Madera,False,True
+08045,Meoqui,False,True
+08048,Namiquipa,False,True
+08050,Nuevo Casas Grandes,False,True
+08060,Santa Bárbara,False,True
+08062,Saucillo,False,True
+09005,Gustavo A. Madero,False,True
+09006,Iztacalco,False,True
+09008,La Magdalena Contreras,False,True
+09009,Milpa Alta,False,True
+09012,Tlalpan,False,True
+10001,Canatlán,False,True
+10004,Cuencamé,False,True
+10005,Durango,False,True
+10007,Gómez Palacio,False,True
+10008,Guadalupe Victoria,False,True
+10012,Lerdo,False,True
+10013,Mapimí,False,True
+10015,Nazas,False,True
+10016,Nombre de Dios,False,True
+10017,Ocampo,False,True
+10018,El Oro,False,True
+10020,Pánuco de Coronado,False,True
+10021,Peñón Blanco,False,True
+10022,Poanas,False,True
+10023,Pueblo Nuevo,False,True
+10024,Rodeo,False,True
+10028,San Juan del Río,False,True
+10032,Santiago Papasquiaro,False,True
+10035,Tepehuanes,False,True
+10036,Tlahualilo,False,True
+10038,Vicente Guerrero,False,True
+10039,Nuevo Ideal,False,True
+11001,Abasolo,True,True
+11002,Acámbaro,False,True
+11003,San Miguel de Allende,False,True
+11004,Apaseo el Alto,False,True
+11005,Apaseo el Grande,True,True
+11007,Celaya,True,True
+11008,Manuel Doblado,False,True
+11009,Comonfort,False,True
+11010,Coroneo,False,True
+11011,Cortazar,True,True
+11012,Cuerámaro,False,True
+11013,Doctor Mora,False,True
+11014,Dolores Hidalgo Cuna de la Independencia Nacional,False,True
+11015,Guanajuato,False,True
+11016,Huanímaro,False,True
+11017,Irapuato,True,True
+11018,Jaral del Progreso,False,True
+11019,Jerécuaro,False,True
+11020,León,False,True
+11021,Moroleón,False,True
+11022,Ocampo,False,True
+11023,Pénjamo,True,True
+11024,Pueblo Nuevo,False,True
+11025,Purísima del Rincón,True,True
+11026,Romita,False,True
+11027,Salamanca,True,True
+11028,Salvatierra,False,True
+11029,San Diego de la Unión,False,True
+11030,San Felipe,False,True
+11031,San Francisco del Rincón,False,True
+11032,San José de Iturbide,False,True
+11033,San Luis de la Paz,False,True
+11035,Santa Cruz de Juventino Rosas,True,True
+11037,Silao de la Victoria,True,True
+11038,Tarandacuao,False,True
+11039,Tarimoro,False,True
+11041,Uriangato,False,True
+11042,Valle de Santiago,False,True
+11043,Victoria,False,True
+11044,Villagrán,True,True
+11046,Yuriria,False,True
+12001,Acapulco de Juárez,False,True
+12007,Arcelia,False,True
+12011,Atoyac de Álvarez,False,True
+12021,Coyuca de Benítez,False,True
+12028,Chilapa de Álvarez,False,True
+12029,Chilpancingo de los Bravo,False,True
+12033,Huamuxtitlán,False,True
+12034,Huitzuco de los Figueroa,False,True
+12035,Iguala de la Independencia,False,True
+12038,Zihuatanejo de Azueta,False,True
+12039,Juan R. Escudero,False,True
+12045,Olinalá,False,True
+12046,Ometepec,False,True
+12048,Petatlán,False,True
+12052,San Luis Acatlán,False,True
+12055,Taxco de Alarcón,False,True
+12057,Técpan de Galeana,False,True
+12058,Teloloapan,False,True
+12059,Tepecoacuilco de Trujano,False,True
+12061,Tixtla de Guerrero,False,True
+12066,Tlapa de Comonfort,False,True
+12075,Eduardo Neri,False,True
+12077,Marquelia,False,True
+13006,Alfajayucan,False,True
+13008,Apan,False,True
+13010,Atitalaquia,False,True
+13012,Atotonilco el Grande,False,True
+13021,Emiliano Zapata,False,True
+13028,Huejutla de Reyes,False,True
+13029,Huichapan,False,True
+13048,Pachuca de Soto,False,True
+13050,Progreso de Obregón,False,True
+13051,Mineral de la Reforma,False,True
+13052,San Agustín Tlaxiaca,False,True
+13056,Santiago Tulantepec de Lugo Guerrero,False,True
+13059,Tecozautla,False,True
+13061,Tepeapulco,False,True
+13063,Tepeji del Río de Ocampo,False,True
+13069,Tizayuca,False,True
+13076,Tula de Allende,False,True
+13077,Tulancingo de Bravo,False,True
+13081,Zacualtipán de Ángeles,False,True
+13083,Zempoala,False,True
+13084,Zimapán,False,True
+14001,Acatic,False,True
+14002,Acatlán de Juárez,False,True
+14005,Amatitán,False,True
+14008,Arandas,False,True
+14009,El Arenal,False,True
+14013,Atotonilco el Alto,False,True
+14015,Autlán de Navarro,False,True
+14016,Ayotlán,False,True
+14018,La Barca,False,True
+14019,Bolaños,False,True
+14021,Casimiro Castillo,False,True
+14023,Zapotlán el Grande,False,True
+14024,Cocula,False,True
+14025,Colotlán,False,True
+14030,Chapala,False,True
+14033,Degollado,False,True
+14035,Encarnación de Díaz,False,True
+14037,El Grullo,False,True
+14039,Guadalajara,False,True
+14044,Ixtlahuacán de los Membrillos,False,True
+14045,Ixtlahuacán del Río,True,True
+14046,Jalostotitlán,False,True
+14050,Jocotepec,False,True
+14053,Lagos de Moreno,False,True
+14055,Magdalena,False,True
+14058,Mascota,False,True
+14063,Ocotlán,False,True
+14066,Poncitlán,False,True
+14070,El Salto,False,True
+14073,San Juan de los Lagos,False,True
+14077,San Martín Hidalgo,False,True
+14078,San Miguel el Alto,False,True
+14079,Gómez Farías,False,True
+14082,Sayula,False,True
+14083,Tala,False,True
+14086,Tapalpa,False,True
+14091,Teocaltiche,False,True
+14092,Teocuitatlán de Corona,False,True
+14093,Tepatitlán de Morelos,False,True
+14094,Tequila,False,True
+14097,Tlajomulco de Zúñiga,False,True
+14098,San Pedro Tlaquepaque,False,True
+14105,Tototlán,False,True
+14108,Tuxpan,False,True
+14109,Unión de San Antonio,False,True
+14113,San Gabriel,False,True
+14114,Villa Corona,False,True
+14118,Yahualica de González Gallo,False,True
+14119,Zacoalco de Torres,False,True
+14120,Zapopan,False,True
+14121,Zapotiltic,False,True
+14124,Zapotlanejo,False,True
+14125,San Ignacio Cerro Gordo,False,True
+15001,Acambay de Ruíz Castañeda,False,True
+15002,Acolman,False,True
+15003,Aculco,False,True
+15007,Amanalco,False,True
+15009,Amecameca,False,True
+15013,Atizapán de Zaragoza,False,True
+15014,Atlacomulco,False,True
+15015,Atlautla,False,True
+15018,Calimaya,False,True
+15021,Coatepec Harinas,False,True
+15024,Cuautitlán,False,True
+15025,Chalco,False,True
+15032,Donato Guerra,False,True
+15033,Ecatepec de Morelos,False,True
+15035,Huehuetoca,False,True
+15037,Huixquilucan,False,True
+15040,Ixtapan de la Sal,False,True
+15042,Ixtlahuaca,False,True
+15043,Xalatlaco,False,True
+15045,Jilotepec,False,True
+15048,Jocotitlán,False,True
+15049,Joquicingo,False,True
+15051,Lerma,False,True
+15052,Malinalco,False,True
+15054,Metepec,False,True
+15056,Morelos,False,True
+15060,Nicolás Romero,False,True
+15062,Ocoyoacac,False,True
+15063,Ocuilan,False,True
+15064,El Oro,False,True
+15067,Otzolotepec,False,True
+15071,Polotitlán,False,True
+15072,Rayón,False,True
+15073,San Antonio la Isla,False,True
+15074,San Felipe del Progreso,False,True
+15076,San Mateo Atenco,False,True
+15079,Soyaniquilpan de Juárez,False,True
+15082,Tejupilco,False,True
+15085,Temascalcingo,False,True
+15087,Temoaya,False,True
+15088,Tenancingo,False,True
+15090,Tenango del Valle,False,True
+15094,Tepetlixpa,False,True
+15095,Tepotzotlán,False,True
+15101,Tianguistenco,False,True
+15104,Tlalnepantla de Baz,False,True
+15106,Toluca,False,True
+15107,Tonatico,False,True
+15108,Tultepec,False,True
+15109,Tultitlán,False,True
+15110,Valle de Bravo,False,True
+15111,Villa de Allende,False,True
+15112,Villa del Carbón,False,True
+15113,Villa Guerrero,False,True
+15118,Zinacantepec,False,True
+16001,Acuitzio,False,True
+16004,Angamacutiro,False,True
+16006,Apatzingán,True,True
+16009,Ario,False,True
+16010,Arteaga,False,True
+16012,Buenavista,True,True
+16013,Carácuaro,False,True
+16015,Coalcomán de Vázquez Pallares,False,True
+16016,Coeneo,False,True
+16017,Contepec,True,False
+16020,Cuitzeo,False,True
+16023,Chavinda,False,True
+16024,Cherán,False,True
+16025,Chilchota,True,True
+16028,Churintzio,True,False
+16030,Ecuandureo,False,True
+16033,Gabriel Zamora,False,True
+16034,Hidalgo,False,True
+16036,Huandacareo,False,True
+16038,Huetamo,False,True
+16040,Indaparapeo,False,True
+16043,Jacona,False,True
+16044,Jiménez,False,True
+16045,Jiquilpan,False,True
+16050,Maravatío,True,True
+16052,Lázaro Cárdenas,False,True
+16053,Morelia,True,True
+16054,Morelos,False,True
+16055,Múgica,False,True
+16058,Nuevo Parangaricutiro,False,True
+16059,Nuevo Urecho,False,True
+16060,Numarán,False,True
+16062,Pajacuarán,False,True
+16063,Panindícuaro,False,True
+16064,Parácuaro,True,False
+16065,Paracho,False,True
+16066,Pátzcuaro,True,True
+16068,Peribán,False,True
+16069,La Piedad,True,True
+16070,Purépero,False,True
+16071,Puruándiro,False,True
+16072,Queréndaro,False,True
+16074,Cojumatlán de Régules,False,True
+16075,Los Reyes,False,True
+16076,Sahuayo,False,True
+16077,San Lucas,False,True
+16079,Salvador Escalante,False,True
+16082,Tacámbaro,False,True
+16083,Tancítaro,False,True
+16084,Tangamandapio,True,False
+16085,Tangancícuaro,False,True
+16086,Tanhuato,False,True
+16087,Taretan,False,True
+16089,Tepalcatepec,False,True
+16090,Tingambato,False,True
+16092,Tiquicheo de Nicolás Romero,False,True
+16093,Tlalpujahua,False,True
+16094,Tlazazalca,False,True
+16095,Tocumbo,False,True
+16098,Tuxpan,False,True
+16099,Tuzantla,False,True
+16100,Tzintzuntzan,False,True
+16102,Uruapan,True,True
+16104,Villamar,False,True
+16106,Yurécuaro,False,True
+16107,Zacapu,True,True
+16108,Zamora,False,True
+16110,Zinapécuaro,False,True
+16112,Zitácuaro,False,True
+16113,José Sixto Verduzco,False,True
+17001,Amacuzac,False,True
+17002,Atlatlahucan,False,True
+17003,Axochiapan,False,True
+17004,Ayala,False,True
+17006,Cuautla,False,True
+17008,Emiliano Zapata,False,True
+17009,Huitzilac,False,True
+17010,Jantetelco,False,True
+17011,Jiutepec,False,True
+17012,Jojutla,False,True
+17013,Jonacatepec de Leandro Valle,False,True
+17014,Mazatepec,False,True
+17015,Miacatlán,False,True
+17017,Puente de Ixtla,False,True
+17018,Temixco,False,True
+17019,Tepalcingo,False,True
+17020,Tepoztlán,False,True
+17021,Tetecala,False,True
+17023,Tlalnepantla,False,True
+17024,Tlaltizapán de Zapata,False,True
+17025,Tlaquiltenango,False,True
+17026,Tlayacapan,False,True
+17028,Xochitepec,False,True
+17029,Yautepec,False,True
+17030,Yecapixtla,False,True
+17031,Zacatepec,False,True
+17032,Zacualpan de Amilpas,False,True
+18001,Acaponeta,False,True
+18002,Ahuacatlán,False,True
+18003,Amatlán de Cañas,False,True
+18004,Compostela,False,True
+18006,Ixtlán del Río,False,True
+18007,Jala,False,True
+18008,Xalisco,False,True
+18010,Rosamorada,False,True
+18011,Ruiz,False,True
+18012,San Blas,True,True
+18013,San Pedro Lagunillas,False,True
+18014,Santa María del Oro,False,True
+18015,Santiago Ixcuintla,True,True
+18016,Tecuala,False,True
+18017,Tepic,False,True
+18018,Tuxpan,False,True
+18020,Bahía de Banderas,False,True
+19005,Anáhuac,False,True
+19006,Apodaca,False,True
+19009,Cadereyta Jiménez,False,True
+19010,El Carmen,False,True
+19012,Ciénega de Flores,False,True
+19013,China,False,True
+19014,Doctor Arroyo,False,True
+19017,Galeana,False,True
+19021,General Escobedo,False,True
+19022,General Terán,False,True
+19025,General Zuazua,False,True
+19026,Guadalupe,False,True
+19029,Hualahuises,True,False
+19033,Linares,True,True
+19038,Montemorelos,False,True
+19041,Pesquería,False,True
+19044,Sabinas Hidalgo,False,True
+19047,Hidalgo,False,True
+19048,Santa Catarina,False,True
+19051,Villaldama,False,True
+20005,Asunción Ixtaltepec,False,True
+20006,Asunción Nochixtlán,False,True
+20014,Ciudad Ixtepec,False,True
+20023,Cuilápam de Guerrero,False,True
+20028,Heroica Ciudad de Ejutla de Crespo,False,True
+20039,Heroica Ciudad de Huajuapan de León,False,True
+20043,Heroica Ciudad de Juchitán de Zaragoza,False,True
+20044,Loma Bonita,False,True
+20057,Matías Romero Avendaño,False,True
+20059,Heroica Ciudad de Miahuatlán de Porfirio Díaz,False,True
+20067,Oaxaca de Juárez,False,True
+20068,Ocotlán de Morelos,False,True
+20079,Salina Cruz,False,True
+20083,San Agustín de las Juntas,False,True
+20091,San Andrés Huayápam,False,True
+20107,San Antonio de la Cal,False,True
+20115,San Bartolo Coyotepec,False,True
+20150,San Francisco Telixtlahuaca,False,True
+20174,Ánimas Trujano,False,True
+20177,San Juan Bautista Cuicatlán,False,True
+20184,San Juan Bautista Tuxtepec,False,True
+20293,San Pablo Etla,False,True
+20295,San Pablo Huixtepec,False,True
+20298,San Pablo Villa de Mitla,False,True
+20318,San Pedro Mixtepec,False,True
+20324,San Pedro Pochutla,False,True
+20350,San Sebastián Tutla,False,True
+20375,Santa Cruz Amilpas,False,True
+20385,Santa Cruz Xoxocotlán,False,True
+20390,Santa Lucía del Camino,False,True
+20397,Heroica Ciudad de Tlaxiaco,False,True
+20399,Santa María Atzompa,False,True
+20413,Santa María Huatulco,False,True
+20483,Santiago Suchilquitongo,False,True
+20515,Santo Domingo Tehuantepec,False,True
+20551,Tlacolula de Matamoros,False,True
+20553,Tlalixtac de Cabrera,False,True
+20565,Villa de Zaachila,False,True
+20570,Zimatlán de Álvarez,False,True
+21003,Acatlán,False,True
+21015,Amozoc,False,True
+21019,Atlixco,False,True
+21034,Coronango,False,True
+21041,Cuautlancingo,False,True
+21045,Chalchicomula de Sesma,False,True
+21051,Chietla,False,True
+21071,Huauchinango,False,True
+21074,Huejotzingo,False,True
+21076,Hueytamalco,False,True
+21085,Izúcar de Matamoros,False,True
+21090,Juan C. Bonilla,False,True
+21106,Ocoyucan,False,True
+21114,Puebla,False,True
+21119,San Andrés Cholula,False,True
+21132,San Martín Texmelucan,False,True
+21140,San Pedro Cholula,False,True
+21153,Tecali de Herrera,False,True
+21154,Tecamachalco,False,True
+21156,Tehuacán,False,True
+21164,Tepeaca,False,True
+21169,Tepexi de Rodríguez,False,True
+21174,Teziutlán,False,True
+21186,Tlatlauquitepec,False,True
+21197,Xicotepec,False,True
+21207,Zacapoaxtla,False,True
+21208,Zacatlán,False,True
+21211,Zaragoza,False,True
+22001,Amealco de Bonfil,False,True
+22002,Pinal de Amoles,False,True
+22004,Cadereyta de Montes,False,True
+22005,Colón,False,True
+22006,Corregidora,False,True
+22007,Ezequiel Montes,False,True
+22008,Huimilpan,False,True
+22009,Jalpan de Serra,False,True
+22011,El Marqués,False,True
+22012,Pedro Escobedo,False,True
+22014,Querétaro,False,True
+22015,San Joaquín,False,True
+22016,San Juan del Río,False,True
+22017,Tequisquiapan,False,True
+22018,Tolimán,False,True
+23001,Cozumel,False,True
+23002,Felipe Carrillo Puerto,False,True
+23004,Othón P. Blanco,False,True
+23005,Benito Juárez,False,True
+23006,José María Morelos,False,True
+23007,Lázaro Cárdenas,False,True
+23008,Playa del Carmen,False,True
+23009,Tulum,False,True
+23010,Bacalar,False,True
+23011,Puerto Morelos,False,True
+24007,Cedral,False,True
+24008,Cerritos,False,True
+24011,Ciudad Fernández,False,True
+24013,Ciudad Valles,False,True
+24015,Charcas,False,True
+24016,Ebano,False,True
+24020,Matehuala,False,True
+24024,Rioverde,False,True
+24025,Salinas,False,True
+24028,San Luis Potosí,False,True
+24032,Santa María del Río,False,True
+24035,Soledad de Graciano Sánchez,False,True
+24037,Tamazunchale,False,True
+24040,Tamuín,False,True
+24050,Villa de Reyes,False,True
+25001,Ahome,True,True
+25002,Angostura,False,True
+25003,Badiraguato,False,True
+25004,Concordia,False,True
+25005,Cosalá,False,True
+25006,Culiacán,True,True
+25007,Choix,False,True
+25008,Elota,False,True
+25009,Escuinapa,False,True
+25010,El Fuerte,False,True
+25011,Guasave,False,True
+25012,Mazatlán,True,True
+25013,Mocorito,False,True
+25014,Rosario,False,True
+25015,Salvador Alvarado,False,True
+25016,San Ignacio,False,True
+25017,Sinaloa,False,True
+25018,Navolato,False,True
+26002,Agua Prieta,False,True
+26003,Álamos,False,True
+26004,Altar,False,True
+26012,Bácum,False,True
+26017,Caborca,True,True
+26018,Cajeme,False,True
+26023,Cumpas,False,True
+26025,Empalme,False,True
+26026,Etchojoa,False,True
+26027,Fronteras,False,True
+26029,Guaymas,False,True
+26030,Hermosillo,False,True
+26033,Huatabampo,False,True
+26035,Imuris,False,True
+26036,Magdalena,False,True
+26038,Moctezuma,False,True
+26042,Navojoa,False,True
+26043,Nogales,False,True
+26048,Puerto Peñasco,False,True
+26051,Rosario,False,True
+26055,San Luis Río Colorado,False,True
+26066,Ures,False,True
+26070,General Plutarco Elías Calles,False,True
+26071,Benito Juárez,False,True
+26072,San Ignacio Río Muerto,False,True
+27001,Balancán,False,True
+27002,Cárdenas,True,True
+27003,Centla,False,True
+27004,Centro,True,True
+27005,Comalcalco,False,True
+27006,Cunduacán,False,True
+27007,Emiliano Zapata,False,True
+27008,Huimanguillo,False,True
+27009,Jalapa,False,True
+27010,Jalpa de Méndez,False,True
+27012,Macuspana,False,True
+27014,Paraíso,False,True
+27016,Teapa,False,True
+27017,Tenosique,False,True
+28002,Aldama,False,True
+28003,Altamira,False,True
+28009,Ciudad Madero,False,True
+28011,Gómez Farías,False,True
+28012,González,False,True
+28013,Güémez,False,True
+28017,Jaumave,False,True
+28018,Jiménez,False,True
+28019,Llera,False,True
+28021,El Mante,False,True
+28022,Matamoros,True,True
+28025,Miguel Alemán,False,True
+28027,Nuevo Laredo,True,True
+28029,Ocampo,False,True
+28030,Padilla,False,True
+28032,Reynosa,True,True
+28033,Río Bravo,False,True
+28035,San Fernando,True,True
+28037,Soto la Marina,False,True
+28038,Tampico,False,True
+28039,Tula,False,True
+28040,Valle Hermoso,False,True
+28041,Victoria,False,True
+28043,Xicoténcatl,False,True
+29005,Apizaco,False,True
+29006,Calpulalpan,False,True
+29010,Chiautempan,False,True
+29013,Huamantla,False,True
+29015,Ixtacuixtla de Mariano Matamoros,False,True
+29017,Mazatecochco de José María Morelos,False,True
+29025,San Pablo del Monte,False,True
+29031,Tetla de la Solidaridad,False,True
+29033,Tlaxcala,False,True
+29034,Tlaxco,False,True
+29036,Totolac,False,True
+29039,Xaloztoc,False,True
+29041,Papalotla de Xicohténcatl,False,True
+29043,Yauhquemehcan,False,True
+29044,Zacatelco,False,True
+30003,Acayucan,False,True
+30010,Altotonga,False,True
+30011,Alvarado,False,True
+30013,Naranjos Amatlán,False,True
+30014,Amatlán de los Reyes,False,True
+30015,Angel R. Cabada,False,True
+30016,La Antigua,False,True
+30021,Atoyac,False,True
+30026,Banderilla,False,True
+30028,Boca del Río,False,True
+30030,Camerino Z. Mendoza,False,True
+30032,Catemaco,False,True
+30033,Cazones de Herrera,False,True
+30034,Cerro Azul,False,True
+30038,Coatepec,False,True
+30039,Coatzacoalcos,False,True
+30040,Coatzintla,False,True
+30044,Córdoba,False,True
+30045,Cosamaloapan de Carpio,False,True
+30048,Cosoleacaque,False,True
+30059,Chinameca,False,True
+30061,Las Choapas,False,True
+30065,Emiliano Zapata,False,True
+30068,Fortín,False,True
+30071,Huatusco,False,True
+30077,Isla,False,True
+30081,Ixhuatlancillo,False,True
+30085,Ixtaczoquitlán,False,True
+30087,Xalapa,False,True
+30089,Jáltipan,False,True
+30092,Xico,False,True
+30094,Juan Rodríguez Clara,False,True
+30100,Manlio Fabio Altamirano,False,True
+30102,Martínez de la Torre,False,True
+30105,Medellín de Bravo,False,True
+30108,Minatitlán,False,True
+30109,Misantla,False,True
+30112,Naolinco,False,True
+30115,Nogales,False,True
+30116,Oluta,False,True
+30118,Orizaba,False,True
+30123,Pánuco,False,True
+30124,Papantla,False,True
+30125,Paso del Macho,False,True
+30128,Perote,False,True
+30131,Poza Rica de Hidalgo,False,True
+30133,Pueblo Viejo,False,True
+30138,Río Blanco,False,True
+30141,San Andrés Tuxtla,False,True
+30148,Soledad de Doblado,False,True
+30155,Tantoyuca,False,True
+30160,Álamo Temapache,False,True
+30161,Tempoal,False,True
+30164,Teocelo,False,True
+30174,Tierra Blanca,False,True
+30175,Tihuatlán,False,True
+30181,Tlalixcoyan,False,True
+30182,Tlalnelhuayocan,False,True
+30183,Tlapacoyan,False,True
+30189,Tuxpan,False,True
+30191,Ursulo Galván,False,True
+30193,Veracruz,False,True
+30201,Zongolica,False,True
+30204,Agua Dulce,False,True
+30206,Nanchital de Lázaro Cárdenas del Río,False,True
+30207,Tres Valles,False,True
+31002,Acanceh,False,True
+31006,Buctzotz,False,True
+31009,Cansahcab,False,True
+31013,Conkal,False,True
+31020,Chicxulub Pueblo,False,True
+31027,Dzidzantún,False,True
+31029,Dzilam González,False,True
+31032,Espita,False,True
+31038,Hunucmá,False,True
+31039,Ixil,False,True
+31040,Izamal,False,True
+31041,Kanasín,False,True
+31048,Maxcanú,False,True
+31050,Mérida,False,True
+31052,Motul,False,True
+31053,Muna,False,True
+31056,Oxkutzcab,False,True
+31058,Peto,False,True
+31059,Progreso,False,True
+31062,Sacalum,False,True
+31076,Tecoh,False,True
+31079,Tekax,False,True
+31089,Ticul,False,True
+31093,Tixkokob,False,True
+31096,Tizimín,False,True
+31101,Umán,False,True
+31102,Valladolid,False,True
+32005,Calera,True,True
+32010,Fresnillo,True,True
+32014,General Francisco R. Murguía,False,True
+32017,Guadalupe,False,True
+32019,Jalpa,False,True
+32020,Jerez,False,True
+32022,Juan Aldama,False,True
+32023,Juchipila,False,True
+32024,Loreto,False,True
+32029,Miguel Auza,False,True
+32034,Nochistlán de Mejía,False,True
+32036,Ojocaliente,False,True
+32039,Río Grande,False,True
+32042,Sombrerete,True,True
+32048,Tlaltenango de Sánchez Román,False,True
+32049,Valparaíso,False,True
+32051,Villa de Cos,False,True
+32052,Villa García,False,True
+32055,Villanueva,True,True
+32056,Zacatecas,True,True
