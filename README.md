@@ -4,7 +4,7 @@
 
 Se incorporaron las 21 propuestas aprobadas en Markdown. El cuerpo ocupa siete
 páginas a 11 puntos; las referencias están en la página 8 y los apéndices en
-las páginas 9–22. La selección de tratados y controles se identifica como
+las páginas 9–49. La selección de tratados y controles se identifica como
 matching 1:muchos o 1:1. Las cifras de los modelos se conservan.
 
 Para trasladar una nueva versión aprobada del Markdown a LaTeX, desde este
@@ -19,6 +19,26 @@ Estos comandos solo actualizan el escrito; no ejecutan estimaciones ni el
 flujo completo. La compilación utiliza Biber y conserva idénticos `main.pdf`
 y `reporte.pdf`. Las figuras locales están en `reporte/figuras/`.
 `codigo_R/analisis.R`, ya incorporado a main, se conserva sin cambios.
+
+El apéndice H (pp. 23–49) incorpora las 1 465 líneas de ese archivo R, con
+números de línea. Una ejecución nueva desde el ZIP de datos limpios reprodujo
+los 22 productos cotejados con tolerancia absoluta de 1e-6 y las 18 tablas a
+la precisión impresa. El [registro del cotejo](reporte/verificacion/reproduccion-r.json)
+incluye huellas del código, insumos y resultados Python de referencia.
+
+El código está en este [repositorio](https://github.com/EduardoGC21/inferencia-causal).
+La [carpeta de entrega de datos](https://drive.google.com/drive/folders/19fPf9UVt5Vdm-h2LiM2sBdD9erg0qItu?usp=sharing)
+es el destino indicado para `datos_limpios_R.zip` y los demás datos del proyecto.
+Tras descargar y descomprimir ese ZIP, instalar `data.table`, `R.utils` y
+`ggplot2` y ejecutar desde la raíz del repositorio:
+
+```powershell
+Rscript --vanilla codigo_R/analisis.R RUTA/datos_limpios_R RUTA/resultados_R
+```
+
+R reconstruye el análisis desde datos limpios; la obtención y limpieza siguen
+en Python. Las salidas históricas adicionales del archivo R, incluida la
+comparación semanal de Culiacán, permanecen fuera de los resultados del reporte.
 
 La [verificación editorial](reporte/verificacion/revision-editorial.json)
 identifica el PDF final. Los manifiestos de reproducción analítica anteriores
@@ -35,7 +55,8 @@ que contiene `0335513`. T08 queda fuera del alcance.
 El escrito identifica a Eduardo Garcia Cortez, clave única 207480, y al profesor
 Mauricio Romero. La [verificación del syllabus](reporte/cumplimiento-syllabus.md)
 localiza las cinco secciones obligatorias y sus evidencias: siete páginas de
-cuerpo, una de referencias APA y catorce de apéndices (22 en total), con fuente de 11 puntos.
+cuerpo, una de referencias APA y 41 de apéndices (49 en total), con fuente de 11 puntos
+en el cuerpo y de 9 puntos en el listado de código.
 Los párrafos se alinean a la izquierda, sin justificación ni sangría inicial.
 El apéndice incluye el mapa de municipios tratados y controles.
 El reporte se concentra en jornadas extensas con inicio local definido.

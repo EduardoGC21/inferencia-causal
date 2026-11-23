@@ -30,7 +30,7 @@ def run():
     clean_repo = clean / "repo"
     out = root / "data" / "outputs" / "qa"
     out.mkdir(parents=True, exist_ok=True)
-    for directory in ("repo/config", "repo/tests", "tasks", "repo/src"):
+    for directory in ("repo/config", "repo/tests", "tasks", "repo/src", "repo/codigo_R"):
         shutil.copytree(root / directory, clean / directory,
                         ignore=shutil.ignore_patterns("__pycache__", "*.egg-info"))
     shutil.copytree(root / "repo/reporte/figuras", clean / "repo/reporte/figuras")
@@ -40,7 +40,7 @@ def run():
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(root / name, target)
     source_names = [path.relative_to(root).as_posix() for folder, extension in
-                    (("repo/config", "*"), ("repo/src", "*.py"), ("repo/tests", "*.py"))
+                    (("repo/config", "*"), ("repo/src", "*.py"), ("repo/tests", "*.py"), ("repo/codigo_R", "*.R"))
                     for path in sorted((root / folder).rglob(extension)) if path.is_file()]
     source_names += ["repo/README.md", "repo/pyproject.toml", "repo/requirements-lock.txt",
                      "repo/reproducir.py", "repo/reporte/main.tex", "repo/reporte/referencias.bib", "repo/reporte/reporte.md", "repo/reporte/convertir_markdown.py"]

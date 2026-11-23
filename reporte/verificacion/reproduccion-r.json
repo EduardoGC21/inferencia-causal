@@ -1,0 +1,363 @@
+{
+  "scope": "Ejecución completa del R y cotejo contra las salidas Python vigentes",
+  "codigo": "codigo_R/analisis.R",
+  "codigo_sha256": "182bc6952aae6453a0f997f34ebdfa49290efb6fc9ceb6a0ea9786c20e64e471",
+  "lineas_codigo": 1465,
+  "paquete_datos": "datos_limpios_R.zip",
+  "zip_sha256": "b186db07dd614377e13e3064cfcc72688e2c63b38530396964c3fcb6afcc86fd",
+  "archivos_datos_verificados": 15,
+  "comando_portable": "Rscript --vanilla codigo_R/analisis.R RUTA/datos_limpios_R RUTA/resultados_R",
+  "salida": 0,
+  "segundos": 104.47806779993698,
+  "resultados_python_preservados": true,
+  "sha256_referencia": {
+    "balance.csv": "ab34890434ba073762a30751e2dc1b7aca88fb983eeb281cf940c68d792ee135",
+    "causal_balance.csv": "253a48e020ed273cba79e730a63e047ef2d5525f75c49f79d7bea10ce0fd0384",
+    "causal_calendario.csv": "e899cd6ac958b29a6f8d5af5aade31f534b2eaa2a47bf745b98e90c3754306d7",
+    "causal_cruce.csv": "e8d79095fe643ccd6748b6d21f0a96cc2d388cef26c3e00f1661b64a417e4730",
+    "causal_descartes.csv": "b045aa15d0d5553297b12a0bb15841b206fd91348058b15c0eba4b4feca0b056",
+    "causal_efectos.csv": "1589cff9de93becd057eb5bf1b1b326e61b1e28a25f5c40a3c7df5caaf5fa919",
+    "causal_elegibilidad.csv": "4925b3fe1b5ce70966a0fe29495969f73855ad0d1593faf7972ffd5163623cdc",
+    "causal_exclusiones_calendario.csv": "2f4e98a14370ecb346f585cb5566187730e0d65cc50469159d2a87657a00b739",
+    "causal_fechas_base.csv": "3476a2b4c4996c7865e99c5ac0976c9dc338970aa26381f535ce12e2659cc0af",
+    "causal_medicion.csv": "e5759f45cf1adeb88c9798b2e62fce6144d3d7924e176d75caec547aa45e5a12",
+    "causal_morelia_donantes.csv": "ff37142ec4c8631b41237b6147d8bb54669af64a3715793c9bd9805997973e32",
+    "causal_muestras.csv": "153ce7364191eb19214a22e0c420e24ba6006e931213ea14e03abdd2ebc597b9",
+    "causal_omision_estado.csv": "8acc4ebe49ba00707d5d24fd9ac2f22752f665cb460ecb32f99d1ccb3e77505e",
+    "causal_soporte.csv": "5c210fdd25907172e91fcf74a0b79842bc2c261287d99d9122355ec37fafcce5",
+    "causal_uniones.csv": "ab043ec8e700f4d5f69fffd427553003981b930b28178524cbc1d96b18c696b2",
+    "causal_vinculos.csv": "aff733741760c57c1bc14f853ee8962875577da8ca1dbd506c3bcc1db3fec957",
+    "causal_wald_semanal.csv": "19b8d0c57bb993607e1e8dcca34722af2fe1f9de8719fea0bf0427c4fc7dbdb8",
+    "cobertura_covariables.csv": "50a40618f4d797b44d2c42bc2f452cebd73a6b555b73a40ca4be42d6aae37906",
+    "comparaciones_municipales.csv": "78befc57871297940de09b4e1ca1d506204f40a7f3c511166916ddc18ea4f1c6",
+    "composicion_sensibilidades.csv": "5590de40ec42c8500c0806d296bd1ae862127440d03655667cd1b4d5ba5b2e42",
+    "covariables_por_fecha.csv": "afdf7c3191c3de20e5ddddcff7f15f70e34cf8541aa49230a9a8341679010c82",
+    "culiacan.csv": "a08a5b71b5fc3890efcaa5fee4402a55a367fde8cf215a5601800682dffe4c41",
+    "culiacan_controles.csv": "6652cd0b7020684c0888214afe1e98e6fd116e1646f8951534171e15edc922fb",
+    "culiacan_descartes_territoriales.csv": "8fad57873c751b685c02f1c03091dcbf293a76fa9dffa4fbb412baa6241c3fb1",
+    "culiacan_placebos.csv": "68c2a5d3b30b8cf0ab9dc56371dac1a3a26a78ae6fd9773dfb6587469bdab1ab",
+    "culiacan_soporte.csv": "ca05130129d1e5feda6ba16065af2daa082501a50eac3a930e4434d218fe52f2",
+    "descartes_denominador_censal.csv": "7fc9da25d1746806899dbe89864434f4f62dadc985d59536f42f6dc3b6c37c7e",
+    "descartes_muestra_comun.csv": "0540cb50d9ea81b7170f0a3498fe3356a9d3ad380bdf8d492627a82088510d73",
+    "descartes_municipales.csv": "1878747171461f435405e4cc81ae36c3c49f33bffb517077efe1dd2cf1910656",
+    "diagnosticos.csv": "2d5d1838f2e045dbef9b847451fde6188a37e1cd58da485a15da394c575ce7d7",
+    "estimaciones.csv": "a9760c3f97d510f86a817a2cad3c3dbfa8f6a0d464a04428d50555f5aefdc6db",
+    "franjas_x_gravedad.csv": "6164e25ff57fc213ab3e3dc4c2c9987f04356dfdd30bd0fa597619174fbe1ac2",
+    "franjas_y_gravedad.csv": "cfb46b380209e06fe7fbc51d51cc43e613e7803f43810640db3e41e9d500f112",
+    "frecuencias_franjas_x_gravedad.csv": "b1d0d32363bff1766f087dcad21be757861a055457c98f4b4fe49e09cd89b885",
+    "frecuencias_franjas_y_gravedad.csv": "ed1374fc4f4cbf113881c8ee47ccff1d10c0af6ac649ac4e0474d0b80fcf362b",
+    "historial.csv": "06baffc9e58be7392d272d829781f0acee02c45ea5635b9cc0418b7a5fbca0d0",
+    "historial_pares.csv": "240a3e91055a73eed5d92c46685c72f21aa96568acfe3f7c5900376a060ebb86",
+    "modelos_m0_m3.csv": "558bc6ea51f7691bf8948caba4bcc6bd97693391fbec9920748aadb0c25e216e",
+    "muestra.csv": "96539a72111980771d13060048bff922edfb12ff542be8e26f81227d3c5737b8",
+    "muestras_municipales.csv": "d7068428213deb048d51b62f497389625d81c336024ae1cc7ab7f71e1d47cf90",
+    "muestras_sensibilidades.csv": "082aedef83219c9df6031c2d9f9fcfd8f6911bdc542f2812e68465d4aa0008e5",
+    "pesos_por_fecha.csv": "a59bae99ea97cf6f7ac8867274a99564305ed32c26ca88cadcad664ba03d0f23",
+    "reparto_controles.csv": "b09405024bc8c71d97450837a752a8a4e32eafef2a3655bbeb914a7aff6d3227",
+    "sensibilidades_seleccion.csv": "0b382e1bbede43bcf31a6d71d4c119619391696687a33616736f6b3ebd811b84",
+    "soporte_denominador_censal.csv": "831488941323915ef0175cc00110fcb9178c8b6d000a08218a4e5e3eae1135e9",
+    "soporte_municipal.csv": "fe84874aaa88e7fedb09d223632b3f786a519a1ae8028ddd23bf2170a9dc4138",
+    "tasas_saic.csv": "b4c066ca05573bf0ca54d0591d7708efc16f4089fd83d108c2b22e1f6c0abf46",
+    "tasas_vmrc.csv": "f176bbc3513c36332beb2e094f114836cb57e9b627a8f74e52596b2b41ddb001",
+    "tramos_y_base.csv": "1099aa7da2401aeaac9a18a7853ffd6d529a26e5debcc059c524a59f55282e01",
+    "vmrc_cobertura.csv": "eb3f5b63e8311195f3000adb79a7925071aacc04dfd9a7174a7986c9a8200e9d",
+    "vmrc_registros_no_municipales.csv": "50f6413fdc1c26c3ad7477e060341594327d8091fd2da668b67414c9d1a4ebed",
+    "wald_modelos.csv": "ceb80ffe87c1f24a8a2315df071c374d190683adb9a9dfa6c5de37d2057f47dd",
+    "wald_previos.csv": "87a17dca7e41648495c80fb9d8938f4addf5fc94362b497bd8d715905e4ddb18"
+  },
+  "cotejo_resultados": {
+    "tolerancia_absoluta": 1e-06,
+    "productos": [
+      {
+        "archivo": "causal_efectos",
+        "filas": 6440,
+        "columnas": 34,
+        "columnas_numericas": 26,
+        "diferencia_maxima": 1.3737899706711687e-12
+      },
+      {
+        "archivo": "causal_muestras",
+        "filas": 180908,
+        "columnas": 51,
+        "columnas_numericas": 26,
+        "diferencia_maxima": 5.122274160385132e-09
+      },
+      {
+        "archivo": "causal_vinculos",
+        "filas": 184743,
+        "columnas": 7,
+        "columnas_numericas": 2,
+        "diferencia_maxima": 5.551115123125783e-16
+      },
+      {
+        "archivo": "causal_soporte",
+        "filas": 27,
+        "columnas": 18,
+        "columnas_numericas": 16,
+        "diferencia_maxima": 4.973799150320701e-14
+      },
+      {
+        "archivo": "causal_elegibilidad",
+        "filas": 319662,
+        "columnas": 10,
+        "columnas_numericas": 1,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "causal_descartes",
+        "filas": 663,
+        "columnas": 19,
+        "columnas_numericas": 12,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "causal_balance",
+        "filas": 144,
+        "columnas": 14,
+        "columnas_numericas": 10,
+        "diferencia_maxima": 5.238689482212067e-10
+      },
+      {
+        "archivo": "causal_uniones",
+        "filas": 624,
+        "columnas": 20,
+        "columnas_numericas": 16,
+        "diferencia_maxima": 5.551115123125783e-16
+      },
+      {
+        "archivo": "causal_omision_estado",
+        "filas": 29568,
+        "columnas": 7,
+        "columnas_numericas": 1,
+        "diferencia_maxima": 2.0194956817931597e-13
+      },
+      {
+        "archivo": "causal_wald_semanal",
+        "filas": 240,
+        "columnas": 19,
+        "columnas_numericas": 12,
+        "diferencia_maxima": 1.4903633882568101e-12
+      },
+      {
+        "archivo": "causal_cruce",
+        "filas": 48,
+        "columnas": 12,
+        "columnas_numericas": 6,
+        "diferencia_maxima": 9.270362255620057e-15
+      },
+      {
+        "archivo": "causal_fechas_base",
+        "filas": 1470,
+        "columnas": 8,
+        "columnas_numericas": 0,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "causal_exclusiones_calendario",
+        "filas": 77,
+        "columnas": 5,
+        "columnas_numericas": 0,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "causal_calendario",
+        "filas": 2070,
+        "columnas": 5,
+        "columnas_numericas": 0,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "causal_medicion",
+        "filas": 1,
+        "columnas": 3,
+        "columnas_numericas": 2,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "causal_morelia_donantes",
+        "filas": 34,
+        "columnas": 3,
+        "columnas_numericas": 1,
+        "diferencia_maxima": 2.7755575615628914e-17
+      },
+      {
+        "archivo": "culiacan",
+        "filas": 93,
+        "columnas": 5,
+        "columnas_numericas": 3,
+        "diferencia_maxima": 4.263256414560601e-14
+      },
+      {
+        "archivo": "culiacan_placebos",
+        "filas": 13,
+        "columnas": 4,
+        "columnas_numericas": 2,
+        "diferencia_maxima": 4.263256414560601e-14
+      },
+      {
+        "archivo": "culiacan_controles",
+        "filas": 12,
+        "columnas": 1,
+        "columnas_numericas": 0,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "culiacan_soporte",
+        "filas": 1,
+        "columnas": 5,
+        "columnas_numericas": 4,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "culiacan_descartes_territoriales",
+        "filas": 1,
+        "columnas": 4,
+        "columnas_numericas": 0,
+        "diferencia_maxima": 0.0
+      },
+      {
+        "archivo": "referencia_auditada",
+        "filas": 56,
+        "diferencia_maxima": 1.5987211554602254e-14
+      }
+    ],
+    "diferencias": [],
+    "aprobado": true
+  },
+  "cotejo_tablas": {
+    "aprobado": true,
+    "tablas": [
+      {
+        "archivo": "causal_balance",
+        "filas": 4,
+        "filas_R": 4,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_balance_prepost",
+        "filas": 4,
+        "filas_R": 4,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_bases",
+        "filas": 4,
+        "filas_R": 4,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_calendario",
+        "filas": 32,
+        "filas_R": 32,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_cruce",
+        "filas": 3,
+        "filas_R": 3,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_inferencia",
+        "filas": 12,
+        "filas_R": 12,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_modelos",
+        "filas": 16,
+        "filas_R": 16,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_omision",
+        "filas": 32,
+        "filas_R": 32,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_perdidas",
+        "filas": 10,
+        "filas_R": 10,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_persistencia",
+        "filas": 6,
+        "filas_R": 6,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_placebo",
+        "filas": 12,
+        "filas_R": 12,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_previos",
+        "filas": 8,
+        "filas_R": 8,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_principales",
+        "filas": 10,
+        "filas_R": 10,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_sensibilidades",
+        "filas": 14,
+        "filas_R": 14,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_soporte",
+        "filas": 18,
+        "filas_R": 18,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_trazabilidad",
+        "filas": 2,
+        "filas_R": 2,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_uniones",
+        "filas": 8,
+        "filas_R": 8,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      },
+      {
+        "archivo": "causal_uniones_aux",
+        "filas": 3,
+        "filas_R": 3,
+        "identica_precision_impresa": true,
+        "diferencias": []
+      }
+    ]
+  },
+  "repositorio": "https://github.com/EduardoGC21/inferencia-causal",
+  "carpeta_entrega_datos": "https://drive.google.com/drive/folders/19fPf9UVt5Vdm-h2LiM2sBdD9erg0qItu?usp=sharing",
+  "carga_a_drive_verificada": false,
+  "flujo_python_completo_ejecutado": false,
+  "pruebas_unitarias_ejecutadas": false
+}

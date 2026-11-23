@@ -38,7 +38,8 @@ def inline(text):
         return f"\x01{len(protected)-1}\x02"
     text = re.sub(r"\$([^$]+)\$", lambda m: keep("$"+m[1]+"$"), text)
     code_pattern = chr(96)+r"([^"+chr(96)+r"]+)"+chr(96)
-    text = re.sub(code_pattern, lambda m: keep(r"\path{"+m[1]+"}"), text)
+    text = re.sub(code_pattern, lambda m: keep(
+        r"\texttt{"+plain(m[1])+"}" if " " in m[1] else r"\path{"+m[1]+"}"), text)
     text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)",
                   lambda m: keep(r"\href{\detokenize{"+m[2]+"}}{"+inline(m[1])+"}"), text)
     text = re.sub(r"<(https?://[^>]+)>", lambda m: keep(r"\url{"+m[1]+"}"), text)
@@ -119,6 +120,15 @@ preamble = r"""\documentclass[11pt,letterpaper]{article}
 \addbibresource{referencias.bib}
 \setlength{\bibitemsep}{0.1em}
 \usepackage{array,longtable,needspace}
+\usepackage{textcomp,listings}
+\lstdefinestyle{codigoR}{
+  language=R,
+  basicstyle=\ttfamily\fontsize{9}{10.8}\selectfont,
+  numbers=left,numberstyle=\tiny,numbersep=8pt,xleftmargin=2.6em,
+  columns=fullflexible,keepspaces=true,showstringspaces=false,upquote=true,
+  breaklines=true,breakatwhitespace=false,breakindent=1.5em,tabsize=2,
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ñ}{{\~n}}1 {ó}{{\'o}}1 {—}{{\textemdash}}1
+}
 \usepackage[hidelinks]{hyperref}
 \hypersetup{pdftitle={Narcoataques y siniestros viales registrados},pdfauthor={Eduardo Garcia Cortez},pdfsubject={Inferencia Causal, ITAM; profesor Mauricio Romero}}
 \urlstyle{same}
@@ -185,10 +195,22 @@ while i < len(lines):
         continue
     if s.startswith("### "):
         heading = s[4:]
-        command = r"\subsection*" if heading.startswith("3.1.") or heading == "Sensibilidad a la base de comparación" else r"\paragraph"
+        command = r"\subsection*" if heading.startswith(("3.1.", "Listado completo")) or heading == "Sensibilidad a la base de comparación" else r"\paragraph"
         out.append(command+"{"+inline(heading)+"}")
         blocks.append({"type":"heading","line":line,"source":s})
         i += 1
+        continue
+    if s == "```r":
+        end = lines.index("```", i+1)
+        code = "\n".join(lines[i+1:end])+"\n"
+        program = args.markdown.parent.parent / "codigo_R/analisis.R"
+        if code != program.read_text(encoding="utf-8-sig"):
+            raise ValueError("El bloque R debe coincidir con codigo_R/analisis.R completo")
+        out.append(r"\lstinputlisting[style=codigoR]{../codigo_R/analisis.R}")
+        blocks.append({"type":"code","line":line,"language":"R",
+                       "path":"codigo_R/analisis.R","lines":end-i-1,
+                       "sha256":hashlib.sha256(program.read_bytes()).hexdigest()})
+        i = end+1
         continue
     if s == "$$":
         end = lines.index("$$",i+1)
