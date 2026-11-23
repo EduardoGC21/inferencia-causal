@@ -106,6 +106,7 @@ def models_table():
 
 
 log = math(r"\log(1+Y)")
+outcome = f'{math("Y")} = siniestros registrados por municipio y día'
 m0 = math("M_0")
 base_eq = math(
     r"\left.\begin{aligned}"
@@ -222,8 +223,8 @@ add("regresion", "Estrategia empírica", "Cómo estimamos el coeficiente de trat
 "Veamos las trayectorias que dan origen a ese contraste.", "Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.")
 
 add("eventos", "Estrategia empírica", "DiD día por día", 60, f"""
-<p class="lead">1:muchos · {log} · 77 pares tratados y 3 536 de control</p>
-<div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span></div>
+<p class="lead">1:muchos · 77 pares tratados y 3 536 de control</p>
+<div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span><span>{outcome}</span></div>
 <div class="series-layout">
   <figure><figcaption>Promedio observado</figcaption>{figure("eventos-observados", "Promedios observados por grupo, del día −28 al 13.")}</figure>
   <figure><figcaption>Cambio medio respecto a la base</figcaption>{figure("eventos-cambios", "Cambios medios de tratados y controles en log(1+Y), del día −7 al 13.")}</figure>
@@ -233,14 +234,14 @@ add("eventos", "Estrategia empírica", "DiD día por día", 60, f"""
 "Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.", "Conteos diarios limpios y pares y pesos guardados. Las 21 diferencias de cambios reproducen los coeficientes de M₀.", sources)
 
 add("trayectoria", "Supuestos", "Las diferencias previas limitan la atribución", 45, f"""
-<p class="lead">Diferencia de cambios en {log} · {m0}, 1:muchos · intervalos puntuales del 95 %</p>
+<p class="lead">{outcome} <span class="chart-meta"> · {m0} · 1:muchos · Intervalos puntuales del 95 %</span></p>
 <figure class="wide-chart">{figure("trayectoria-principal", "Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.")}</figure>
 <p class="axis-caption">Días respecto al inicio local</p>
 <div class="diagnostic">
   <p><strong>Tendencias paralelas:</strong> cambios comparables en ausencia del ataque.</p>
   <p><strong>Prueba previa por semanas:</strong> rechaza por estado; es inconclusa por estado y fecha.</p>
 </div>""",
-"""Cada punto compara los cambios. Su intervalo puntual del 95 por ciento admite dependencia por estado y fecha. Para atribuirlo al ataque, los cambios sin ataque tendrían que ser paralelos en esta escala. También requerimos una base libre de anticipación y de efectos de ataques previos, y controles sin contagio. El emparejamiento mejora el balance observado. Aun así, los Días menos cinco y menos dos presentan diferencias negativas. La prueba semanal rechaza diferencias previas nulas por estado. Al agrupar también por fecha, el valor p es 0,109. La evidencia deja abierta una fuente de sesgo.""",
+"""Cada punto es la diferencia entre los cambios de tratados y controles. Es el coeficiente estimado, beta gorro. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.""",
 "Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
 
 add("resultados", "Resultados", "El ajuste cambia poco la estimación inicial", 35, f"""
@@ -251,7 +252,7 @@ add("resultados", "Resultados", "El ajuste cambia poco la estimación inicial", 
 "Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
 
 add("duracion", "Resultados", "La duración queda abierta", 40, f"""
-<p class="lead">{m0}, 1:muchos · diferencia de cambios en {log}</p>
+<p class="lead">{m0} · 1:muchos · {outcome}</p>
 <div class="duration-layout">
   <figure>{figure("duracion", "Caída mayor para 0 a 1; los intervalos de 2 a 6 y 7 a 13 incluyen cero.")}
   <figcaption>Intervalos del 95 % por estado y fecha</figcaption></figure>
@@ -327,7 +328,7 @@ add("contrastes", "Discusión", "El signo se mantiene con 1:1 y en niveles", 0, 
 "Volver al índice de respaldos.", "Reporte, §4 y cuadros B1–B2.", sources)
 
 add("alternativas", "Discusión", "En niveles cambia la precisión", 0, f"""
-<p class="lead">Cambio en registros por municipio y día · {m0} · intervalos del 95 %</p>
+<p class="lead">{m0} · Intervalos del 95 %</p>
 <div class="series-key"><span><i class="series-line estimate"></i> 1:muchos</span><span><i class="series-line control"></i> 1:1</span></div>
 <figure class="wide-chart">{figure("trayectoria-niveles", "Comparación diaria a escala de conteos para ambos emparejamientos.")}</figure>
 <p class="axis-caption">Días respecto al inicio local · agrupación por estado y fecha</p>""",

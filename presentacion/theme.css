@@ -167,6 +167,7 @@
 #eventos header, #trayectoria header { margin-bottom: 19px; }
 #eventos .lead { margin-bottom: 10px; }
 .wide-chart img { width: 1128px; height: 332px; }
+.chart-meta { font-size: var(--label); }
 .diagnostic { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; margin-top: 18px; }
 .diagnostic p { font-size: var(--label); }
 

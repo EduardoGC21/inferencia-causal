@@ -47,7 +47,7 @@ def save(fig, name):
 
 
 def descriptive(series, field, name, first, ticks):
-    fig, ax = canvas(552, 334, .14, .97, bottom=.13)
+    fig, ax = canvas(552, 334, .22, .97, bottom=.13)
     for group, color, marker, line in [
         ("tratados", AMBER, "o", "-"), ("controles", BLUE, "s", (0, (4, 2))),
     ]:
@@ -55,9 +55,11 @@ def descriptive(series, field, name, first, ticks):
                 marker=marker, markersize=2.5, linestyle=line, linewidth=1.65)
     days(ax, first, ticks)
     if field == "observado":
+        ax.set_ylabel("Promedio de log(1 + Y)")
         ax.set_yticks([.50, .60, .70, .80])
         ax.set_ylim(.47, .88)
     else:
+        ax.set_ylabel("Cambio en log(1 + Y)")
         ax.axhline(0, color=MUTED, linewidth=1, alpha=.67)
         ax.set_yticks([-.20, -.10, 0, .10])
         ax.set_ylim(-.215, .14)
@@ -66,7 +68,9 @@ def descriptive(series, field, name, first, ticks):
 
 
 def trajectory(scale, methods, name):
-    fig, ax = canvas(1128, 332, .08, .984, bottom=.15)
+    fig, ax = canvas(1128, 332, .112, .984, bottom=.15)
+    unit = "log(1 + Y)" if scale == "log1p" else "registros por municipio y día"
+    ax.set_ylabel(f"Diferencia de cambios\nen {unit}")
     for j, (method, color, marker, line) in enumerate(methods):
         data = effects.loc[
             effects.escenario.eq("principal") & effects.muestra.eq(method)
@@ -88,7 +92,9 @@ def duration():
     data = effects.query("escenario == 'principal' and muestra == 'emparejada' and modelo == 'M0' "
                          "and base == 'tres_semanas' and escala == 'log1p' and agrupacion == 'entidad_fecha'")
     rows = data.set_index("tramo").loc[["d0..1", "d2..6", "wk+1"]]
-    fig, ax = canvas(750, 306, .23, .96, bottom=.18)
+    fig, ax = canvas(750, 306, .26, .96, bottom=.24)
+    ax.set_ylabel("Tramo analizado")
+    ax.set_xlabel("Diferencia de cambios en log(1 + Y)")
     ax.axvline(0, color=MUTED, linewidth=1.2, alpha=.68)
     for y, (_, row), color in zip([2, 1, 0], rows.iterrows(), [BLUE, INK, INK]):
         ax.errorbar(row.efecto, y, xerr=[[row.efecto - row.ic_inf], [row.ic_sup - row.efecto]],

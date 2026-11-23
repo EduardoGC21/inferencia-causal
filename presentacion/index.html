@@ -142,8 +142,8 @@
   <div class="slide-surface">
     <header><p class="eyebrow">Estrategia empírica</p><h2>DiD día por día</h2></header>
 
-<p class="lead">1:muchos · <span data-tex="\log(1+Y)"></span> · 77 pares tratados y 3 536 de control</p>
-<div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span></div>
+<p class="lead">1:muchos · 77 pares tratados y 3 536 de control</p>
+<div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span><span><span data-tex="Y"></span> = siniestros registrados por municipio y día</span></div>
 <div class="series-layout">
   <figure><figcaption>Promedio observado</figcaption><img src="assets/eventos-observados.png" alt="Promedios observados por grupo, del día −28 al 13."></figure>
   <figure><figcaption>Cambio medio respecto a la base</figcaption><img src="assets/eventos-cambios.png" alt="Cambios medios de tratados y controles en log(1+Y), del día −7 al 13."></figure>
@@ -158,7 +158,7 @@
   <div class="slide-surface">
     <header><p class="eyebrow">Supuestos</p><h2>Las diferencias previas limitan la atribución</h2></header>
 
-<p class="lead">Diferencia de cambios en <span data-tex="\log(1+Y)"></span> · <span data-tex="M_0"></span>, 1:muchos · intervalos puntuales del 95 %</p>
+<p class="lead"><span data-tex="Y"></span> = siniestros registrados por municipio y día <span class="chart-meta"> · <span data-tex="M_0"></span> · 1:muchos · Intervalos puntuales del 95 %</span></p>
 <figure class="wide-chart"><img src="assets/trayectoria-principal.png" alt="Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio."></figure>
 <p class="axis-caption">Días respecto al inicio local</p>
 <div class="diagnostic">
@@ -168,7 +168,7 @@
     <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
 
   </div>
-  <aside class="notes"><p><strong>trayectoria · 5:10–5:55 (45 s)</strong></p><p>Cada punto compara los cambios. Su intervalo puntual del 95 por ciento admite dependencia por estado y fecha. Para atribuirlo al ataque, los cambios sin ataque tendrían que ser paralelos en esta escala. También requerimos una base libre de anticipación y de efectos de ataques previos, y controles sin contagio. El emparejamiento mejora el balance observado. Aun así, los Días menos cinco y menos dos presentan diferencias negativas. La prueba semanal rechaza diferencias previas nulas por estado. Al agrupar también por fecha, el valor p es 0,109. La evidencia deja abierta una fuente de sesgo.</p><p><strong>Transición.</strong> Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.</p><p><strong>Referencia para consulta.</strong> Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.</p></aside>
+  <aside class="notes"><p><strong>trayectoria · 5:10–5:55 (45 s)</strong></p><p>Cada punto es la diferencia entre los cambios de tratados y controles. Es el coeficiente estimado, beta gorro. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.</p><p><strong>Transición.</strong> Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.</p><p><strong>Referencia para consulta.</strong> Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.</p></aside>
 </section>
 <section id="resultados" class="main " data-timing="35">
   <div class="slide-surface">
@@ -186,7 +186,7 @@
   <div class="slide-surface">
     <header><p class="eyebrow">Resultados</p><h2>La duración queda abierta</h2></header>
 
-<p class="lead"><span data-tex="M_0"></span>, 1:muchos · diferencia de cambios en <span data-tex="\log(1+Y)"></span></p>
+<p class="lead"><span data-tex="M_0"></span> · 1:muchos · <span data-tex="Y"></span> = siniestros registrados por municipio y día</p>
 <div class="duration-layout">
   <figure><img src="assets/duracion.png" alt="Caída mayor para 0 a 1; los intervalos de 2 a 6 y 7 a 13 incluyen cero.">
   <figcaption>Intervalos del 95 % por estado y fecha</figcaption></figure>
@@ -284,7 +284,7 @@
   <div class="slide-surface">
     <header><p class="eyebrow">Discusión</p><h2>En niveles cambia la precisión</h2></header>
 
-<p class="lead">Cambio en registros por municipio y día · <span data-tex="M_0"></span> · intervalos del 95 %</p>
+<p class="lead"><span data-tex="M_0"></span> · Intervalos del 95 %</p>
 <div class="series-key"><span><i class="series-line estimate"></i> 1:muchos</span><span><i class="series-line control"></i> 1:1</span></div>
 <figure class="wide-chart"><img src="assets/trayectoria-niveles.png" alt="Comparación diaria a escala de conteos para ambos emparejamientos."></figure>
 <p class="axis-caption">Días respecto al inicio local · agrupación por estado y fecha</p>

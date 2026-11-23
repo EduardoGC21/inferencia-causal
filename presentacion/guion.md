@@ -110,7 +110,7 @@ Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.
 
 **Explicación oral**
 
-Cada punto compara los cambios. Su intervalo puntual del 95 por ciento admite dependencia por estado y fecha. Para atribuirlo al ataque, los cambios sin ataque tendrían que ser paralelos en esta escala. También requerimos una base libre de anticipación y de efectos de ataques previos, y controles sin contagio. El emparejamiento mejora el balance observado. Aun así, los Días menos cinco y menos dos presentan diferencias negativas. La prueba semanal rechaza diferencias previas nulas por estado. Al agrupar también por fecha, el valor p es 0,109. La evidencia deja abierta una fuente de sesgo.
+Cada punto es la diferencia entre los cambios de tratados y controles. Es el coeficiente estimado, beta gorro. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.
 
 **Transición**
 
