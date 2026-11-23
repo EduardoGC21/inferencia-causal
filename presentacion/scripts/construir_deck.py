@@ -244,10 +244,10 @@ add("trayectoria", "Supuestos", "Diagnóstico de tendencias paralelas", 45, f"""
 """Cada punto es la diferencia entre los cambios de tratados y controles. Es el coeficiente estimado, beta gorro. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.""",
 "Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
 
-add("resultados", "Resultados", "El ajuste cambia poco la estimación inicial", 35, f"""
+add("resultados", "Resultados", "Añadir covariables cambia poco la estimación inicial", 35, f"""
 <p class="lead">Días 0–1 · 1:muchos · Cambio en {log} · Efectos fijos de fecha</p>
 {models_table()}
-<p class="model-caption">3 613 pares · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.</p>""",
+<p class="model-caption">3 613 pares municipio–fecha · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.</p>""",
 """En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Y. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.""",
 "Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
 

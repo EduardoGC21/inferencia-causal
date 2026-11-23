@@ -118,7 +118,7 @@ Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.
 
 **Referencia para consulta.** Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.
 
-## El ajuste cambia poco la estimación inicial
+## Añadir covariables cambia poco la estimación inicial
 
 **Identificador** `resultados` · **Tiempo** 5:55–6:30 (35 s)
 

@@ -8,4 +8,4 @@
 
 - Se verificó la lectura de los ejes y la definición de \(Y\) en las páginas 7, 8, 10 y 17 del PDF.
 
-Huella SHA-256 del PDF revisado: `9492c7752d1b7ea405562d7a4491f2c95e8ccab7d405b42b18e00274c71763f6`.
+Huella SHA-256 del PDF revisado: `52d6d633ab167bb6659acdadbc43153903b6f96be6a944d3a6b93ddd08501d6b`.
