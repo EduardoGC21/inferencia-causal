@@ -42,21 +42,32 @@ try {
   const equations = await page.locator('[data-tex]').count();
   assert.ok(equations > 0);
   assert.equal(await page.locator('[data-tex] .katex').count(), equations);
-  for (const [i, slide] of slides.entries()) {
-    await page.evaluate(i => Reveal.slide(i), i);
-    await page.evaluate(() => document.fonts.ready);
-    const surface = page.locator('section.present .slide-surface');
-    const clipped = await surface.evaluate(surface => {
-      const frame = surface.getBoundingClientRect();
-      return [...surface.querySelectorAll('header, p, img, figcaption, .equation, .katex-html .base, td, th, a')]
-        .filter(el => {
-          const box = el.getBoundingClientRect();
-          return box.right > frame.right + 1 || box.bottom > frame.bottom + 1;
-        }).map(el => el.tagName + ' ' + el.textContent.slice(0, 38));
-    });
-    assert.deepEqual(clipped, [], slide.id);
-    await surface.screenshot({ path: join(shots, `${String(i + 1).padStart(2, '0')}-${slide.id}.png`) });
+  const expectedBase = Array.from({ length: 21 }, (_, i) => String(i - 28));
+  const days = await page.locator('#base .days .reference').allTextContents();
+  assert.deepEqual(days.map(day => day.replace('−', '-')), expectedBase);
+
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1024, height: 576 }]) {
+    await page.setViewportSize(viewport);
+    await page.evaluate(() => Reveal.layout());
+    for (const [i, slide] of slides.entries()) {
+      await page.evaluate(i => Reveal.slide(i), i);
+      const surface = page.locator('section.present .slide-surface');
+      const clipped = await surface.evaluate(surface => {
+        const frame = surface.getBoundingClientRect();
+        return [...surface.querySelectorAll('header, p, img, figcaption, .math-band, .equation, .katex-html .base, td, th, a')]
+          .filter(el => {
+            const box = el.getBoundingClientRect();
+            return box.right > frame.right + 1 || box.bottom > frame.bottom + 1;
+          }).map(el => el.tagName + ' ' + el.textContent.slice(0, 38));
+      });
+      assert.deepEqual(clipped, [], slide.id + ' @ ' + viewport.width);
+      if (viewport.width === 1440) {
+        const name = String(i + 1).padStart(2, '0') + '-' + slide.id + '.png';
+        await surface.screenshot({ path: join(shots, name) });
+      }
+    }
   }
+  await page.setViewportSize({ width: 1440, height: 900 });
   assert.ok(await page.evaluate(() =>
     [...document.fonts].some(font => font.family.includes('KaTeX_') && font.status === 'loaded')
   ));
@@ -74,12 +85,13 @@ try {
   assert.deepEqual(errors, []);
   assert.deepEqual(remote, []);
   const report = {
-    prueba: 'Archivo local en Chromium, red desactivada, 1440 × 900',
+    prueba: 'Archivo local en Chromium, red desactivada, 1440 × 900 y 1024 × 576',
     principales: slides.filter(s => s.seconds).length,
     referencias: slides.filter(s => s.id === 'referencias').length,
     respaldos: slides.filter(s => s.backup).length,
     segundos: duration,
     ecuaciones_katex: equations,
+    dias_base_verificados: days.length,
     notas_y_transiciones_cotejadas: slides.length,
     paginas_impresas: slides.length,
     solicitudes_externas: remote.length,

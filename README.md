@@ -65,9 +65,11 @@ Para trasladar el Markdown a LaTeX y compilar, se requieren `pdflatex` y
 
 La conversión exige coincidencia exacta entre el listado del apéndice H y
 `codigo_R/analisis.R`. La compilación produce copias idénticas en
-`reporte/main.pdf` y `reporte/reporte.pdf`. La presentación expuesta
-se conserva en `presentacion/`. Los registros de verificaciones previas
-corresponden a sus respectivas ediciones.
+`reporte/main.pdf` y `reporte/reporte.pdf`. La [presentación final](presentacion/index.html) y el
+[guion](presentacion/guion.md) usan la misma especificación y notación.
+Las [instrucciones de la presentación](presentacion/README.md) explican
+cómo regenerar las figuras y su PDF. Los registros de verificaciones
+previas corresponden a sus respectivas ediciones.
 
 ## Referencia histórica anterior a Ruta B
 

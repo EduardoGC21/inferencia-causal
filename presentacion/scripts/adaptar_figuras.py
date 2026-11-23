@@ -1,4 +1,5 @@
 """Adapta observaciones y estimaciones guardadas al lienzo de exposición."""
+from io import StringIO
 from pathlib import Path
 
 import matplotlib
@@ -11,7 +12,7 @@ from PIL import Image
 
 ASSETS = Path(__file__).resolve().parents[1] / "assets"
 INK, BLUE, AMBER, MUTED = "#142e4b", "#235ca0", "#a04a21", "#555f70"
-LOG_CRASHES = "log(1 + siniestros registrados)"
+UNIT = "Siniestros registrados por municipio y día"
 POINTS = list(range(-7, 14))
 effects = pd.read_csv(ASSETS / "datos/efectos.csv", dtype={"tramo": str})
 
@@ -27,7 +28,7 @@ plt.rcParams.update({
 
 
 def decimal(x, _):
-    return f"{x:.2f}".replace("-", "−").replace(".", ",")
+    return f"{0 if x == 0 else x:g}".replace("-", "−").replace(".", ",")
 
 
 def canvas(width, height, left, right, bottom=.15, top=.96):
@@ -44,8 +45,11 @@ def days(ax, first, ticks):
 
 
 def save(fig, name):
+    output = StringIO()
     with plt.rc_context({"svg.hashsalt": f"inferencia-{name}"}):
-        fig.savefig(ASSETS / f"{name}.svg", metadata={"Date": None})
+        fig.savefig(output, format="svg", metadata={"Date": None})
+    svg = "\n".join(line.rstrip() for line in output.getvalue().splitlines()) + "\n"
+    (ASSETS / f"{name}.svg").write_text(svg, encoding="utf-8", newline="\n")
     plt.close(fig)
 
 
@@ -58,27 +62,24 @@ def descriptive(series, field, name, first, ticks):
                 marker=marker, markersize=2.5, linestyle=line, linewidth=1.65)
     days(ax, first, ticks)
     if field == "observado":
-        ax.set_ylabel(f"Promedio de\n{LOG_CRASHES}")
-        ax.set_yticks([.50, .60, .70, .80])
-        ax.set_ylim(.47, .88)
+        ax.set_ylabel("Siniestros registrados\npor municipio y día")
+        ax.axvspan(-28.6, -7.5, color="#edf2f7", zorder=0)
     else:
-        ax.set_ylabel(f"Cambio en\n{LOG_CRASHES}")
+        ax.set_ylabel("Cambio en siniestros\npor municipio y día")
         ax.axhline(0, color=MUTED, linewidth=1, alpha=.67)
-        ax.set_yticks([-.20, -.10, 0, .10])
-        ax.set_ylim(-.215, .14)
+    ax.margins(y=.12)
     ax.yaxis.set_major_formatter(FuncFormatter(decimal))
     save(fig, name)
 
 
-def trajectory(scale, methods, name, *, height=332):
+def trajectory(methods, name, *, height=332):
     fig, ax = canvas(1128, height, .112, .984, bottom=.15)
-    unit = LOG_CRASHES if scale == "log1p" else "registros por municipio y día"
-    ax.set_ylabel(f"Diferencia de cambios\nen {unit}")
+    ax.set_ylabel("Siniestros registrados\npor municipio y día")
     for j, (method, color, marker, line) in enumerate(methods):
         data = effects.loc[
             effects.escenario.eq("principal") & effects.muestra.eq(method)
             & effects.modelo.eq("M0") & effects.base.eq("tres_semanas")
-            & effects.escala.eq(scale) & effects.agrupacion.eq("entidad_fecha")
+            & effects.escala.eq("niveles") & effects.agrupacion.eq("entidad_fecha")
         ].set_index("tramo").loc[list(map(str, POINTS))]
         x = np.array(POINTS) + (j - (len(methods) - 1) / 2) * .23
         y = data.efecto.to_numpy()
@@ -93,18 +94,17 @@ def trajectory(scale, methods, name, *, height=332):
 
 def duration():
     data = effects.query("escenario == 'principal' and muestra == 'emparejada' and modelo == 'M0' "
-                         "and base == 'tres_semanas' and escala == 'log1p' and agrupacion == 'entidad_fecha'")
+                         "and base == 'tres_semanas' and escala == 'niveles' and agrupacion == 'entidad_fecha'")
     rows = data.set_index("tramo").loc[["d0..1", "d2..6", "wk+1"]]
     fig, ax = canvas(1128, 374, .176, .978, bottom=.19)
     ax.set_ylabel("Tramo analizado")
-    ax.set_xlabel(f"Diferencia de cambios en {LOG_CRASHES}")
+    ax.set_xlabel(UNIT)
     ax.axvline(0, color=MUTED, linewidth=1.2, alpha=.68)
     for y, (_, row), color in zip([2, 1, 0], rows.iterrows(), [BLUE, INK, INK]):
         ax.errorbar(row.efecto, y, xerr=[[row.efecto - row.ic_inf], [row.ic_sup - row.efecto]],
                     fmt="o", color=color, markersize=7, linewidth=2, capsize=5)
     ax.set_yticks([2, 1, 0], ["Días 0–1", "Días 2–6", "Días 7–13"])
-    ax.set_xticks([-.20, -.15, -.10, -.05, 0, .05])
-    ax.set_xlim(-.214, .056)
+    ax.margins(x=.12)
     ax.set_ylim(-.5, 2.5)
     ax.xaxis.set_major_formatter(FuncFormatter(decimal))
     save(fig, "duracion")
@@ -114,9 +114,8 @@ series = pd.read_csv(ASSETS / "datos/series-eventos.csv", index_col="h")
 descriptive(series, "observado", "eventos-observados", -28, [-28, -21, -14, -7, 0, 7, 13])
 descriptive(series, "cambio", "eventos-cambios", -7, [-7, -5, -2, 0, 3, 7, 10, 13])
 methods = [("emparejada", INK, "o", "-"), ("emparejada_1a1", BLUE, "s", "--")]
-trajectory("log1p", methods[:1], "trayectoria-principal", height=364)
-trajectory("log1p", methods, "trayectoria-dos-matchings")
-trajectory("niveles", methods, "trayectoria-niveles")
+trajectory(methods[:1], "trayectoria-principal", height=364)
+trajectory(methods, "trayectoria-niveles")
 duration()
 
 original = Image.open(ASSETS.parent.parent / "reporte/figuras/mapa-municipios.png").convert("RGB")
@@ -126,4 +125,4 @@ for name, (start, end) in [("tratados", (.060, .488)), ("controles", (.533, .96)
     gray = panel.convert("L").point(lambda x: 255 if x < 249 else 0)
     panel.crop(gray.getbbox()).save(ASSETS / f"mapa-{name}.png")
 
-print("Figuras listas: dos mapas, dos series descriptivas, tres trayectorias y duración.")
+print("Figuras listas: dos mapas, dos series descriptivas, dos trayectorias y duración.")

@@ -82,5 +82,8 @@ revisaron la trayectoria, los cuadros, la paginación y el listado. El
 cuerpo ocupa siete páginas y las referencias empiezan en la octava.
 La conversión comprobó la identidad del listado del apéndice H con las
 1 542 líneas de `codigo_R/analisis.R`. `main.pdf` y `reporte.pdf`
-son idénticos. La huella del árbol de Git y las huellas de la
-presentación, su archivo HTML y el guion constan en el registro numérico.
+son idénticos. La revisión de notación usa $Y_{i,d}$ para el conteo diario y
+$\bar Y_{ith}$ para el promedio del tramo. La revisión visual confirmó
+la notación en las páginas 3 y 4. Las salidas de la estimación
+conservan sus huellas y la presentación final usa las mismas cifras.
+[Verificación de la presentación](../../presentacion/verificacion/REVISION.md)

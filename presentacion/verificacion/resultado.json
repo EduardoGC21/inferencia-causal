@@ -1,10 +1,11 @@
 {
-  "prueba": "Archivo local en Chromium, red desactivada, 1440 × 900",
+  "prueba": "Archivo local en Chromium, red desactivada, 1440 × 900 y 1024 × 576",
   "principales": 12,
   "referencias": 1,
   "respaldos": 5,
   "segundos": 480,
-  "ecuaciones_katex": 36,
+  "ecuaciones_katex": 31,
+  "dias_base_verificados": 21,
   "notas_y_transiciones_cotejadas": 18,
   "paginas_impresas": 18,
   "solicitudes_externas": 0,

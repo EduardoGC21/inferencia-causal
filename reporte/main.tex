@@ -110,20 +110,20 @@ Accidentes previos & 2,05 (3,41) & 2,09 (3,45) & -0,011 & 0,012 \\
 
 \paragraph{Estimando y base.}
 
-Sea $t$ la fecha de inicio local y sea $h$ el tramo de días relativos al inicio. $Z_{i,d}$ cuenta los siniestros publicados del municipio $i$ en la fecha calendario $d$. Para cada par, la base $B_{it}$ y el resultado medio $Y_{ith}$ son\par
+Sea $t$ la fecha de inicio local y sea $h$ el tramo de días relativos al inicio. $Y_{i,d}$ cuenta los siniestros publicados del municipio $i$ en la fecha calendario $d$. Para cada par, la base $B_{it}$ y el resultado medio $\bar Y_{ith}$ son\par
 
 \[
-B_{it}=\frac{1}{21}\sum_{k=-28}^{-8} Z_{i,t+k},
+B_{it}=\frac{1}{21}\sum_{k=-28}^{-8} Y_{i,t+k},
 \qquad
-Y_{ith}=\frac{1}{|h|}\sum_{k\in h}Z_{i,t+k}.
+\bar Y_{ith}=\frac{1}{|h|}\sum_{k\in h}Y_{i,t+k}.
 \]
 
 La base comprende las semanas -4, -3 y -2 e incluye tres observaciones de cada día de la semana. $|h|$ es el número de días del tramo. En Culiacán, para el inicio del jueves 17 de octubre de 2019, la base abarca del 19 de septiembre al 9 de octubre, inclusive. La semana -1 permite examinar diferencias inmediatamente anteriores al inicio.\par
 
-Sea $\mathrm{Treat}_{it}$ el indicador de par tratado y $A_{it}$ el de elegibilidad previa. Si $Y_{ith}(1)$ y $Y_{ith}(0)$ son los promedios diarios potenciales con y sin ataque, el objetivo es\par
+Sea $\mathrm{Treat}_{it}$ el indicador de par tratado y $A_{it}$ el de elegibilidad previa. Si $\bar Y_{ith}(1)$ y $\bar Y_{ith}(0)$ son los promedios diarios potenciales con y sin ataque, el objetivo es\par
 
 \[
-\tau_{\mathrm{ATT},h}=E[Y_{ith}(1)-Y_{ith}(0)\mid
+\tau_{\mathrm{ATT},h}=E[\bar Y_{ith}(1)-\bar Y_{ith}(0)\mid
 \mathrm{Treat}_{it}=1,A_{it}=1,\text{soporte}].
 \]
 
@@ -133,7 +133,7 @@ Se excluyen municipios con exposición documentada entre los Días -49 y -1: la 
 
 Los controles proceden de estados ajenos al episodio. También se excluyen municipios con antecedentes documentados y estados con señales previas sin municipio identificable. Se exige estabilidad territorial desde el inicio de la base hasta la víspera del ataque. La selección principal no utiliza ataques posteriores.\par
 
-El nivel previo es la media de los Días -28 a -15. Se exige $(\bar Z_c+0.5)/(\bar Z_i+0.5)\in[0.5,2]$, donde $\bar Z_i$ y $\bar Z_c$ son las medias del tratado y del candidato. La población, el empleo y los automóviles por mil habitantes también deben estar, por separado, entre la mitad y el doble del valor tratado. Se requieren al menos diez candidatos de cinco estados por tratado.\par
+El nivel previo es la media de los Días -28 a -15. Se exige $(\bar Y_c+0.5)/(\bar Y_i+0.5)\in[0.5,2]$, donde $\bar Y_i$ y $\bar Y_c$ son las medias del tratado y del candidato. La población, el empleo y los automóviles por mil habitantes también deben estar, por separado, entre la mitad y el doble del valor tratado. Se requieren al menos diez candidatos de cinco estados por tratado.\par
 
 El emparejamiento 1:muchos utiliza todos los candidatos: cada tratado pesa uno y reparte otro peso total de uno entre sus controles. El emparejamiento 1:1 elige el candidato más cercano según población, empleo y automóviles, después de comprobar el mismo mínimo de candidatos y estados. Se permite reutilizar controles; sus pesos acumulan las contribuciones de cada tratado.\par
 
@@ -143,7 +143,7 @@ Cada par $i,t$ aporta una fila por fecha calendario $d$ de cada bloque $s$. Se d
 
 \[
 \begin{aligned}
-Z_{i,d}={}&\alpha_{ith}+\lambda_{th}\mathrm{Post}_s
+Y_{i,d}={}&\alpha_{ith}+\lambda_{th}\mathrm{Post}_s
   +\delta_{h,\operatorname{ds}(d)}\\
  &+\tau_{\mathrm{DD},h}(\mathrm{Treat}_{it}\times\mathrm{Post}_s)
   +(X_{it}'\gamma_h)\mathrm{Post}_s+\varepsilon_{ithsd}.

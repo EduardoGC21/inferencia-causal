@@ -9,7 +9,7 @@ al PDF del árbol de trabajo.
 | Requisito | Ubicación en la versión revisada |
 | --- | --- |
 | Texto de 6–8 páginas y fuente de 11–12 puntos | Siete páginas de cuerpo (1–7), `article` a 11 puntos, referencias en p. 8 y apéndices en pp. 9–48 |
-| Notación canónica del curso | Sección 3, pp. 3–4. Resultados potenciales $Y_{ith}(1)$ y $Y_{ith}(0)$, efecto objetivo $\tau_{\mathrm{ATT},h}$ y coeficiente $\tau_{\mathrm{DD},h}$ de Tratado × Después. La regresión incluye conteos diarios $Z_{i,d}$ y efectos fijos del día de la semana. |
+| Notación canónica del curso | Sección 3, pp. 3–4. Resultados potenciales $\bar Y_{ith}(1)$ y $\bar Y_{ith}(0)$, efecto objetivo $\tau_{\mathrm{ATT},h}$ y coeficiente $\tau_{\mathrm{DD},h}$ de Tratado × Después. La regresión incluye conteos diarios $Y_{i,d}$ y efectos fijos del día de la semana. |
 | Contexto, pregunta, mecanismos y literatura | Sección 1, p. 1: dos antecedentes académicos y una fuente de contexto; ATT antes del estimador |
 | Datos, fuentes, periodo, unidad y N | P. 2: ATUS 2019–2025 e historia de 2018; 3 613 pares municipio–fecha, 77 tratados, 3 536 controles, 31 episodios y 32 fechas |
 | Tratamiento, medición, ceros y selección | P. 2: catálogo propio, inicio local, cobertura previa y límites de la captación |
@@ -36,7 +36,7 @@ apéndices van aparte. La presentación oral es una entrega separada.
 ## Verificación
 
 Se cotejó la notación de resultados potenciales y de la ecuación con las
-diapositivas del curso. La edición revisada usa $Z_{i,d}$ para el conteo diario, $Y_{ith}$ para el
+diapositivas del curso. La edición revisada usa $Y_{i,d}$ para el conteo diario, $\bar Y_{ith}$ para el
 promedio del tramo y $\hat\tau$ para el coeficiente estimado. El [registro
 numérico](verificacion/niveles-base-semanal.json) identifica los archivos
 entregados. El [registro de verificación](verificacion/niveles-base-semanal.md)

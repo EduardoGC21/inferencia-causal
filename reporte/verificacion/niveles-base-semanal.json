@@ -245,13 +245,19 @@
       "config/proyecto.toml": "9537097d06f65795a23a85c7cfcddf466c501082f1c4662221629df882f9f091"
     },
     "reporte": {
-      "reporte/main.tex": "7d882c5b25a13bb1ae884a0000b4a3fcd7f9d3ed0ca92c76de2533479b9b1eb3",
-      "reporte/reporte.md": "fd9e5aefbc75b882a20f5aec84bc2846789c17b4efbe12dd7c8cac72301cd558",
-      "reporte/main.pdf": "039845db1b1d57741467bc910d6bf1ca6471926c1fda8f3d0b91c1b2d5ff9a34",
-      "reporte/reporte.pdf": "039845db1b1d57741467bc910d6bf1ca6471926c1fda8f3d0b91c1b2d5ff9a34",
+      "reporte/main.tex": "27a95b6d9a64d6d2f7564b95bc161f9b78650a919994d304797bdae021cdc965",
+      "reporte/reporte.md": "d1114643fe524b2d3ffcb1304a76059cddb93ac2d9a30ef87c8c8dbdc7cf6867",
+      "reporte/main.pdf": "864b4cc86ff899bd1471c540f0707c6446d25379a7d9ca1491612310467be46b",
+      "reporte/reporte.pdf": "864b4cc86ff899bd1471c540f0707c6446d25379a7d9ca1491612310467be46b",
       "reporte/figuras/trayectoria-siniestros.png": "4cf1f30545dd2e0321df8328e0189454ee2473f51e441519f1fb19355d1951f1"
     },
     "presentacion": {
+      "presentacion/index.html": "e53d848aede4343ebc71232b353eaf0366911b92784b55027de6f78b1dd6acca",
+      "presentacion/guion.md": "8b0c277c54636c1cd9238666f997c34c9df0eaf4a2ee1299b13b2d557a6d3279",
+      "presentacion/presentacion.pdf": "ab3e72e124e933280ddbef52b09314f7dcc2487712a06dfff70e84c47d9d05b4",
+      "presentacion/assets/datos/procedencia.json": "ad42a83adf79913cf34c39c87d06c183ad1a258b62351b4946dc8ac7872b4f29"
+    },
+    "presentacion_base": {
       "presentacion/index.html": "f520f28b590c87c03f201e097d635c327096115da4aacd3f2b1f315ab035f5e6",
       "presentacion/presentacion.pdf": "ae9050ae55137e1d16c8b1f75828012be911974713f95c41999bc4e9c8856dfc",
       "presentacion/guion.md": "eb1551ffb97104e0bf9f4861130e1d9e870633a1cf6028665a9205e5738d18fe"
@@ -271,5 +277,22 @@
   },
   "lineas_codigo_r": 1542,
   "identidad_listado_r": true,
-  "presentacion_intacta": true
+  "notacion_conteo_diario": "Y_{i,d}",
+  "paginas_reporte_revisadas_por_notacion": [
+    3,
+    4
+  ],
+  "presentacion_final": {
+    "prueba": "Archivo local en Chromium, red desactivada, 1440 × 900 y 1024 × 576",
+    "principales": 12,
+    "referencias": 1,
+    "respaldos": 5,
+    "segundos": 480,
+    "ecuaciones_katex": 31,
+    "dias_base_verificados": 21,
+    "notas_y_transiciones_cotejadas": 18,
+    "paginas_impresas": 18,
+    "solicitudes_externas": 0,
+    "errores": 0
+  }
 }
