@@ -216,7 +216,7 @@ add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 
 add("regresion", "Estrategia empírica", "Estimación por mínimos cuadrados ponderados", 50, f"""
 <div class="math-band reg-equation">{reg_eq}</div>
 <p class="reg-reading"><strong>{math(r"\beta_h^g")} mide la diferencia entre cambios.</strong></p>
-<p class="reg-estimand">Estimamos el efecto promedio del tratamiento sobre los tratados (ATT) en {log}.</p>""",
+<p class="reg-estimand"><strong>Estimamos ATT en escala {math(r"\boldsymbol{\log(1+Y)}")}.</strong></p>""",
 """La variable dependiente es el cambio que acabamos de construir. D vale uno para el tratado y cero para un control. Lambda es el efecto fijo de fecha y descuenta cambios comunes a cada inicio. Beta es la diferencia entre cambios. Buscamos estimar el efecto promedio del tratamiento sobre los tratados, el ATT. X reúne covariables previas, gamma sus coeficientes y u el residuo. La regresión usa mínimos cuadrados ponderados. En M cero, cada tratado pesa uno y distribuye una unidad de peso entre sus controles. Equivale a promediar 77 contrastes, uno por par tratado. M uno añade logaritmo de población, M dos empleo por mil habitantes y M tres autos por mil. La muestra y los pesos explícitos se conservan.""",
 "Veamos las trayectorias que dan origen a ese contraste.", "Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.")
 
