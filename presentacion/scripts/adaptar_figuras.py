@@ -95,7 +95,7 @@ def duration():
     rows = data.set_index("tramo").loc[["d0..1", "d2..6", "wk+1"]]
     fig, ax = canvas(1128, 374, .176, .978, bottom=.19)
     ax.set_ylabel("Tramo analizado")
-    ax.set_xlabel("Diferencia de cambios en log(1 + Y)")
+    ax.set_xlabel(f"Diferencia de cambios en {LOG_CRASHES}")
     ax.axvline(0, color=MUTED, linewidth=1.2, alpha=.68)
     for y, (_, row), color in zip([2, 1, 0], rows.iterrows(), [BLUE, INK, INK]):
         ax.errorbar(row.efecto, y, xerr=[[row.efecto - row.ic_inf], [row.ic_sup - row.efecto]],

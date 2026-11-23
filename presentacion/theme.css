@@ -166,7 +166,6 @@
 .axis-caption { color: var(--muted); text-align: center; }
 #eventos header, #trayectoria header { margin-bottom: 19px; }
 .wide-chart img { width: 1128px; height: auto; }
-.chart-meta { font-size: var(--label); }
 .diagnostic { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; margin-top: 18px; }
 .diagnostic p { font-size: var(--label); }
 
@@ -187,7 +186,7 @@
 #resultados .model-stars { font-size: var(--label); vertical-align: super; line-height: 0; margin-left: 2px; }
 .model-caption { font-size: var(--label); margin-top: 7px; color: var(--muted); }
 #sensibilidades :is(th, td) { padding-top: 7px; padding-bottom: 7px; }
-.duration-chart figcaption { text-align: center; }
+.duration-reading { margin-top: 14px; text-align: center; }
 
 .closing .slide-surface { color: white; background: var(--navy); }
 .closing .eyebrow, .closing a { color: #c7def4; }

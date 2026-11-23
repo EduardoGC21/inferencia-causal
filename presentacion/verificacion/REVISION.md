@@ -8,4 +8,4 @@
 
 - Se verificó la lectura de los ejes y la definición de \(Y\) en las páginas 7, 8, 10 y 17 del PDF. La gráfica ampliada de la página 10 conserva trazos vectoriales y rótulos seleccionables.
 
-Huella SHA-256 del PDF revisado: `852ba1aa37350ad11a670d8e1517c7db07464416b75df90efa733d5e025bee63`.
+Huella SHA-256 del PDF revisado: `4a7b93199b9ded14d093e9840e6f3a584384c916b0bdfbb95e5ea0e86b1fbded`.

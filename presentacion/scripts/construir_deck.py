@@ -104,7 +104,6 @@ def models_table():
 
 
 log = math(r"\log(1+Y)")
-outcome = f'{math("Y")} = siniestros registrados por municipio y día'
 m0 = math("M_0")
 base_eq = math(
     r"\left.\begin{aligned}"
@@ -249,12 +248,12 @@ add("resultados", "Resultados", "Añadir covariables cambia poco la estimación 
 "Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
 
 add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 40, f"""
-<p class="lead">{m0} · 1:muchos · {outcome} <span class="chart-meta"> · Intervalos del 95 % por estado y fecha</span></p>
-<figure class="duration-chart">{figure("duracion", "La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.", extension="svg")}
-  <figcaption>Los intervalos de los <strong>días 2–6 y 7–13</strong> incluyen cero.</figcaption>
-</figure>""",
+<figure>{figure("duracion", "La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.", extension="svg")}
+  <figcaption class="axis-caption">{m0} · Intervalos del 95 % por estado y fecha</figcaption>
+</figure>
+<p class="duration-reading">Los intervalos de los <strong>días 2–6 y 7–13</strong> incluyen cero.</p>""",
 """Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estima en los días cero a uno: menos 0,107 en la escala logarítmica. Después, los coeficientes están más cerca de cero y sus intervalos admiten una caída y un cambio nulo. La señal de los días siete a trece depende de la agrupación y las exclusiones. Si exijo continuidad del registro y ausencia de otro ataque posterior, cambia la muestra. El seguimiento hasta el Día trece deja abierta la duración.""",
-"La base y el calendario también afectan la lectura del resultado inicial.", "Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.", sources)
+"La base y el calendario también afectan la lectura del resultado inicial.", "Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.", sources)
 
 sensitivity_rows = []
 for label, row in [

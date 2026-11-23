@@ -144,7 +144,7 @@ Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estim
 
 La base y el calendario también afectan la lectura del resultado inicial.
 
-**Referencia para consulta.** Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.
+**Referencia para consulta.** Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.
 
 ## Sensibilidad del resultado
 
