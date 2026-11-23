@@ -6,6 +6,6 @@
 - Se verificaron las 19 páginas exportadas. Se revisó la llave que agrupa la transformación y la base antes de calcular el cambio, así como la ecuación de regresión con sus términos anotados. La definición de narcoataque y la construcción del catálogo quedaron en el guion y las notas de Contexto. [PDF revisado](../presentacion.pdf)
 - La pregunta de la portada y la tabla de modelos se cotejaron con el reporte vigente. La tabla abre Resultados e identifica el ajuste de cada modelo. Incluye coeficientes, errores estándar, valores p y dos medidas de ajuste del cuadro 2, Panel A. Se verificó en el PDF que solo los cuatro coeficientes de tratamiento llevan un asterisco. Las 21 diferencias entre los cambios medios de los grupos reproducen la trayectoria diaria de M₀ con tolerancia absoluta de 1e−10. [Procedencia](../assets/datos/procedencia.json)
 
-- Se verificó la lectura de los ejes y la definición de \(Y\) en las páginas 7, 8, 10 y 17 del PDF.
+- Se verificó la lectura de los ejes y la definición de \(Y\) en las páginas 7, 8, 10 y 17 del PDF. La gráfica ampliada de la página 10 conserva trazos vectoriales y rótulos seleccionables.
 
-Huella SHA-256 del PDF revisado: `3e71084940c43bbaa87c15cc9e7275d8b7cc0b899dd28f196aeb74b637311657`.
+Huella SHA-256 del PDF revisado: `165ca70e7eea630914aea783cc7b3004413483f6234eb7e60b1094197013e53c`.

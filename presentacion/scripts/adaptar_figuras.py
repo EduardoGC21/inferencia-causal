@@ -92,7 +92,7 @@ def duration():
     data = effects.query("escenario == 'principal' and muestra == 'emparejada' and modelo == 'M0' "
                          "and base == 'tres_semanas' and escala == 'log1p' and agrupacion == 'entidad_fecha'")
     rows = data.set_index("tramo").loc[["d0..1", "d2..6", "wk+1"]]
-    fig, ax = canvas(750, 306, .26, .96, bottom=.24)
+    fig, ax = canvas(1128, 374, .176, .978, bottom=.19)
     ax.set_ylabel("Tramo analizado")
     ax.set_xlabel("Diferencia de cambios en log(1 + Y)")
     ax.axvline(0, color=MUTED, linewidth=1.2, alpha=.68)
@@ -104,7 +104,9 @@ def duration():
     ax.set_xlim(-.214, .056)
     ax.set_ylim(-.5, 2.5)
     ax.xaxis.set_major_formatter(FuncFormatter(decimal))
-    save(fig, "duracion")
+    with plt.rc_context({"svg.hashsalt": "inferencia-duracion", "svg.fonttype": "none"}):
+        fig.savefig(ASSETS / "duracion.svg", metadata={"Date": None})
+    plt.close(fig)
 
 
 series = pd.read_csv(ASSETS / "datos/series-eventos.csv", index_col="h")

@@ -138,7 +138,7 @@ Veamos si la caída persiste después del primer tramo.
 
 **Explicación oral**
 
-Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estima en los días cero a uno: menos 0,107 en la escala logarítmica. Después, las estimaciones son menores y sus intervalos admiten una caída y un cambio nulo. La señal de los días siete a trece depende de la agrupación y las exclusiones. Si exijo continuidad del registro y ausencia de otro ataque posterior, cambia la muestra. El seguimiento hasta el Día trece deja abierta la duración.
+Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estima en los días cero a uno: menos 0,107 en la escala logarítmica. Después, los coeficientes están más cerca de cero y sus intervalos admiten una caída y un cambio nulo. La señal de los días siete a trece depende de la agrupación y las exclusiones. Si exijo continuidad del registro y ausencia de otro ataque posterior, cambia la muestra. El seguimiento hasta el Día trece deja abierta la duración.
 
 **Transición**
 

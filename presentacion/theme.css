@@ -189,9 +189,7 @@
 .model-caption { font-size: var(--label); margin-top: 7px; color: var(--muted); }
 #sensibilidades :is(th, td) { padding-top: 7px; padding-bottom: 7px; }
 #sensibilidades .takeaway { margin-top: 14px; }
-.duration-layout { display: grid; grid-template-columns: 750px 1fr; gap: 26px; align-items: center; }
-.duration-layout figcaption { text-align: center; font-size: var(--label); color: var(--muted); }
-.duration-layout p + p { margin-top: 28px; }
+.duration-chart figcaption { text-align: center; }
 
 .closing .slide-surface { color: white; background: var(--navy); }
 .closing .eyebrow, .closing a { color: #c7def4; }

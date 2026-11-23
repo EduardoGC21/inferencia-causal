@@ -22,8 +22,8 @@ def math(tex, block=False):
     return f'<span{cls} data-tex="{escape(tex, quote=True)}"></span>'
 
 
-def figure(file, alt):
-    return f'<img src="assets/{file}.png" alt="{escape(alt, quote=True)}">'
+def figure(file, alt, *, extension="png"):
+    return f'<img src="assets/{file}.{extension}" alt="{escape(alt, quote=True)}">'
 
 
 def num(n):
@@ -250,14 +250,11 @@ add("resultados", "Resultados", "Añadir covariables cambia poco la estimación 
 "Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
 
 add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 40, f"""
-<p class="lead">{m0} · 1:muchos · {outcome}</p>
-<div class="duration-layout">
-  <figure>{figure("duracion", "Caída mayor para 0 a 1; los intervalos de 2 a 6 y 7 a 13 incluyen cero.")}
-  <figcaption>Intervalos del 95 % por estado y fecha</figcaption></figure>
-  <div><p><strong>Días 2–6 y 7–13</strong><br>Las estimaciones son menores y los intervalos incluyen cero.</p>
-  <p>El seguimiento llega al Día 13.</p></div>
-</div>""",
-"""Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estima en los días cero a uno: menos 0,107 en la escala logarítmica. Después, las estimaciones son menores y sus intervalos admiten una caída y un cambio nulo. La señal de los días siete a trece depende de la agrupación y las exclusiones. Si exijo continuidad del registro y ausencia de otro ataque posterior, cambia la muestra. El seguimiento hasta el Día trece deja abierta la duración.""",
+<p class="lead">{m0} · 1:muchos · {outcome} <span class="chart-meta"> · Intervalos del 95 % por estado y fecha</span></p>
+<figure class="duration-chart">{figure("duracion", "La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.", extension="svg")}
+  <figcaption>Los intervalos de los <strong>días 2–6 y 7–13</strong> incluyen cero.</figcaption>
+</figure>""",
+"""Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estima en los días cero a uno: menos 0,107 en la escala logarítmica. Después, los coeficientes están más cerca de cero y sus intervalos admiten una caída y un cambio nulo. La señal de los días siete a trece depende de la agrupación y las exclusiones. Si exijo continuidad del registro y ausencia de otro ataque posterior, cambia la muestra. El seguimiento hasta el Día trece deja abierta la duración.""",
 "La base y el calendario también afectan la lectura del resultado inicial.", "Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.", sources)
 
 sensitivity_rows = []
