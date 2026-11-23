@@ -68,13 +68,13 @@ La comparación requiere una base previa para cada día analizado.
 
 **Explicación oral**
 
-Cada casilla es un día respecto al inicio. Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esos jueves. La semana menos uno sirve para el diagnóstico previo. En la fórmula, i indica municipio, t el inicio local, h el día relativo y Y el conteo. Primero transformo cada conteo con logaritmo de uno más Y. Después promedio las tres referencias y resto esa base del valor observado. Cada tramo promedia cambios de días naturales. El Día 0 puede incluir horas anteriores al inicio.
+Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. Dejo fuera la semana menos uno para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local, h el día relativo y r conserva el día de la semana. Aplico logaritmo de uno más Y a cada conteo antes de promediar las tres referencias. Resto esa base del valor observado. Cada tramo promedia cambios diarios. El Día 0 puede incluir horas anteriores al inicio.
 
 **Transición**
 
 Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.
 
-**Referencia para consulta.** Reporte, §3. Ejemplo fechado: 17 de octubre de 2019 en Culiacán.
+**Referencia para consulta.** Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.
 
 ## La fecha común permite comparar cambios
 

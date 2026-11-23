@@ -191,16 +191,14 @@ add("matching", "Estrategia empírica", "Cómo elegimos los controles para compa
 "La comparación requiere una base previa para cada día analizado.", "Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.")
 
 add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 50, f"""
-<p class="lead">Para el Día 0, se promedian las tres fechas resaltadas del mismo día de la semana.</p>
 {calendar()}
-<div class="timeline-key"><span><i class="key-swatch reference"></i> Ejemplo de base para el Día 0</span><span><i class="key-swatch followup"></i> Días de seguimiento analizados</span><span>Semana −1: diagnóstico previo</span></div>
+<div class="timeline-key"><span><i class="key-swatch reference"></i> Referencias del Día 0</span><span><i class="key-swatch followup"></i> Tramos analizados</span><span>Semana −1 · diagnóstico previo</span></div>
 <div class="math-band">
-  <p>{math(r"g(y)=\log(1+y)")} se aplica a cada conteo <strong>antes de promediar</strong>.</p>
+  <p>{math(r"g(y)=\log(1+y)")}</p>
   {base_eq}
-  <p>{math(r"r(t,h)=t+(h\bmod 7)")} fija el día de la semana. La base queda entre −28 y −8.</p>
 </div>""",
-"""Cada casilla es un día respecto al inicio. Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esos jueves. La semana menos uno sirve para el diagnóstico previo. En la fórmula, i indica municipio, t el inicio local, h el día relativo y Y el conteo. Primero transformo cada conteo con logaritmo de uno más Y. Después promedio las tres referencias y resto esa base del valor observado. Cada tramo promedia cambios de días naturales. El Día 0 puede incluir horas anteriores al inicio.""",
-"Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.", "Reporte, §3. Ejemplo fechado: 17 de octubre de 2019 en Culiacán.")
+"""Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. Dejo fuera la semana menos uno para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local, h el día relativo y r conserva el día de la semana. Aplico logaritmo de uno más Y a cada conteo antes de promediar las tres referencias. Resto esa base del valor observado. Cada tramo promedia cambios diarios. El Día 0 puede incluir horas anteriores al inicio.""",
+"Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.", "Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.")
 
 add("regresion", "Estrategia empírica", "La fecha común permite comparar cambios", 50, f"""
 <div class="reg-contrast">

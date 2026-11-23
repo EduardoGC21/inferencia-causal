@@ -128,11 +128,11 @@
 .backup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
 .backup-grid p + p { margin-top: 22px; }
 
-.calendar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px 20px; text-align: center; margin-top: 23px; }
-.calendar strong, .timeline-key { font-size: var(--label); }
-.split-period { display: grid; grid-template-columns: 2fr 5fr; gap: 9px; }
-.days { display: grid; grid-template-columns: repeat(var(--day-count), minmax(0, 1fr)); gap: 3px; margin-top: 4px; }
-.days span { padding: 6px 0; background: var(--wash); font-size: var(--label); }
+.calendar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 20px; text-align: center; }
+.calendar strong { font-size: var(--body); white-space: nowrap; }
+.split-period { display: grid; grid-template-columns: minmax(109px, 2fr) minmax(0, 5fr); gap: 9px; }
+.days { display: grid; grid-template-columns: repeat(var(--day-count), minmax(0, 1fr)); gap: 3px; margin-top: 9px; }
+.days span { padding: 13px 0; background: var(--wash); font-size: var(--body); line-height: 1.12; }
 .days .prior { background: #edf1f5; }
 .days .reference, .key-swatch.reference { background: #bad6ef; color: var(--navy); }
 .days .followup { background: var(--navy); color: white; }
@@ -142,10 +142,10 @@
   background: linear-gradient(to right, var(--navy) 33.3%, var(--followup-mid) 33.3% 66.7%, var(--followup-late) 66.7%);
 }
 .days .reference { font-weight: 700; }
-.timeline-key { display: flex; gap: 33px; margin-top: 12px; }
+.timeline-key { display: flex; gap: 33px; margin-top: 16px; font-size: var(--label); }
 .key-swatch { display: inline-block; width: .9em; height: .9em; vertical-align: -.06em; margin-right: 5px; }
 .math-band { background: var(--wash); padding: 20px 28px; margin-top: 26px; }
-#base .math-band { margin-top: 21px; }
+#base .math-band { margin-top: 24px; padding-block: 15px; }
 .equation { display: block; }
 .equation .katex-display { margin: .42em 0; text-align: left; }
 .equation .katex-display > .katex { text-align: left; }
