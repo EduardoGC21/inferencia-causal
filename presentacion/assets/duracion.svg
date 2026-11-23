@@ -40,64 +40,64 @@ z
     <g id="xtick_1">
      <g id="line2d_1"/>
      <g id="text_1">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: middle; fill: #142e4b" x="176.713984" y="236.600394" transform="rotate(-0 176.713984 236.600394)">−0,20</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #142e4b" x="176.713984" y="236.600394" transform="rotate(-0 176.713984 236.600394)">−0,20</text>
      </g>
     </g>
     <g id="xtick_2">
      <g id="line2d_2"/>
      <g id="text_2">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: middle; fill: #142e4b" x="297.334784" y="236.600394" transform="rotate(-0 297.334784 236.600394)">−0,15</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #142e4b" x="297.334784" y="236.600394" transform="rotate(-0 297.334784 236.600394)">−0,15</text>
      </g>
     </g>
     <g id="xtick_3">
      <g id="line2d_3"/>
      <g id="text_3">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: middle; fill: #142e4b" x="417.955584" y="236.600394" transform="rotate(-0 417.955584 236.600394)">−0,10</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #142e4b" x="417.955584" y="236.600394" transform="rotate(-0 417.955584 236.600394)">−0,10</text>
      </g>
     </g>
     <g id="xtick_4">
      <g id="line2d_4"/>
      <g id="text_4">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: middle; fill: #142e4b" x="538.576384" y="236.600394" transform="rotate(-0 538.576384 236.600394)">−0,05</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #142e4b" x="538.576384" y="236.600394" transform="rotate(-0 538.576384 236.600394)">−0,05</text>
      </g>
     </g>
     <g id="xtick_5">
      <g id="line2d_5"/>
      <g id="text_5">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: middle; fill: #142e4b" x="659.197184" y="236.600394" transform="rotate(-0 659.197184 236.600394)">0,00</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #142e4b" x="659.197184" y="236.600394" transform="rotate(-0 659.197184 236.600394)">0,00</text>
      </g>
     </g>
     <g id="xtick_6">
      <g id="line2d_6"/>
      <g id="text_6">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: middle; fill: #142e4b" x="779.817984" y="236.600394" transform="rotate(-0 779.817984 236.600394)">0,05</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #142e4b" x="779.817984" y="236.600394" transform="rotate(-0 779.817984 236.600394)">0,05</text>
      </g>
     </g>
     <g id="text_7">
-     <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: middle; fill: #142e4b" x="468.61632" y="254.114456" transform="rotate(-0 468.61632 254.114456)">Diferencia de cambios en log(1 + siniestros registrados)</text>
+     <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #142e4b" x="468.61632" y="254.114456" transform="rotate(-0 468.61632 254.114456)">Diferencia de cambios en log(1 + siniestros registrados)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
     <g id="ytick_1">
      <g id="line2d_7"/>
      <g id="text_8">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: end; fill: #142e4b" x="134.94016" y="50.570597" transform="rotate(-0 134.94016 50.570597)">Días 0–1</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end; fill: #142e4b" x="134.94016" y="50.570597" transform="rotate(-0 134.94016 50.570597)">Días 0–1</text>
      </g>
     </g>
     <g id="ytick_2">
      <g id="line2d_8"/>
      <g id="text_9">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: end; fill: #142e4b" x="134.94016" y="119.685797" transform="rotate(-0 134.94016 119.685797)">Días 2–6</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end; fill: #142e4b" x="134.94016" y="119.685797" transform="rotate(-0 134.94016 119.685797)">Días 2–6</text>
      </g>
     </g>
     <g id="ytick_3">
      <g id="line2d_9"/>
      <g id="text_10">
-      <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: end; fill: #142e4b" x="134.94016" y="188.800997" transform="rotate(-0 134.94016 188.800997)">Días 7–13</text>
+      <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end; fill: #142e4b" x="134.94016" y="188.800997" transform="rotate(-0 134.94016 188.800997)">Días 7–13</text>
      </g>
     </g>
     <g id="text_11">
-     <text style="font-size: 14.4px; font-family: 'Arial'; text-anchor: middle; fill: #142e4b" x="62.270441" y="114.444" transform="rotate(-90 62.270441 114.444)">Tramo analizado</text>
+     <text style="font-size: 14.4px; font-family: 'Arial', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #142e4b" x="62.270441" y="114.444" transform="rotate(-90 62.270441 114.444)">Tramo analizado</text>
     </g>
    </g>
    <g id="line2d_10">

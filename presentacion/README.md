@@ -24,7 +24,7 @@ Abre `http://127.0.0.1:8765/presentacion/`. El botón **Exportar PDF** abre el m
 
 ## Actualizar los archivos
 
-La fuente editorial es [construir_deck.py](scripts/construir_deck.py). Genera `index.html` y `guion.md` en una sola ejecución, con el mismo texto oral, tiempos y transiciones. Las figuras se reconstruyen desde los extractos entregados y el mapa del reporte. Desde `repo/`, con el entorno existente de Python, pandas, Matplotlib y Pillow, ejecuta:
+La fuente editorial es [construir_deck.py](scripts/construir_deck.py). Genera `index.html` y `guion.md` en una sola ejecución, con el mismo texto oral, tiempos y transiciones. Las gráficas se generan en SVG a partir de los extractos entregados y los mapas se recortan del reporte. El PDF conserva las gráficas como vectores y las tablas como texto seleccionable. Desde `repo/`, con el entorno existente de Python, pandas, Matplotlib y Pillow, ejecuta:
 
 ```powershell
 & ../.venv/Scripts/python.exe presentacion/scripts/adaptar_figuras.py

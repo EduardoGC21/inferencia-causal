@@ -22,8 +22,8 @@ def math(tex, block=False):
     return f'<span{cls} data-tex="{escape(tex, quote=True)}"></span>'
 
 
-def figure(file, alt, *, extension="png"):
-    return f'<img src="assets/{file}.{extension}" alt="{escape(alt, quote=True)}">'
+def figure(file, alt):
+    return f'<img src="assets/{file}" alt="{escape(alt, quote=True)}">'
 
 
 def num(n):
@@ -165,8 +165,8 @@ add("datos", "Datos", "La muestra reúne 77 pares tratados", 50, f"""
   <p><strong>Resultado</strong><br>Accidentes registrados en vías no federales.</p>
 </div>
 <div class="map-pair">
-  <figure><figcaption><span class="dot treated"></span>54 municipios tratados</figcaption>{figure("mapa-tratados", "Municipios de la muestra que figuran como tratados al menos una vez")}</figure>
-  <figure><figcaption><span class="dot control"></span>765 municipios de control</figcaption>{figure("mapa-controles", "Municipios de la muestra que figuran como controles al menos una vez")}</figure>
+  <figure><figcaption><span class="dot treated"></span>54 municipios tratados</figcaption>{figure("mapa-tratados.png", "Municipios de la muestra que figuran como tratados al menos una vez")}</figure>
+  <figure><figcaption><span class="dot control"></span>765 municipios de control</figcaption>{figure("mapa-controles.png", "Municipios de la muestra que figuran como controles al menos una vez")}</figure>
 </div>""",
 """Los mapas cuentan municipios únicos. En el análisis, la unidad es el par municipio–episodio. Un municipio reaparece si participa en otra fecha. Hay 31 episodios y 32 fechas porque un mismo episodio puede empezar en fechas distintas según el municipio. El tratamiento marca el inicio local, aunque la violencia continúe después. Los siniestros y las covariables provienen de fuentes oficiales. ATUS es la Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas del Instituto Nacional de Estadística y Geografía, INEGI. Un cero indica cero registros publicados con fecha válida. El conteo tampoco mide el riesgo por viaje.""",
 "Con esta unidad, podemos buscar municipios comparables para cada inicio.", "Reporte, §2 y apéndices A, E y F. Los 3 613 pares son 77 tratados y 3 536 controles.", data)
@@ -222,15 +222,15 @@ add("regresion", "Estrategia empírica", "Estimación por mínimos cuadrados pon
 add("eventos", "Estrategia empírica", "Promedios y cambios de tratados y controles", 60, f"""
 <div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span></div>
 <div class="series-layout">
-  <figure><figcaption>Promedio observado</figcaption>{figure("eventos-observados", "Promedios observados por grupo, del día −28 al 13.")}</figure>
-  <figure><figcaption>Cambio medio respecto a la base</figcaption>{figure("eventos-cambios", "Cambios medios de tratados y controles en log(1+Y), del día −7 al 13.")}</figure>
+  <figure><figcaption>Promedio observado</figcaption>{figure("eventos-observados.svg", "Promedios observados por grupo, del día −28 al 13.")}</figure>
+  <figure><figcaption>Cambio medio respecto a la base</figcaption>{figure("eventos-cambios.svg", "Cambios medios de tratados y controles en log(1+Y), del día −7 al 13.")}</figure>
 </div>
 <p class="axis-caption">Días respecto al inicio local</p>""",
 """A la izquierda, cada línea promedia el logaritmo de uno más el conteo de siniestros por municipio y día. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.""",
 "Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.", "Emparejamiento 1:muchos con 77 pares tratados y 3 536 de control. Las 21 diferencias de cambios reproducen los coeficientes de M₀.", sources)
 
 add("trayectoria", "Supuestos", "Diagnóstico de tendencias paralelas", 45, f"""
-<figure class="wide-chart">{figure("trayectoria-principal", "Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.")}
+<figure class="wide-chart">{figure("trayectoria-principal.svg", "Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.")}
   <figcaption class="axis-caption">Días respecto al inicio local · {m0} · Intervalos puntuales del 95 %</figcaption>
 </figure>
 <div class="diagnostic">
@@ -248,7 +248,7 @@ add("resultados", "Resultados", "Añadir covariables cambia poco la estimación 
 "Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
 
 add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 40, f"""
-<figure>{figure("duracion", "La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.", extension="svg")}
+<figure>{figure("duracion.svg", "La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.")}
   <figcaption class="axis-caption">{m0} · Intervalos del 95 % por estado y fecha</figcaption>
 </figure>
 <p class="duration-reading">Los intervalos de los <strong>días 2–6 y 7–13</strong> incluyen cero.</p>""",
@@ -320,7 +320,7 @@ add("contrastes", "Discusión", "El signo se mantiene con 1:1 y en niveles", 0, 
 add("alternativas", "Discusión", "En niveles cambia la precisión", 0, f"""
 <p class="lead">{m0} · Intervalos del 95 %</p>
 <div class="series-key"><span><i class="series-line estimate"></i> 1:muchos</span><span><i class="series-line control"></i> 1:1</span></div>
-<figure class="wide-chart">{figure("trayectoria-niveles", "Comparación diaria a escala de conteos para ambos emparejamientos.")}</figure>
+<figure class="wide-chart">{figure("trayectoria-niveles.svg", "Comparación diaria a escala de conteos para ambos emparejamientos.")}</figure>
 <p class="axis-caption">Días respecto al inicio local · agrupación por estado y fecha</p>""",
 """En niveles, el punto se interpreta como registros por municipio y día. En uno a uno usamos los mismos 77 pares tratados y cambiamos comparadores y pesos. Un intervalo que incluye cero admite un cambio nulo y también otros efectos. Que un método excluya cero y otro lo incluya no establece una diferencia estadística entre métodos. Las tendencias paralelas se requieren en la escala empleada. La comparación semanal de la crisis prolongada de Culiacán desde septiembre de 2024 queda fuera del reporte y de esta exposición.""",
 "Volver al índice de respaldos.", "Reporte, figura 1, apéndices A–C y README del repositorio.", sources)

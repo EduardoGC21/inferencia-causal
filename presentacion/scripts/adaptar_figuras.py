@@ -16,7 +16,8 @@ POINTS = list(range(-7, 14))
 effects = pd.read_csv(ASSETS / "datos/efectos.csv", dtype={"tramo": str})
 
 plt.rcParams.update({
-    "font.family": "Arial", "font.size": 14.4,
+    "font.family": ["Arial", "sans-serif"], "font.size": 14.4,
+    "svg.fonttype": "none",
     "axes.spines.top": False, "axes.spines.right": False,
     "axes.spines.left": False, "axes.spines.bottom": False,
     "xtick.color": INK, "ytick.color": INK,
@@ -43,7 +44,8 @@ def days(ax, first, ticks):
 
 
 def save(fig, name):
-    fig.savefig(ASSETS / f"{name}.png", dpi=200)
+    with plt.rc_context({"svg.hashsalt": f"inferencia-{name}"}):
+        fig.savefig(ASSETS / f"{name}.svg", metadata={"Date": None})
     plt.close(fig)
 
 
@@ -105,9 +107,7 @@ def duration():
     ax.set_xlim(-.214, .056)
     ax.set_ylim(-.5, 2.5)
     ax.xaxis.set_major_formatter(FuncFormatter(decimal))
-    with plt.rc_context({"svg.hashsalt": "inferencia-duracion", "svg.fonttype": "none"}):
-        fig.savefig(ASSETS / "duracion.svg", metadata={"Date": None})
-    plt.close(fig)
+    save(fig, "duracion")
 
 
 series = pd.read_csv(ASSETS / "datos/series-eventos.csv", index_col="h")
