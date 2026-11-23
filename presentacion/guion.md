@@ -6,13 +6,13 @@ Eduardo Garcia Cortez · CU: 207480 · Inferencia Causal · ITAM
 
 Ruta principal de **480 segundos (8:00)**. Los tiempos incluyen las transiciones. Para ensayar, lee la explicación oral y la transición. Los respaldos quedan fuera del tiempo.
 
-## ¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques?
+## ¿Cómo cambian los siniestros viales registrados tras el inicio local de narcoataques?
 
 **Identificador** `pregunta` · **Tiempo** 0:00–0:20 (20 s)
 
 **Explicación oral**
 
-¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.
+¿Cómo cambian los siniestros viales registrados tras el inicio local de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.
 
 **Transición**
 
@@ -20,13 +20,13 @@ Primero, ¿por qué esperaríamos un cambio?
 
 **Referencia para consulta.** Reporte, §1 y §5. Bauernschuster y Rekers (2022).
 
-## Por qué podrían cambiar los accidentes registrados
+## Por qué podrían cambiar los siniestros viales registrados
 
 **Identificador** `contexto` · **Tiempo** 0:20–0:50 (30 s)
 
 **Explicación oral**
 
-Los bloqueos o la suspensión del transporte pueden reducir la circulación. Los desvíos pueden cambiar el riesgo en otras vías. Para fechar el inicio local uso un catálogo propio de prensa y comunicados. Para medir el resultado uso los accidentes registrados por municipio y día en vías no federales, según la estadística del Instituto Nacional de Estadística y Geografía.
+Los bloqueos pueden reducir la circulación y los desvíos pueden cambiar el riesgo en otras vías. También puede cambiar la forma de conducir. Tras el ataque, algunas personas podrían poner más atención y cuidado. Queremos saber si el ataque causa un cambio en los siniestros viales registrados. Uso el catálogo propio para fechar los ataques y la estadística oficial para medir los registros viales.
 
 **Transición**
 

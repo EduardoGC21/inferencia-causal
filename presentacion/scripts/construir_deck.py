@@ -111,14 +111,14 @@ base_eq = math(r"B_{ith}^{g}=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k}),\q
                r"\Delta_{ith}^{g}=g(Y_{i,t+h})-B_{ith}^{g}", True)
 reg_eq = math(r"\Delta_{ith}^{g}=\lambda_{th}+\beta_h^{g}D_{it}+X_{it}^{\prime}\gamma_h+u_{ith}", True)
 
-add("pregunta", "Municipios de México · 2019–2025", "¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques?", 20, """
+add("pregunta", "Municipios de México · 2019–2025", "¿Cómo cambian los siniestros viales registrados tras el inicio local de narcoataques?", 20, """
 <canvas class="cover-art" width="1100" height="1440" role="img" aria-label="Ilustración cenital de un choque entre dos autos en un cruce"></canvas>
 <p class="byline"><span class="project-title">Narcoataques y siniestros viales registrados</span>
 <strong>Eduardo Garcia Cortez · CU: 207480</strong><br>Inferencia Causal · ITAM</p>""",
-"""¿Cómo cambian los accidentes registrados tras el inicio local de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.""",
+"""¿Cómo cambian los siniestros viales registrados tras el inicio local de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.""",
 "Primero, ¿por qué esperaríamos un cambio?", "Reporte, §1 y §5. Bauernschuster y Rekers (2022).", style="cover")
 
-add("contexto", "Contexto", "Por qué podrían cambiar los accidentes registrados", 30, """
+add("contexto", "Contexto", "Por qué podrían cambiar los siniestros viales registrados", 30, """
 <div class="context-layout">
   <div>
     <h3>Mecanismos posibles</h3>
@@ -132,14 +132,18 @@ add("contexto", "Contexto", "Por qué podrían cambiar los accidentes registrado
       <span class="context-arrow" aria-hidden="true">→</span>
       <p>Cambios de ruta y de riesgo por vía</p>
     </div>
+    <div class="context-path">
+      <p><strong>Factor humano</strong></p>
+      <span class="context-arrow" aria-hidden="true">→</span>
+      <p>Cambios al conducir, más atención y cuidado</p>
+    </div>
   </div>
-  <div class="context-data">
-    <h3>Qué observamos</h3>
-    <p><strong>Inicio local del ataque</strong><br>Fecha y lugar en el catálogo propio de prensa y comunicados.</p>
-    <p><strong>Accidentes registrados</strong><br>Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas (ATUS). Registros por municipio y día en vías no federales.</p>
+  <div>
+    <h3>Interés</h3>
+    <p>Evaluar si los narcoataques tienen un efecto causal sobre los siniestros viales registrados.</p>
   </div>
 </div>""",
-"""Los bloqueos o la suspensión del transporte pueden reducir la circulación. Los desvíos pueden cambiar el riesgo en otras vías. Para fechar el inicio local uso un catálogo propio de prensa y comunicados. Para medir el resultado uso los accidentes registrados por municipio y día en vías no federales, según la estadística del Instituto Nacional de Estadística y Geografía.""",
+"""Los bloqueos pueden reducir la circulación y los desvíos pueden cambiar el riesgo en otras vías. También puede cambiar la forma de conducir. Tras el ataque, algunas personas podrían poner más atención y cuidado. Queremos saber si el ataque causa un cambio en los siniestros viales registrados. Uso el catálogo propio para fechar los ataques y la estadística oficial para medir los registros viales.""",
 "El mapa ubica los municipios que entraron a la muestra.", "Reporte, §1–2 y apéndice E.")
 
 add("datos", "Contexto y datos", "La muestra reúne 77 pares tratados", 50, f"""
