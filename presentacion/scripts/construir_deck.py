@@ -131,23 +131,36 @@ add("datos", "Contexto y datos", "La muestra reúne 77 pares tratados", 50, f"""
 """El mapa cuenta municipios únicos. La unidad es el par municipio–episodio: un municipio reaparece si participa en otra fecha. El catálogo propio exige acciones coordinadas en tres o más lugares en 24 horas. La violencia puede continuar después del inicio local. Tres agentes de inteligencia artificial asistieron la búsqueda web, con cobertura desigual y sin validación humana exhaustiva. Los accidentes y las covariables provienen de fuentes oficiales. ATUS es la Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas del Instituto Nacional de Estadística y Geografía, INEGI. Un cero indica cero registros publicados con fecha válida. El conteo tampoco mide el riesgo por viaje.""",
 "Con esta unidad, podemos buscar municipios comparables para cada inicio.", "Reporte, §2 y apéndices A, E y F. Los 3 613 pares son 77 tratados y 3 536 controles.", data)
 
-add("matching", "Estrategia empírica", "Cada tratado tiene su comparación", 50, """
-<div class="matching-layout">
-  <div class="eligibility">
-    <h3>¿Quién puede ser control?</h3>
-    <p>Otro estado, cobertura previa y ausencia de exposición documentada en la ventana previa.</p>
-    <p>Accidentes previos, población, empleo y automóviles dentro de los márgenes de comparación.</p>
+add("matching", "Estrategia empírica", "Cómo aproximamos el contrafactual", 50, """
+<div class="matching-flow">
+  <div class="match-treated">
+    <span class="dot treated" aria-hidden="true"></span>
+    <h3>Municipio tratado</h3>
+    <p>En su fecha de inicio</p>
   </div>
-  <div class="pool">
-    <p class="pool-title">Al menos 10 candidatos de 5 estados</p>
-    <dl>
-      <div><dt>1:muchos</dt><dd>Usa todos los elegibles y reparte entre ellos el peso de la comparación.</dd></div>
-      <div><dt>1:1</dt><dd>Elige al candidato más cercano.</dd></div>
-    </dl>
+  <div class="match-arrow" aria-hidden="true"></div>
+  <div class="match-pool">
+    <h3>Candidatos elegibles</h3>
+    <p>Estados ajenos al episodio, con cobertura y sin exposición documentada en la ventana previa.</p>
+    <p>Accidentes previos, población, empleo y autos comparables.</p>
+    <p class="match-support">≥10 candidatos · ≥5 estados</p>
+  </div>
+  <div class="match-fork" aria-hidden="true"></div>
+  <div class="match-options">
+    <div class="match-choice">
+      <h3><span class="dot control" aria-hidden="true"></span>1:muchos</h3>
+      <p>Todos los elegibles</p>
+      <p class="match-weight">El peso se reparte entre ellos.</p>
+    </div>
+    <div class="match-choice">
+      <h3><span class="dot control" aria-hidden="true"></span>1:1</h3>
+      <p>El candidato más cercano</p>
+      <p class="match-weight">Concentra el peso de los controles.</p>
+    </div>
   </div>
 </div>
-<p class="takeaway">El emparejamiento selecciona controles. Diferencias en diferencias compara sus cambios.</p>""",
-"""Cada tratado se compara con municipios de estados ajenos al episodio, en las mismas fechas. Exijo cobertura en tres meses completos previos, estabilidad territorial y ausencia de exposición documentada desde el Día menos 49. Aplico márgenes de la mitad al doble en accidentes previos, población, empleo y autos. Diez candidatos de cinco estados es el mínimo para que el tratado tenga soporte. Uno a muchos usa a todos los elegibles. Uno a uno toma al más cercano por población, empleo y autos, dentro de ese mismo conjunto. Un control puede participar más de una vez. El efecto que queremos medir es el cambio promedio atribuible al inicio entre los pares tratados incluidos, con igual peso por par.""",
+<p class="takeaway">En las mismas fechas, el cambio de los controles aproxima el cambio sin ataque.</p>""",
+"""El contrafactual es cómo habría cambiado el resultado del tratado sin el ataque. Para aproximarlo, busco controles en estados ajenos al episodio. Exijo cobertura en tres meses completos previos, estabilidad territorial y ausencia de exposición documentada desde el Día menos 49. Aplico márgenes de la mitad al doble en accidentes previos, población, empleo y autos. El mínimo es de diez candidatos de al menos cinco estados. Uno a muchos usa todos los elegibles y reparte el peso. Uno a uno elige al más cercano por población, empleo y autos. Después, diferencias en diferencias compara los cambios en las mismas fechas. Queremos estimar el efecto promedio de los pares tratados incluidos, con igual peso por par.""",
 "La comparación requiere una base previa para cada día analizado.", "Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.")
 
 add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 55, f"""

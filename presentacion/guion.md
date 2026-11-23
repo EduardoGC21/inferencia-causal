@@ -34,13 +34,13 @@ Con esta unidad, podemos buscar municipios comparables para cada inicio.
 
 **Referencia para consulta.** Reporte, §2 y apéndices A, E y F. Los 3 613 pares son 77 tratados y 3 536 controles.
 
-## Cada tratado tiene su comparación
+## Cómo aproximamos el contrafactual
 
 **Identificador** `matching` · **Tiempo** 1:20–2:10 (50 s)
 
 **Explicación oral**
 
-Cada tratado se compara con municipios de estados ajenos al episodio, en las mismas fechas. Exijo cobertura en tres meses completos previos, estabilidad territorial y ausencia de exposición documentada desde el Día menos 49. Aplico márgenes de la mitad al doble en accidentes previos, población, empleo y autos. Diez candidatos de cinco estados es el mínimo para que el tratado tenga soporte. Uno a muchos usa a todos los elegibles. Uno a uno toma al más cercano por población, empleo y autos, dentro de ese mismo conjunto. Un control puede participar más de una vez. El efecto que queremos medir es el cambio promedio atribuible al inicio entre los pares tratados incluidos, con igual peso por par.
+El contrafactual es cómo habría cambiado el resultado del tratado sin el ataque. Para aproximarlo, busco controles en estados ajenos al episodio. Exijo cobertura en tres meses completos previos, estabilidad territorial y ausencia de exposición documentada desde el Día menos 49. Aplico márgenes de la mitad al doble en accidentes previos, población, empleo y autos. El mínimo es de diez candidatos de al menos cinco estados. Uno a muchos usa todos los elegibles y reparte el peso. Uno a uno elige al más cercano por población, empleo y autos. Después, diferencias en diferencias compara los cambios en las mismas fechas. Queremos estimar el efecto promedio de los pares tratados incluidos, con igual peso por par.
 
 **Transición**
 

@@ -72,14 +72,46 @@
 .dot.treated { background: #d95600; }
 .dot.control { background: #137ca6; }
 
-.matching-layout, .backup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
-.matching-layout { align-items: stretch; }
-.eligibility { padding-top: 20px; }
-.eligibility p + p, .backup-grid p + p { margin-top: 22px; }
-.pool { padding: 28px 34px; background: var(--wash); }
-.pool-title { font-weight: 700; color: var(--blue); margin-bottom: 20px; }
-.pool dl > div + div { margin-top: 20px; }
-.pool dt { margin-bottom: 2px; }
+.matching-flow {
+  display: grid;
+  grid-template-columns: 230px 54px 410px 74px 1fr;
+  align-items: center;
+  min-height: 360px;
+}
+.match-treated { padding-right: 18px; }
+.match-treated .dot { display: block; width: 30px; height: 30px; margin: 0 0 14px; }
+.match-treated h3 { margin-bottom: 4px; }
+.match-treated p, .match-pool > p, .match-weight { font-size: var(--label); }
+.match-arrow { position: relative; height: 2px; margin-right: 9px; background: var(--blue); }
+.match-arrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 1px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--blue);
+  border-right: 2px solid var(--blue);
+  transform: translateY(-50%) rotate(45deg);
+}
+.match-pool { background: var(--wash); padding: 27px 28px; }
+.match-pool p + p { margin-top: 13px; }
+.match-pool .match-support { margin-top: 19px; color: var(--blue); font-weight: 700; }
+.match-fork { position: relative; height: 151px; }
+.match-fork::before, .match-fork::after { content: ""; position: absolute; }
+.match-fork::before {
+  inset: 0 0 0 50%;
+  border: 2px solid var(--blue);
+  border-right: 0;
+}
+.match-fork::after { top: 50%; left: 0; width: 50%; height: 2px; background: var(--blue); }
+.match-options { display: grid; grid-template-rows: 127px 127px; gap: 22px; }
+.match-choice { display: flex; flex-direction: column; justify-content: center; padding-left: 25px; }
+.match-choice h3 { margin-bottom: 6px; }
+.match-weight { color: var(--muted); margin-top: 3px; }
+#matching .takeaway { margin-top: 14px; }
+.backup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.backup-grid p + p { margin-top: 22px; }
 
 .calendar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px 20px; text-align: center; margin-top: 23px; }
 .calendar strong, .timeline-key { font-size: var(--label); }
