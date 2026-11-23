@@ -26,13 +26,13 @@ Primero, ¿por qué esperaríamos un cambio?
 
 **Explicación oral**
 
-Los bloqueos pueden reducir la circulación y los desvíos pueden cambiar el riesgo en otras vías. También puede cambiar la forma de conducir. Tras el ataque, algunas personas podrían poner más atención y cuidado. Queremos saber si el ataque causa un cambio en los siniestros viales registrados. Uso el catálogo propio para fechar los ataques y la estadística oficial para medir los registros viales.
+Los bloqueos, los desvíos y los cambios al conducir pueden afectar los siniestros. En este estudio, un narcoataque reúne acciones coordinadas en al menos tres lugares en 24 horas, con afectación del espacio público, los comercios o el transporte. Tres agentes de inteligencia artificial recopilaron prensa y comunicados. Se buscaron fuentes independientes para corroborar fecha y municipio. La cobertura es desigual y no hubo validación humana exhaustiva.
 
 **Transición**
 
 El mapa ubica los municipios que entraron a la muestra.
 
-**Referencia para consulta.** Reporte, §1–2 y apéndice E.
+**Referencia para consulta.** Reporte, §2 para la definición y apéndice E para la búsqueda web, la corroboración entre fuentes y los casos pendientes.
 
 ## La muestra reúne 77 pares tratados
 
@@ -40,7 +40,7 @@ El mapa ubica los municipios que entraron a la muestra.
 
 **Explicación oral**
 
-El mapa cuenta municipios únicos. La unidad es el par municipio–episodio: un municipio reaparece si participa en otra fecha. El catálogo propio exige acciones coordinadas en tres o más lugares en 24 horas. La violencia puede continuar después del inicio local. Tres agentes de inteligencia artificial asistieron la búsqueda web, con cobertura desigual y sin validación humana exhaustiva. Los accidentes y las covariables provienen de fuentes oficiales. ATUS es la Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas del Instituto Nacional de Estadística y Geografía, INEGI. Un cero indica cero registros publicados con fecha válida. El conteo tampoco mide el riesgo por viaje.
+Los mapas cuentan municipios únicos. En el análisis, la unidad es el par municipio–episodio. Un municipio reaparece si participa en otra fecha. Hay 31 episodios y 32 fechas porque un mismo episodio puede empezar en fechas distintas según el municipio. El tratamiento marca el inicio local, aunque la violencia continúe después. Los siniestros y las covariables provienen de fuentes oficiales. ATUS es la Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas del Instituto Nacional de Estadística y Geografía, INEGI. Un cero indica cero registros publicados con fecha válida. El conteo tampoco mide el riesgo por viaje.
 
 **Transición**
 

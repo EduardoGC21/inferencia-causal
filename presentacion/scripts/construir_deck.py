@@ -143,10 +143,10 @@ add("contexto", "Contexto", "Por qué podrían cambiar los siniestros viales reg
     <p>Evaluar si los narcoataques tienen un efecto causal sobre los siniestros viales registrados.</p>
   </div>
 </div>""",
-"""Los bloqueos pueden reducir la circulación y los desvíos pueden cambiar el riesgo en otras vías. También puede cambiar la forma de conducir. Tras el ataque, algunas personas podrían poner más atención y cuidado. Queremos saber si el ataque causa un cambio en los siniestros viales registrados. Uso el catálogo propio para fechar los ataques y la estadística oficial para medir los registros viales.""",
-"El mapa ubica los municipios que entraron a la muestra.", "Reporte, §1–2 y apéndice E.")
+"""Los bloqueos, los desvíos y los cambios al conducir pueden afectar los siniestros. En este estudio, un narcoataque reúne acciones coordinadas en al menos tres lugares en 24 horas, con afectación del espacio público, los comercios o el transporte. Tres agentes de inteligencia artificial recopilaron prensa y comunicados. Se buscaron fuentes independientes para corroborar fecha y municipio. La cobertura es desigual y no hubo validación humana exhaustiva.""",
+"El mapa ubica los municipios que entraron a la muestra.", "Reporte, §2 para la definición y apéndice E para la búsqueda web, la corroboración entre fuentes y los casos pendientes.")
 
-add("datos", "Contexto y datos", "La muestra reúne 77 pares tratados", 50, f"""
+add("datos", "Datos", "La muestra reúne 77 pares tratados", 50, f"""
 <div class="map-context">
   <p><strong>31 episodios, 32 fechas</strong><br>Un municipio puede participar en distintas fechas.</p>
   <p><strong>Tratamiento</strong><br>Inicio local de una jornada coordinada de violencia.</p>
@@ -156,7 +156,7 @@ add("datos", "Contexto y datos", "La muestra reúne 77 pares tratados", 50, f"""
   <figure><figcaption><span class="dot treated"></span>54 municipios tratados</figcaption>{figure("mapa-tratados", "Municipios de la muestra que figuran como tratados al menos una vez")}</figure>
   <figure><figcaption><span class="dot control"></span>765 municipios de control</figcaption>{figure("mapa-controles", "Municipios de la muestra que figuran como controles al menos una vez")}</figure>
 </div>""",
-"""El mapa cuenta municipios únicos. La unidad es el par municipio–episodio: un municipio reaparece si participa en otra fecha. El catálogo propio exige acciones coordinadas en tres o más lugares en 24 horas. La violencia puede continuar después del inicio local. Tres agentes de inteligencia artificial asistieron la búsqueda web, con cobertura desigual y sin validación humana exhaustiva. Los accidentes y las covariables provienen de fuentes oficiales. ATUS es la Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas del Instituto Nacional de Estadística y Geografía, INEGI. Un cero indica cero registros publicados con fecha válida. El conteo tampoco mide el riesgo por viaje.""",
+"""Los mapas cuentan municipios únicos. En el análisis, la unidad es el par municipio–episodio. Un municipio reaparece si participa en otra fecha. Hay 31 episodios y 32 fechas porque un mismo episodio puede empezar en fechas distintas según el municipio. El tratamiento marca el inicio local, aunque la violencia continúe después. Los siniestros y las covariables provienen de fuentes oficiales. ATUS es la Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas del Instituto Nacional de Estadística y Geografía, INEGI. Un cero indica cero registros publicados con fecha válida. El conteo tampoco mide el riesgo por viaje.""",
 "Con esta unidad, podemos buscar municipios comparables para cada inicio.", "Reporte, §2 y apéndices A, E y F. Los 3 613 pares son 77 tratados y 3 536 controles.", data)
 
 add("matching", "Estrategia empírica", "Cómo elegimos los controles para comparar cambios", 50, """
