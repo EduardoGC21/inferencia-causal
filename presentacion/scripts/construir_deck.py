@@ -268,9 +268,8 @@ for label, row in [
 
 add("sensibilidades", "Resultados", "La referencia previa y el calendario importan", 30, f"""
 <p class="lead">Días 0–1 · {m0}, 1:muchos, {log} · intervalos por estado y fecha</p>
-{table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}
-<p class="takeaway">Cambiar la base conserva los pares. Excluir fechas cambia la muestra.</p>""",
-"""Con los mismos pares y pesos, la semana previa reduce la magnitud de la caída y el Día menos dos cambia el signo. Ambos intervalos incluyen cero. Sin feriados ni recesos, la muestra queda en 25 tratados y aumenta la incertidumbre. El placebo reconstruye la comparación 28 días antes y da una caída de menor magnitud, con un intervalo que incluye cero.""",
+{table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}""",
+"""Con los mismos pares y pesos, la semana previa atenúa la caída y el día menos dos cambia el signo. Ambos intervalos incluyen cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.""",
 "¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources)
 
 add("conclusion", "Conclusión", "La mayor caída relativa aparece al inicio", 20, """
