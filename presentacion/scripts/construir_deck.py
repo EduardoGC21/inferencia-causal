@@ -241,11 +241,10 @@ add("trayectoria", "Supuestos", "Diagnóstico de tendencias paralelas", 45, f"""
 "Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Modelo M₀, 1:muchos. Intervalos puntuales del 95 % por estado y fecha. Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
 
 add("resultados", "Resultados", "Añadir covariables cambia poco la estimación inicial", 35, f"""
-<p class="lead">Días 0–1 · 1:muchos · Cambio en {log} · Efectos fijos de fecha</p>
 {models_table()}
-<p class="model-caption">3 613 pares municipio–fecha · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.</p>""",
+<p class="table-caption">Días 0–1 · 1:muchos · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.</p>""",
 """En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Y. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.""",
-"Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
+"Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares municipio–fecha, efectos fijos de fecha y el cambio en log(1+Y). Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.", sources)
 
 add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 40, f"""
 <figure>{figure("duracion.svg", "La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.")}
@@ -265,10 +264,10 @@ for label, row in [
     sensitivity_rows.append((short[0], row["tratados"], *short[1:]))
 
 add("sensibilidades", "Resultados", "Sensibilidad del resultado", 30, f"""
-<p class="lead">Días 0–1 · {m0}, 1:muchos, {log} · intervalos por estado y fecha</p>
-{table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}""",
+{table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}
+<p class="table-caption">Días 0–1 · {m0} · 1:muchos</p>""",
 """Con los mismos pares y pesos, usar la semana previa como base atenúa la caída y el intervalo incluye cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.""",
-"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources)
+"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources)
 
 add("conclusion", "Conclusión", "La mayor caída relativa aparece al inicio", 20, """
 <p class="closing-summary">La caída destaca en los días 0–1. Después, las estimaciones son menores y la duración sigue abierta.</p>

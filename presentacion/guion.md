@@ -130,7 +130,7 @@ En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al camb
 
 Veamos si la caída persiste después del primer tramo.
 
-**Referencia para consulta.** Reporte, cuadro 2, Panel A, y apéndices A y B. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.
+**Referencia para consulta.** Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares municipio–fecha, efectos fijos de fecha y el cambio en log(1+Y). Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.
 
 ## La caída estimada es mayor en los días 0 y 1
 
@@ -158,7 +158,7 @@ Con los mismos pares y pesos, usar la semana previa como base atenúa la caída 
 
 ¿Qué se puede sostener con ese conjunto de resultados?
 
-**Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C4. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
+**Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
 
 ## La mayor caída relativa aparece al inicio
 

@@ -8,4 +8,4 @@
 
 - Se revisaron las gráficas y las tablas en las páginas 7–11 y 16–17 del PDF. Las gráficas conservan trazos vectoriales y rótulos seleccionables. Las tablas conservan texto seleccionable.
 
-Huella SHA-256 del PDF revisado: `6d34a0b1fbe730eb5f6ebbe337db437eff1f8c6c9cfab15c942c5fa421b4c776`.
+Huella SHA-256 del PDF revisado: `bc136a7fe5f5a84658e5b296e4a2341fdc6fba39a8b4b46e530e2586ea141b65`.
