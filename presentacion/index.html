@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Narcoataques y siniestros viales registrados</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/vendor/reveal/reveal.css">
+  <link rel="stylesheet" href="assets/vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="presenter.css">
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="reveal"><div class="slides">
+<section id="pregunta" class="main cover" data-timing="20">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Municipios de México · 2019–2025</p><h1>¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques?</h1></header>
+
+<canvas class="cover-art" width="1100" height="1440" role="img" aria-label="Ilustración cenital de un choque entre dos autos en un cruce"></canvas>
+<p class="byline"><span class="project-title">Narcoataques y siniestros viales registrados</span>
+<strong>Eduardo Garcia Cortez · CU: 207480</strong><br>Inferencia Causal · ITAM</p>
+
+
+  </div>
+  <aside class="notes"><p><strong>pregunta · 0:00–0:20 (20 s)</strong></p><p>¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.</p><p><strong>Transición.</strong> Primero, ¿por qué esperaríamos un cambio?</p><p><strong>Referencia para consulta.</strong> Reporte, §1 y §5. Bauernschuster y Rekers (2022).</p></aside>
+</section>
+<section id="contexto" class="main " data-timing="30">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Contexto</p><h2>Por qué podrían cambiar los siniestros viales registrados</h2></header>
+
+<div class="context-layout">
+  <div>
+    <h3>Mecanismos posibles</h3>
+    <div class="context-path">
+      <p><strong>Bloqueos o suspensión del transporte</strong></p>
+      <span class="context-arrow" aria-hidden="true">→</span>
+      <p>Menos circulación</p>
+    </div>
+    <div class="context-path">
+      <p><strong>Desvíos</strong></p>
+      <span class="context-arrow" aria-hidden="true">→</span>
+      <p>Cambios de ruta y de riesgo por vía</p>
+    </div>
+    <div class="context-path">
+      <p><strong>Factor humano</strong></p>
+      <span class="context-arrow" aria-hidden="true">→</span>
+      <p>Cambios al conducir, más atención y cuidado</p>
+    </div>
+  </div>
+  <div>
+    <h3>Interés</h3>
+    <p>Evaluar si los narcoataques tienen un efecto causal sobre los siniestros viales registrados.</p>
+  </div>
+</div>
+
+
+  </div>
+  <aside class="notes"><p><strong>contexto · 0:20–0:50 (30 s)</strong></p><p>Los bloqueos, los desvíos y los cambios al conducir pueden afectar los siniestros. En este estudio, un narcoataque reúne acciones coordinadas en al menos tres lugares en 24 horas, con afectación del espacio público, los comercios o el transporte. Tres agentes de inteligencia artificial recopilaron prensa y comunicados. Se buscaron fuentes independientes para corroborar fecha y municipio. La cobertura es desigual y no hubo validación humana exhaustiva.</p><p><strong>Transición.</strong> El mapa ubica los municipios que entraron a la muestra.</p><p><strong>Referencia para consulta.</strong> Reporte, §2 para la definición y apéndice E para la búsqueda web, la corroboración entre fuentes y los casos pendientes.</p></aside>
+</section>
+<section id="datos" class="main " data-timing="50">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Datos</p><h2>La muestra reúne 77 pares tratados</h2></header>
+
+<div class="map-context">
+  <p><strong>31 episodios, 32 fechas</strong><br>Un municipio puede participar en distintas fechas.</p>
+  <p><strong>Tratamiento</strong><br>Inicio local de una jornada coordinada de violencia.</p>
+  <p><strong>Resultado</strong><br>Accidentes registrados en vías no federales.</p>
+</div>
+<div class="map-pair">
+  <figure><figcaption><span class="dot treated"></span>54 municipios tratados</figcaption><img src="assets/mapa-tratados.png" alt="Municipios de la muestra que figuran como tratados al menos una vez"></figure>
+  <figure><figcaption><span class="dot control"></span>765 municipios de control</figcaption><img src="assets/mapa-controles.png" alt="Municipios de la muestra que figuran como controles al menos una vez"></figure>
+</div>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), Consejo Nacional de Población (CONAPO) y catálogo propio.</p>
+
+  </div>
+  <aside class="notes"><p><strong>datos · 0:50–1:40 (50 s)</strong></p><p>Los mapas cuentan municipios únicos. En el análisis, la unidad es el par municipio–episodio. Un municipio reaparece si participa en otra fecha. Hay 31 episodios y 32 fechas porque un mismo episodio puede empezar en fechas distintas según el municipio. El tratamiento marca el inicio local, aunque la violencia continúe después. Los siniestros y las covariables provienen de fuentes oficiales. ATUS es la Estadística de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas del Instituto Nacional de Estadística y Geografía, INEGI. Un cero indica cero registros publicados con fecha válida. El conteo tampoco mide el riesgo por viaje.</p><p><strong>Transición.</strong> Con esta unidad, podemos buscar municipios comparables para cada inicio.</p><p><strong>Referencia para consulta.</strong> Reporte, §2 y apéndices A, E y F. Los 3 613 pares son 77 tratados y 3 536 controles.</p></aside>
+</section>
+<section id="matching" class="main " data-timing="50">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Estrategia empírica</p><h2>Cómo elegimos los controles para comparar cambios</h2></header>
+
+<div class="matching-flow">
+  <div class="match-treated">
+    <span class="dot treated" aria-hidden="true"></span>
+    <h3>Municipio tratado</h3>
+    <p>En su fecha de inicio</p>
+  </div>
+  <div class="match-arrow" aria-hidden="true"></div>
+  <div class="match-pool">
+    <h3>Candidatos elegibles</h3>
+    <p>Estados ajenos al episodio, con cobertura y sin exposición documentada en la ventana previa.</p>
+    <p>Accidentes previos, población, empleo y autos comparables.</p>
+    <p class="match-support">≥10 candidatos · ≥5 estados</p>
+  </div>
+  <div class="match-fork" aria-hidden="true"></div>
+  <div class="match-options">
+    <div class="match-choice">
+      <h3><span class="dot control" aria-hidden="true"></span>1:muchos</h3>
+      <p>Todos los elegibles</p>
+      <p class="match-weight">El peso se reparte entre ellos.</p>
+    </div>
+    <div class="match-choice">
+      <h3><span class="dot control" aria-hidden="true"></span>1:1</h3>
+      <p>El candidato más cercano</p>
+      <p class="match-weight">Concentra el peso de los controles.</p>
+    </div>
+  </div>
+</div>
+
+
+  </div>
+  <aside class="notes"><p><strong>matching · 1:40–2:30 (50 s)</strong></p><p>El contrafactual es cómo habría cambiado el resultado del tratado sin el ataque. Para aproximarlo, busco controles en estados ajenos al episodio. Exijo cobertura en tres meses completos previos, estabilidad territorial y ausencia de exposición documentada desde el Día menos 49. Aplico márgenes de la mitad al doble en accidentes previos, población, empleo y autos. El mínimo es de diez candidatos de al menos cinco estados. Uno a muchos usa todos los elegibles y reparte el peso. Uno a uno elige al más cercano por población, empleo y autos. Después, diferencias en diferencias compara los cambios en las mismas fechas. Queremos estimar el efecto promedio de los pares tratados incluidos, con igual peso por par.</p><p><strong>Transición.</strong> La comparación requiere una base previa para cada día analizado.</p><p><strong>Referencia para consulta.</strong> Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.</p></aside>
+</section>
+<section id="base" class="main " data-timing="50">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Estrategia empírica</p><h2>Cada día tiene tres referencias previas</h2></header>
+
+<p class="lead">Para el Día 0, se promedian las tres fechas resaltadas del mismo día de la semana.</p>
+<div class="calendar" aria-label="Días −28 a 13. El seguimiento posterior abarca tres tramos."><div class=""><strong>Semana −4</strong><div class="days" style="--day-count:7"><span class="reference">−28</span><span class="prior">−27</span><span class="prior">−26</span><span class="prior">−25</span><span class="prior">−24</span><span class="prior">−23</span><span class="prior">−22</span></div></div><div class=""><strong>Semana −3</strong><div class="days" style="--day-count:7"><span class="reference">−21</span><span class="prior">−20</span><span class="prior">−19</span><span class="prior">−18</span><span class="prior">−17</span><span class="prior">−16</span><span class="prior">−15</span></div></div><div class=""><strong>Semana −2</strong><div class="days" style="--day-count:7"><span class="reference">−14</span><span class="prior">−13</span><span class="prior">−12</span><span class="prior">−11</span><span class="prior">−10</span><span class="prior">−9</span><span class="prior">−8</span></div></div><div class=""><strong>Semana −1</strong><div class="days" style="--day-count:7"><span class="prior">−7</span><span class="prior">−6</span><span class="prior">−5</span><span class="prior">−4</span><span class="prior">−3</span><span class="prior">−2</span><span class="prior">−1</span></div></div><div class="split-period"><div class=""><strong>Días 0–1</strong><div class="days" style="--day-count:2"><span class="followup">0</span><span class="followup">1</span></div></div><div class="period-mid"><strong>Días 2–6</strong><div class="days" style="--day-count:5"><span class="followup">2</span><span class="followup">3</span><span class="followup">4</span><span class="followup">5</span><span class="followup">6</span></div></div></div><div class="period-late"><strong>Días 7–13</strong><div class="days" style="--day-count:7"><span class="followup">7</span><span class="followup">8</span><span class="followup">9</span><span class="followup">10</span><span class="followup">11</span><span class="followup">12</span><span class="followup">13</span></div></div></div>
+<div class="timeline-key"><span><i class="key-swatch reference"></i> Referencias del Día 0</span><span><i class="key-swatch followup"></i> Tramos analizados</span><span>Semana −1 · diagnóstico previo</span></div>
+<div class="math-band">
+  <span class="equation" data-tex="\left.\begin{aligned}g(y)&amp;=\log(1+y)\\B_{ith}^{g}&amp;=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k})\end{aligned}\right\}\quad{\color{#235ca0}\longrightarrow}\quad\Delta_{ith}^{g}=g(Y_{i,t+h})-B_{ith}^{g}"></span>
+</div>
+
+
+  </div>
+  <aside class="notes"><p><strong>base · 2:30–3:20 (50 s)</strong></p><p>Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. Dejo fuera la semana menos uno para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local, h el día relativo y r conserva el día de la semana. Aplico logaritmo de uno más Y a cada conteo antes de promediar las tres referencias. Resto esa base del valor observado. Cada tramo promedia cambios diarios. El Día 0 puede incluir horas anteriores al inicio.</p><p><strong>Transición.</strong> Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.</p><p><strong>Referencia para consulta.</strong> Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.</p></aside>
+</section>
+<section id="regresion" class="main " data-timing="50">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Estrategia empírica</p><h2>Estimación por mínimos cuadrados ponderados</h2></header>
+
+<div class="math-band reg-equation"><span class="equation" data-tex="\underbrace{\Delta_{ith}^{g}}_{\text{cambio}}=\underbrace{\lambda_{th}}_{\text{FE de fecha}}+\underbrace{\color{#235ca0}{\beta_h^{g}D_{it}}}_{\text{tratamiento}}+\underbrace{X_{it}^{\prime}\gamma_h}_{\text{covariables}}+\underbrace{u_{ith}}_{\text{residuo}}"></span></div>
+<p class="reg-reading"><strong><span data-tex="\boldsymbol{\beta_h^g}"></span> mide la diferencia entre cambios.</strong></p>
+<p class="reg-estimand"><strong>Estimamos ATT en escala <span data-tex="\boldsymbol{\log(1+Y)}"></span>.</strong></p>
+
+
+  </div>
+  <aside class="notes"><p><strong>regresion · 3:20–4:10 (50 s)</strong></p><p>La variable dependiente es el cambio que acabamos de construir. D vale uno para el tratado y cero para un control. Lambda es el efecto fijo de fecha y descuenta cambios comunes a cada inicio. Beta es la diferencia entre cambios. Buscamos estimar el efecto promedio del tratamiento sobre los tratados, el ATT. X reúne covariables previas, gamma sus coeficientes y u el residuo. La regresión usa mínimos cuadrados ponderados. En M cero, cada tratado pesa uno y distribuye una unidad de peso entre sus controles. Equivale a promediar 77 contrastes, uno por par tratado. M uno añade logaritmo de población, M dos empleo por mil habitantes y M tres autos por mil. La muestra y los pesos explícitos se conservan.</p><p><strong>Transición.</strong> Veamos las trayectorias que dan origen a ese contraste.</p><p><strong>Referencia para consulta.</strong> Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.</p></aside>
+</section>
+<section id="eventos" class="main " data-timing="60">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Estrategia empírica</p><h2>Promedios y cambios de tratados y controles</h2></header>
+
+<div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span></div>
+<div class="series-layout">
+  <figure><figcaption>Promedio observado</figcaption><img src="assets/eventos-observados.svg" alt="Promedios observados por grupo, del día −28 al 13."></figure>
+  <figure><figcaption>Cambio medio respecto a la base</figcaption><img src="assets/eventos-cambios.svg" alt="Cambios medios de tratados y controles en log(1+Y), del día −7 al 13."></figure>
+</div>
+<p class="axis-caption">Días respecto al inicio local</p>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
+
+  </div>
+  <aside class="notes"><p><strong>eventos · 4:10–5:10 (60 s)</strong></p><p>A la izquierda, cada línea promedia el logaritmo de uno más el conteo de siniestros por municipio y día. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.</p><p><strong>Transición.</strong> Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.</p><p><strong>Referencia para consulta.</strong> Emparejamiento 1:muchos con 77 pares tratados y 3 536 de control. Las 21 diferencias de cambios reproducen los coeficientes de M₀.</p></aside>
+</section>
+<section id="trayectoria" class="main " data-timing="45">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Supuestos</p><h2>Diagnóstico de tendencias paralelas</h2></header>
+
+<figure class="wide-chart"><img src="assets/trayectoria-principal.svg" alt="Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.">
+  <figcaption class="axis-caption">Días respecto al inicio local · <span data-tex="M_0"></span> · Intervalos puntuales del 95 %</figcaption>
+</figure>
+<div class="diagnostic">
+  <p><strong>Tendencias paralelas:</strong> cambios comparables en ausencia del ataque.</p>
+  <p><strong>Prueba previa por semanas:</strong> rechaza por estado; es inconclusa por estado y fecha.</p>
+</div>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
+
+  </div>
+  <aside class="notes"><p><strong>trayectoria · 5:10–5:55 (45 s)</strong></p><p>Cada punto es la diferencia entre los cambios de tratados y controles. Es el coeficiente estimado, beta gorro. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.</p><p><strong>Transición.</strong> Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.</p><p><strong>Referencia para consulta.</strong> Modelo M₀, 1:muchos. Intervalos puntuales del 95 % por estado y fecha. Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.</p></aside>
+</section>
+<section id="resultados" class="main " data-timing="35">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Resultados</p><h2>Añadir covariables cambia poco la estimación inicial</h2></header>
+
+<table><thead><tr><th scope="col">Variable / estadístico</th><th scope="col"><span data-tex="M_0"></span></th><th scope="col"><span data-tex="M_1"></span></th><th scope="col"><span data-tex="M_2"></span></th><th scope="col"><span data-tex="M_3"></span></th></tr></thead><tbody><tr><th scope="row">Tratamiento (<span data-tex="\widehat{\beta}"></span>)</th><td>−0,107<sup class="model-stars">*</sup><span class="model-cell-stats">(0,043) · 0,019</span></td><td>−0,105<sup class="model-stars">*</sup><span class="model-cell-stats">(0,043) · 0,021</span></td><td>−0,107<sup class="model-stars">*</sup><span class="model-cell-stats">(0,043) · 0,020</span></td><td>−0,108<sup class="model-stars">*</sup><span class="model-cell-stats">(0,045) · 0,022</span></td></tr><tr><th scope="row">Logaritmo de población</th><td>—</td><td>−0,022<span class="model-cell-stats">(0,019) · 0,261</span></td><td>−0,030<span class="model-cell-stats">(0,029) · 0,303</span></td><td>−0,029<span class="model-cell-stats">(0,028) · 0,309</span></td></tr><tr><th scope="row">Empleo por mil habitantes</th><td>—</td><td>—</td><td>0,000184<span class="model-cell-stats">(0,000399) · 0,649</span></td><td>0,000214<span class="model-cell-stats">(0,000434) · 0,625</span></td></tr><tr><th scope="row">Autos por mil habitantes</th><td>—</td><td>—</td><td>—</td><td>−0,000111<span class="model-cell-stats">(0,000245) · 0,653</span></td></tr><tr><th scope="row"><span data-tex="R^2"></span> ponderado</th><td>0,162</td><td>0,164</td><td>0,165</td><td>0,166</td></tr><tr><th scope="row"><span data-tex="R^2"></span> tras descontar fechas</th><td>0,022</td><td>0,025</td><td>0,026</td><td>0,027</td></tr></tbody></table>
+    <footer class="table-footer"><p class="table-caption">Días 0–1 · 1:muchos · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.</p><p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p></footer>
+
+  </div>
+  <aside class="notes"><p><strong>resultados · 5:55–6:30 (35 s)</strong></p><p>En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Y. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.</p><p><strong>Transición.</strong> Veamos si la caída persiste después del primer tramo.</p><p><strong>Referencia para consulta.</strong> Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares municipio–fecha, efectos fijos de fecha y el cambio en log(1+Y). Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.</p></aside>
+</section>
+<section id="duracion" class="main " data-timing="40">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Resultados</p><h2>La caída estimada es mayor en los días 0 y 1</h2></header>
+
+<figure><img src="assets/duracion.svg" alt="La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.">
+  <figcaption class="axis-caption"><span data-tex="M_0"></span> · Intervalos del 95 % por estado y fecha</figcaption>
+</figure>
+<p class="duration-reading">Los intervalos de los <strong>días 2–6 y 7–13</strong> incluyen cero.</p>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
+
+  </div>
+  <aside class="notes"><p><strong>duracion · 6:30–7:10 (40 s)</strong></p><p>Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estima en los días cero a uno: menos 0,107 en la escala logarítmica. Después, los coeficientes están más cerca de cero y sus intervalos admiten una caída y un cambio nulo. La señal de los días siete a trece depende de la agrupación y las exclusiones. Si exijo continuidad del registro y ausencia de otro ataque posterior, cambia la muestra. El seguimiento hasta el Día trece deja abierta la duración.</p><p><strong>Transición.</strong> La base y el calendario también afectan la lectura del resultado inicial.</p><p><strong>Referencia para consulta.</strong> Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.</p></aside>
+</section>
+<section id="sensibilidades" class="main " data-timing="30">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Resultados</p><h2>Sensibilidad del resultado</h2></header>
+
+<table><thead><tr><th scope="col">Comparación</th><th scope="col">Pares tratados</th><th scope="col">Estimación</th><th scope="col">Intervalo del 95 %</th></tr></thead><tbody><tr><th scope="row">Base principal: tres fechas</th><td>77</td><td>−0,107</td><td>[−0,195; −0,019]</td></tr><tr><th scope="row">Base: semana anterior</th><td>77</td><td>−0,064</td><td>[−0,167; 0,039]</td></tr><tr><th scope="row">Sin feriados ni recesos escolares</th><td>25</td><td>−0,123</td><td>[−0,258; 0,011]</td></tr><tr><th scope="row">Placebo: inicio 28 días antes</th><td>81</td><td>−0,023</td><td>[−0,087; 0,040]</td></tr></tbody></table>
+    <footer class="table-footer"><p class="table-caption">Días 0–1 · <span data-tex="M_0"></span> · 1:muchos</p><p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p></footer>
+
+  </div>
+  <aside class="notes"><p><strong>sensibilidades · 7:10–7:40 (30 s)</strong></p><p>Con los mismos pares y pesos, usar la semana previa como base atenúa la caída y el intervalo incluye cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.</p><p><strong>Transición.</strong> ¿Qué se puede sostener con ese conjunto de resultados?</p><p><strong>Referencia para consulta.</strong> Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.</p></aside>
+</section>
+<section id="conclusion" class="main closing" data-timing="20">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Conclusión</p><h2>La mayor caída estimada aparece al inicio</h2></header>
+
+<div class="closing-results">
+  <div class="closing-estimate">
+    <p class="closing-period">Días 0–1</p>
+    <p class="closing-number">−0,107 <span class="closing-scale">en <span data-tex="\log(1+Y)"></span></span></p>
+    <p class="closing-interval">Intervalo del 95 % [−0,195; −0,019]</p>
+  </div>
+  <div class="closing-persistence">
+    <p class="closing-period">Días 2–6 y 7–13</p>
+    <h3>Duración incierta</h3>
+    <p>Ambos intervalos incluyen cero.</p>
+  </div>
+</div>
+<p class="closing-limit"><strong>Las diferencias previas</strong> entre tratados y controles limitan la atribución al ataque.</p>
+<a class="backup-link" href="#/respaldos">Respaldos para discusión →</a>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
+
+  </div>
+  <aside class="notes"><p><strong>conclusion · 7:40–8:00 (20 s)</strong></p><p>La mayor caída relativa se estima en los días cero y uno. Después, los intervalos incluyen cero y la duración sigue abierta. Las diferencias que ya había entre tratados y controles limitan cuánto podemos atribuir al ataque.</p><p><strong>Transición.</strong> Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.</p><p><strong>Referencia para consulta.</strong> Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Y).</p></aside>
+</section>
+<section id="referencias" class="references " data-timing="0">
+  <div class="slide-surface">
+    <header><h2>Referencias</h2></header>
+
+<ul class="reference-list">
+  <li>Bauernschuster, S., &amp; Rekers, R. (2022). <a href="https://doi.org/10.1016/j.jpubeco.2022.104663">Speed limit enforcement and road safety</a>. <em>Journal of Public Economics, 210</em>, artículo 104663.</li>
+  <li>Cámara de Diputados. (2025). <a href="https://www.ordenjuridico.gob.mx/Documentos/Federal/html/wo125151.html"><em>Ley Federal del Trabajo</em></a> (art. 74).</li>
+  <li>Consejo Nacional de Población. (2024). <a href="https://www.gob.mx/conapo/documentos/reconstruccion-y-proyecciones-de-la-poblacion-de-los-municipios-de-mexico-1990-2040"><em>Reconstrucción y proyecciones de la población de los municipios de México, 1990–2040</em></a> [Base de datos].</li>
+  <li>Garcia Cortez, E. (2026). <em>Catálogo municipal de narcoataques, 2019–2025</em> [Base de datos de elaboración propia].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2015). <a href="https://www.inegi.org.mx/programas/intercensal/2015/"><em>Encuesta Intercensal 2015</em></a> [Tabulados de población y vivienda].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2021). <a href="https://www.inegi.org.mx/programas/ccpv/2020/"><em>Censo de Población y Vivienda 2020</em></a> [Principales resultados por localidad, ITER].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2025a). <a href="https://www.inegi.org.mx/temas/mg/"><em>Marco geoestadístico</em></a> [Cartografía municipal de diciembre de 2025].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2025b). <a href="https://www.inegi.org.mx/app/saic/"><em>Sistema Automatizado de Información Censal</em></a> [Tabulados de empleo de 2018 y 2023].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2026a). <a href="https://www.inegi.org.mx/programas/accidentes/"><em>Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas</em></a> [Microdatos, 2018–2025].</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2026b). <a href="https://www.inegi.org.mx/app/ageeml/"><em>Catálogo Único de Claves de Áreas Geoestadísticas Estatales, Municipales y Localidades</em></a>.</li>
+  <li>Instituto Nacional de Estadística y Geografía. (2026c). <a href="https://www.inegi.org.mx/programas/vehiculosmotor/"><em>Vehículos de Motor Registrados en Circulación</em></a> [Registros municipales, 2018–2024].</li>
+  <li>Secretaría de Educación de Veracruz. (2026). <a href="https://www.sev.gob.mx/educacion-basica/calendario-escolar/"><em>Calendarios escolares históricos de educación básica</em></a>.</li>
+</ul>
+<a class="backup-link" href="#/respaldos">Respaldos para discusión →</a>
+
+
+  </div>
+  <aside class="notes"><p><strong>referencias · Fuera de la ruta cronometrada</strong></p><p>Las referencias quedan disponibles para consulta.</p><p><strong>Transición.</strong> Pasar al índice de respaldos si hay preguntas.</p><p><strong>Referencia para consulta.</strong> Reporte, referencias y apéndices E y F.</p></aside>
+</section>
+<section id="respaldos" class="backup " data-timing="0">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Discusión</p><h2>Respaldos para la discusión</h2></header>
+
+<nav class="backup-index" aria-label="Respaldos">
+  <a href="#/soporte">¿Cómo se construye el grupo de control?</a>
+  <a href="#/inferencia">¿Qué mide la incertidumbre?</a>
+  <a href="#/contrastes">¿Qué pasa con 1:1 o en niveles?</a>
+  <a href="#/alternativas">¿Cómo cambian las trayectorias?</a>
+</nav>
+
+    <a class="back-link" href="#/conclusion">← Conclusión</a>
+  </div>
+  <aside class="notes"><p><strong>respaldos · Fuera de la ruta cronometrada</strong></p><p>Abre la pregunta correspondiente. Cada respaldo termina con un enlace al índice.</p><p><strong>Transición.</strong> Volver a la conclusión cuando termine la discusión.</p><p><strong>Referencia para consulta.</strong> Reporte, apéndices A–H.</p></aside>
+</section>
+<section id="soporte" class="backup " data-timing="0">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Discusión</p><h2>Soporte, balance y pesos</h2></header>
+
+<div class="backup-grid">
+  <div><h3>Reglas de elegibilidad</h3><p>Tres meses completos con registros, territorio estable y ventana previa libre de exposición documentada.</p><p>Covariables con medición anterior a <span data-tex="t-28"></span> y razones entre 0,5 y 2.</p></div>
+  <div><h3>Cómo se reparte el peso</h3><p><span data-tex="C_{it}"></span> reúne los controles elegibles del tratado <span data-tex="i"></span> en <span data-tex="t"></span>.</p>
+  <div class="math-band"><span class="equation" data-tex="w_{it}=1\quad(D_{it}=1),\qquad w_{ct}=\sum_{i:\,c\in C_{it}}\frac{1}{|C_{it}|}"></span></div></div>
+</div>
+<p class="takeaway">La mayor diferencia estandarizada observada en 1:muchos es 0,082 en valor absoluto.</p>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
+    <a class="back-link" href="#/respaldos">← Índice de respaldos</a>
+  </div>
+  <aside class="notes"><p><strong>soporte · Fuera de la ruta cronometrada</strong></p><p>El nivel de accidentes se calcula en Días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.</p><p><strong>Transición.</strong> Volver al índice de respaldos.</p><p><strong>Referencia para consulta.</strong> Reporte, cuadro 1, §3 y apéndices A y D.</p></aside>
+</section>
+<section id="inferencia" class="backup " data-timing="0">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Discusión</p><h2>La agrupación permite errores dependientes</h2></header>
+
+<div class="backup-grid">
+  <div><h3>Intervalos puntuales</h3><p>Estado: dependencia entre municipios del mismo estado.</p><p>Fecha: dependencia entre municipios con el mismo inicio.</p><p>Omisión de estados: sensibilidad a la concentración del peso.</p></div>
+  <div><h3>Diagnóstico previo por semanas</h3><p>Compara las semanas −4, −3 y −1 con la −2.</p><p>Por estado: <span data-tex="p&lt;0{,}001"></span>.<br>Por estado y fecha: <span data-tex="p=0{,}109"></span>.</p></div>
+</div>
+<p class="takeaway">La agrupación cambia la precisión. El diagnóstico examina una fuente de sesgo.</p>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
+    <a class="back-link" href="#/respaldos">← Índice de respaldos</a>
+  </div>
+  <aside class="notes"><p><strong>inferencia · Fuera de la ruta cronometrada</strong></p><p>La agrupación en dos dimensiones admite dependencia por estado y por fecha, descuenta su intersección y conserva el coeficiente. Se distingue de un ajuste de Bonferroni: los intervalos de la trayectoria tienen cobertura nominal por punto. Catorce estados aportan tratados y el peso está concentrado. El intervalo alternativo omite un estado a la vez, conserva los pesos de las filas restantes y vuelve a absorber las fechas. En la prueba previa, la semana menos dos es el punto de referencia para una comparación conjunta distinta de la base diaria y del placebo. El efecto mínimo detectable en niveles para Días 0–1 es de 0,664 registros por municipio y día, bajo prueba bilateral del 5 por ciento y potencia del 80 por ciento.</p><p><strong>Transición.</strong> Volver al índice de respaldos.</p><p><strong>Referencia para consulta.</strong> Reporte, §3.1, §4 y apéndice D.</p></aside>
+</section>
+<section id="contrastes" class="backup " data-timing="0">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Discusión</p><h2>El signo se mantiene con 1:1 y en niveles</h2></header>
+
+<p class="lead">Días 0–1 · 77 pares tratados · intervalos por estado y fecha</p>
+<table><thead><tr><th scope="col">Modelo y escala</th><th scope="col">Estimación</th><th scope="col">Intervalo del 95 %</th></tr></thead><tbody><tr><th scope="row"><span data-tex="M_0"></span> · 1:muchos · <span data-tex="\log(1+Y)"></span></th><td>−0,107</td><td>[−0,195; −0,019]</td></tr><tr><th scope="row"><span data-tex="M_0"></span> · 1:1 · <span data-tex="\log(1+Y)"></span></th><td>−0,102</td><td>[−0,224; 0,019]</td></tr><tr><th scope="row"><span data-tex="M_0"></span> · 1:muchos · registros por municipio y día</th><td>−0,397</td><td>[−0,865; 0,072]</td></tr></tbody></table>
+<p class="takeaway">Con 1:1 y en niveles, el intervalo incluye cero.</p>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
+    <a class="back-link" href="#/respaldos">← Índice de respaldos</a>
+  </div>
+  <aside class="notes"><p><strong>contrastes · Fuera de la ruta cronometrada</strong></p><p>En uno a uno la magnitud es similar y el intervalo se amplía. En niveles se estiman 0,397 registros menos por municipio y día. El intervalo admite otras magnitudes y un cambio nulo. La transformación exponencial del coeficiente principal da una caída del 10,2 por ciento en la escala geométrica de uno más Y. La media aritmética de los accidentes corresponde a otra cantidad.</p><p><strong>Transición.</strong> Volver al índice de respaldos.</p><p><strong>Referencia para consulta.</strong> Reporte, §4 y cuadros B1–B2.</p></aside>
+</section>
+<section id="alternativas" class="backup " data-timing="0">
+  <div class="slide-surface">
+    <header><p class="eyebrow">Discusión</p><h2>En niveles cambia la precisión</h2></header>
+
+<p class="lead"><span data-tex="M_0"></span> · Intervalos del 95 %</p>
+<div class="series-key"><span><i class="series-line estimate"></i> 1:muchos</span><span><i class="series-line control"></i> 1:1</span></div>
+<figure class="wide-chart"><img src="assets/trayectoria-niveles.svg" alt="Comparación diaria a escala de conteos para ambos emparejamientos."></figure>
+<p class="axis-caption">Días respecto al inicio local · agrupación por estado y fecha</p>
+    <p class="source">Elaboración propia con datos de: INEGI (ATUS y covariables), CONAPO y catálogo propio.</p>
+    <a class="back-link" href="#/respaldos">← Índice de respaldos</a>
+  </div>
+  <aside class="notes"><p><strong>alternativas · Fuera de la ruta cronometrada</strong></p><p>En niveles, el punto se interpreta como registros por municipio y día. En uno a uno usamos los mismos 77 pares tratados y cambiamos comparadores y pesos. Un intervalo que incluye cero admite un cambio nulo y también otros efectos. Que un método excluya cero y otro lo incluya no establece una diferencia estadística entre métodos. Las tendencias paralelas se requieren en la escala empleada. La comparación semanal de la crisis prolongada de Culiacán desde septiembre de 2024 queda fuera del reporte y de esta exposición.</p><p><strong>Transición.</strong> Volver al índice de respaldos.</p><p><strong>Referencia para consulta.</strong> Reporte, figura 1, apéndices A–C y README del repositorio.</p></aside>
+</section>
+  </div></div>
+  <script src="assets/vendor/reveal/reveal.js"></script>
+  <script src="assets/vendor/reveal/plugin/notes.js"></script>
+  <script src="assets/vendor/katex/katex.min.js"></script>
+  <script src="deck.js"></script>
+  <script src="presenter.js"></script>
+</body>
+</html>

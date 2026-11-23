@@ -1,0 +1,41 @@
+{
+  "alcance": "Extractos de resultados existentes; ninguna estimación nueva",
+  "archivos": [
+    {
+      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/resultados/modelos/causal_efectos.csv",
+      "sha256": "0142fecb2222f50137de10567603a6f2e9e4663c09e7c9254b045332b268c178"
+    },
+    {
+      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/resultados/modelos/causal_wald_semanal.csv",
+      "sha256": "0a500dc9b06e8249bc972a1e25e09d375b65c98fc30e01b4e2f9ee384f51b54b"
+    },
+    {
+      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/resultados/modelos/causal_balance.csv",
+      "sha256": "dbbb3b8413d716f452f28fcd7f6b17e6d89ab12525362910708ece39de677a67"
+    },
+    {
+      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/resultados/modelos/causal_muestras.csv",
+      "sha256": "b3d5740922ae8b3a10a033d312073235322b26bb6970d446c528b96dfc2a89d0"
+    },
+    {
+      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/conteos_diarios.csv.gz",
+      "sha256": "c23344ec092d16d96cbf0ef06d7e876cd3545f9bc28865c7a7be633c090dad3d"
+    },
+    {
+      "ruta_desde_repo": "reporte/reporte.md",
+      "sha256": "766f326215ea5d06a4a16bbcca18efe1a8141c4d30d40299cc4a00c19ae113f8"
+    },
+    {
+      "ruta_desde_repo": "reporte/reporte.pdf",
+      "sha256": "7be838b3e41db6ca617ac8e31e13b9bc487c7a093646649f756a69343c9ed30a"
+    },
+    {
+      "ruta_desde_repo": "reporte/main.tex",
+      "sha256": "8860739e2b24a7465c83c0724b157304900c24c51eca599f379c688c26f704c8"
+    },
+    {
+      "ruta_desde_repo": "reporte/figuras/mapa-municipios.png",
+      "sha256": "c3de5f9c5d75d764320b338e4083dc771c5d883653b818a9a949dd73fcfb6dbd"
+    }
+  ]
+}
