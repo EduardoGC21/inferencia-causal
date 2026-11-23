@@ -18,7 +18,7 @@ Inferencia Causal · ITAM · Noviembre de 2026
 
 ## Resumen
 
-Se estudian los accidentes registrados tras el inicio local de narcoataques en municipios mexicanos, 2019–2025. Se comparan cambios de municipios tratados con controles emparejados, respecto a tres semanas previas del mismo día de la semana. La muestra contiene 77 pares municipio–episodio y 32 fechas de inicio. En los Días 0–1, la estimación principal es -0,107 en $\log(1+Y)$, donde $Y$ cuenta accidentes registrados, con intervalo de confianza del 95 % de [-0,195; -0,019], agrupado por estado y fecha. La caída posterior es menor e incierta. Las diferencias previas entre grupos limitan la atribución causal.
+Se estudian los accidentes registrados tras el inicio local de narcoataques en municipios mexicanos, 2019–2025. Se comparan cambios de municipios tratados con controles emparejados, respecto a tres semanas previas del mismo día de la semana. La muestra contiene 77 pares municipio–episodio y 32 fechas de inicio. En los Días 0–1, la estimación principal es -0,107 en $\log(1+Z)$, donde $Z$ cuenta accidentes registrados, con intervalo de confianza del 95 % de [-0,195; -0,019], agrupado por estado y fecha. La caída posterior es menor e incierta. Las diferencias previas entre grupos limitan la atribución causal.
 
 ## 1. Contexto y motivación
 
@@ -69,24 +69,24 @@ Desviación estándar (DE) ponderada entre pares. Las diferencias de medias esta
 
 ### Estimando y base.
 
-Sea $t$ el inicio local, $D_{it}$ la asignación focal y $A_{it}$ la elegibilidad previa. Para $g(y)=\log(1+y)$, principal, o $g(y)=y$, complementaria, el objetivo es
+Sean $t$ el inicio local, $\mathrm{Treat}_{it}$ el indicador de par tratado y $A_{it}$ la elegibilidad previa. $Y_{ith1}^g(d)$ es el resultado potencial del horizonte $h$ en la escala $g$, con ataque ($d=1$) o sin él ($d=0$). El objetivo es
 
 $$
-\tau_h^g=E[g(Y_{i,t+h}(1))-g(Y_{i,t+h}(0))\mid D_{it}=1,A_{it}=1,\text{soporte}].
+\tau_{\mathrm{ATT},h}^g=E[Y_{ith1}^g(1)-Y_{ith1}^g(0)\mid \mathrm{Treat}_{it}=1,A_{it}=1,\text{soporte}].
 $$
 
 La muestra principal no se condiciona a la ausencia de violencia posterior. Se definen $q(h)=h\bmod7\in\{0,\ldots,6\}$, $r(t,h)=t+q(h)$ y
 
 $$
-B_{ith}^g=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k}),\qquad
-\Delta_{ith}^g=g(Y_{i,t+h})-B_{ith}^g.
+B_{ith}^g=\tfrac13\sum_{k\in\{28,21,14\}}g(Z_{i,r(t,h)-k}),\qquad
+\Delta_{ith}^g=g(Z_{i,t+h})-B_{ith}^g.
 $$
 
 Para cada día analizado, la base promedia tres fechas anteriores al inicio con el mismo día de la semana, entre los Días -28 y -8. La semana inmediatamente anterior queda fuera. Cada intervalo promedia los cambios diarios respecto a esa base.
 
 En Culiacán, Sinaloa, el jueves 17 de octubre de 2019 se compara con los jueves 19 y 26 de septiembre y 3 de octubre. El jueves siguiente reutiliza esas referencias; la base siempre permanece antes del inicio.
 
-Se aplica $\log(1+Y)$ a cada conteo antes de promediar: el uno incluye ceros y el logaritmo reduce la influencia de conteos altos. En niveles se utiliza el conteo directo. Cada escala requiere tendencias paralelas propias; la validez en una no demuestra validez en la otra.
+En la escala principal, $g(z)=\log(1+z)$ se aplica a cada conteo antes de promediar. La transformación admite ceros y reduce la influencia de los conteos altos. En niveles, $g(z)=z$. Cada escala requiere tendencias paralelas propias.
 
 ### Comparadores y pesos.
 
@@ -94,19 +94,28 @@ Se excluyen municipios con exposición documentada entre los Días -49 y -1: la 
 
 Los controles proceden de estados ajenos al episodio. También se excluyen municipios con antecedentes documentados y estados con señales previas sin municipio identificable. Se exige estabilidad territorial desde el inicio de la base hasta la víspera del ataque. La selección principal no utiliza ataques posteriores.
 
-El nivel previo es la media de los Días -28 a -15. Se exige $(\bar Y_c+0.5)/(\bar Y_i+0.5)\in[0.5,2]$, donde $\bar Y_i$ y $\bar Y_c$ son las medias del tratado y del candidato. La población, el empleo y los automóviles por mil habitantes también deben estar, por separado, entre la mitad y el doble del valor tratado. Se requieren al menos diez candidatos de cinco estados por tratado.
+El nivel previo es la media de los Días -28 a -15. Se exige $(\bar Z_c+0.5)/(\bar Z_i+0.5)\in[0.5,2]$, donde $\bar Z_i$ y $\bar Z_c$ son las medias del tratado y del candidato. La población, el empleo y los automóviles por mil habitantes también deben estar, por separado, entre la mitad y el doble del valor tratado. Se requieren al menos diez candidatos de cinco estados por tratado.
 
 El matching 1:muchos utiliza todos los candidatos: cada tratado pesa uno y reparte otro peso total de uno entre sus controles. El matching 1:1 elige el candidato más cercano según población, empleo y automóviles, después de comprobar el mismo mínimo de candidatos y estados. Se permite reutilizar controles; sus pesos acumulan las contribuciones de cada tratado.
 
-La regresión de diferencias en diferencias compara el cambio de cada municipio tratado respecto a su base previa con el cambio de sus controles en las mismas fechas. Se estima por mínimos cuadrados ponderados:
+Para cada horizonte $h$, el par municipio $i$–fecha de inicio $t$ aporta dos filas de igual peso. La variable dependiente $Y_{iths}^g$ contiene la base en la fila $s=0$ y el resultado analizado en la fila $s=1$. Para un tramo se promedian por separado los resultados diarios y sus bases en la escala $g$. $\mathrm{Post}_s=\mathbf{1}\{s=1\}$ identifica la fila analizada, también en los diagnósticos de días previos.
 
 $$
-\Delta_{ith}^{g}=\lambda_{th}+\beta_h^{g}D_{it}+X_{it}'\gamma_h+u_{ith}.
+Y_{iths}^{g}=\alpha_{ith}+\lambda_{th}\mathrm{Post}_s
++\tau_{\mathrm{DD},h}^{g}(\mathrm{Treat}_{it}\times\mathrm{Post}_s)
++(X_{it}'\gamma_h)\mathrm{Post}_s+\varepsilon_{iths}.
 $$
 
-Aquí, $i$ es el municipio; $t$, el inicio local; y $h$, el día o intervalo. $\Delta_{ith}^g$ es el cambio respecto a la base en la escala $g$. $D_{it}$ distingue tratados y controles; $\lambda_{th}$ recoge el cambio común de la fecha. $\beta_h^g$ compara los cambios de ambos grupos. $X_{it}$ contiene covariables previas, $\gamma_h$ sus coeficientes y $u_{ith}$ el residuo.
+Los mínimos cuadrados ponderados incluyen dos efectos fijos. $\alpha_{ith}$ corresponde al par y $\lambda_{th}\mathrm{Post}_s$, a la fecha de inicio por periodo, con cero en la base. $\tau_{\mathrm{DD},h}^g$ multiplica **Tratado × Después**, la interacción $D_{its}=\mathrm{Treat}_{it}\mathrm{Post}_s$. $X_{it}$ reúne covariables previas, $\gamma_h$ sus coeficientes y $\varepsilon_{iths}$ es el residuo. El panel diario convencional usa efectos de municipio y fecha calendario. Aquí los efectos se definen sobre las filas construidas para cada horizonte.
 
-El modelo principal $M_0$ omite $X_{it}$ y promedia por igual las diferencias en diferencias de los tratados. $M_1$ añade logaritmo de población; $M_2$, empleo por mil habitantes; y $M_3$, automóviles por mil habitantes. Todos conservan muestra y pesos explícitos. Los modelos ajustados evalúan sensibilidad al ajuste lineal, cuya ponderación implícita puede diferir de la de $M_0$.
+Restar la base cancela $\alpha_{ith}$ y reduce la interacción a $\mathrm{Treat}_{it}(1-0)=\mathrm{Treat}_{it}$. Se recupera la regresión de cambios con $u_{ith}=\varepsilon_{ith1}-\varepsilon_{ith0}$. El coeficiente compara los cambios entre tratados y controles de la misma fecha.
+
+$$
+\Delta_{ith}^{g}=Y_{ith1}^{g}-Y_{ith0}^{g}
+=\lambda_{th}+\tau_{\mathrm{DD},h}^{g}\mathrm{Treat}_{it}+X_{it}'\gamma_h+u_{ith}.
+$$
+
+El modelo principal $M_0$ omite $X_{it}$ y da el mismo peso a cada contraste tratado. Bajo los supuestos de identificación, $\tau_{\mathrm{DD},h}^g=\tau_{\mathrm{ATT},h}^g$ en $M_0$. $M_1$ añade logaritmo de población, $M_2$ empleo por mil habitantes y $M_3$ automóviles por mil habitantes. El ajuste conserva la muestra y los pesos explícitos, y puede cambiar la ponderación implícita.
 
 ### Identificación y sesgo.
 
@@ -126,7 +135,7 @@ La duración se examina en la muestra principal. Como contraste, se exige contin
 
 ### Efecto inmediato y escala.
 
-En los Días 0–1, $M_0$ con emparejamiento 1:muchos estima -0,107 en $\log(1+Y)$, con intervalo de confianza del 95 % de [-0,195; -0,019], agrupado por estado y fecha. Equivale a -0,130 desviaciones estándar diarias previas y a una caída aproximada del 10,2 % en la escala geométrica de $1+Y$, no directamente en el promedio de $Y$. El intervalo alternativo por omisión de estados también excluye cero.
+En los Días 0–1, $M_0$ con emparejamiento 1:muchos estima -0,107 en $\log(1+Z)$, con intervalo de confianza del 95 % de [-0,195; -0,019], agrupado por estado y fecha. Equivale a -0,130 desviaciones estándar diarias previas y a una caída aproximada del 10,2 % en la escala geométrica de $1+Z$, no directamente en el promedio de $Z$. El intervalo alternativo por omisión de estados también excluye cero.
 
 En niveles, se estiman 0,397 registros menos por municipio y día, equivalentes a -0,108 desviaciones estándar; el intervalo [-0,865; 0,072] incluye cero. El efecto mínimo detectable (MDE) es de 0,664 registros, con prueba bilateral al 5 % y potencia del 80 %. El cambio nulo no queda demostrado. Estos resultados no distinguen circulación, conducta y captación.
 
@@ -134,13 +143,13 @@ Los contrastes y la estandarización se detallan en el cuadro B1 del apéndice B
 
 ### Especificaciones progresivas.
 
-El cuadro 2 muestra que el ajuste por población, empleo y automóviles cambia poco la estimación inmediata: los coeficientes se sitúan entre -0,105 y -0,108 en $\log(1+Y)$ y entre -0,381 y -0,401 registros por municipio y día.
+El cuadro 2 muestra que el ajuste por población, empleo y automóviles cambia poco la estimación inmediata: los coeficientes se sitúan entre -0,105 y -0,108 en $\log(1+Z)$ y entre -0,381 y -0,401 registros por municipio y día.
 
 Esta estabilidad no descarta factores omitidos ni garantiza tendencias paralelas. El Panel A presenta los resultados logarítmicos; el Panel B, en niveles, está en el apéndice A.
 
 **Cuadro 2.** Días 0–1: regresiones con ajuste progresivo en la muestra principal
 
-**Panel A. Resultado: cambio en $\log(1+Y)$**
+**Panel A. Resultado: cambio en $\log(1+Z)$**
 
 | Variable / estadístico | $M_0$ | $M_1$ | $M_2$ | $M_3$ |
 |:---|---:|---:|---:|---:|
@@ -153,13 +162,13 @@ Esta estabilidad no descarta factores omitidos ni garantiza tendencias paralelas
 
 Cada celda presenta estimación, error estándar (EE), intervalo de confianza (IC) del 95 % y valor $p$ bilateral, con agrupación por estado y fecha y 31 grados de libertad. El guion indica una variable excluida. Las dos medidas de $R^2$ se explican en el apéndice A.
 
-Emparejamiento 1:muchos: los cuatro modelos utilizan 3 613 observaciones municipio–fecha, 77 pares tratados, 32 fechas de inicio y efectos fijos de fecha. Conservan muestra, pesos y base de tres semanas. Los coeficientes de las covariables son ajustes estadísticos, no sus efectos causales.
+Emparejamiento 1:muchos: los cuatro modelos utilizan 3 613 pares municipio–fecha, 77 tratados y 32 fechas de inicio. Conservan muestra, pesos y base de tres semanas. Los coeficientes de las covariables corresponden al ajuste estadístico.
 
 ### Trayectoria y falsificaciones.
 
 La figura 1 muestra una caída alrededor del inicio, mayor en los Días 0–1. También aparecen diferencias previas: Sem. -1 tiene una estimación logarítmica de -0,034 [-0,079; 0,011], y los Días -2 y -5 presentan -0,116 y -0,085. Estas señales limitan la atribución al ataque. Los intervalos corresponden a cada punto, no a toda la trayectoria.
 
-**Figura 1. Los accidentes registrados muestran una caída relativa alrededor del inicio local.** Modelo $M_0$, emparejamientos 1:muchos y 1:1. Día 0: inicio local. Base: tres fechas previas del mismo día de la semana. Arriba: cambio en $\log(1+Y)$; abajo: cambio en registros por municipio y día. Barras: intervalos puntuales del 95 %, agrupados por estado y fecha. La línea vertical marca el Día 0.
+**Figura 1. Los accidentes registrados muestran una caída relativa alrededor del inicio local.** Modelo $M_0$, emparejamientos 1:muchos y 1:1. Día 0: inicio local. Base: tres fechas previas del mismo día de la semana. Arriba: cambio en $\log(1+Z)$; abajo: cambio en registros por municipio y día. Barras: intervalos puntuales del 95 %, agrupados por estado y fecha. La línea vertical marca el Día 0.
 
 ![Trayectoria de registros](figuras/trayectoria-siniestros.png)
 
@@ -184,7 +193,7 @@ La muestra se reduce de 77 a 25 pares tratados y de 32 a 15 fechas. La estimaci�
 
 ## 5. Conclusión y validez externa
 
-Se documenta una reducción relativa inmediata de accidentes registrados: -0,107 en $\log(1+Y)$ durante los Días 0–1, con intervalo del 95 % de [-0,195; -0,019], agrupado por estado y fecha. El ajuste por covariables cambia poco la estimación; el placebo no reproduce una caída comparable. Después, las estimaciones son menores e inciertas, sin una fecha precisa de desaparición. El patrón es compatible con menos circulación, cambios al conducir o alteraciones de la captación; no identifica cada mecanismo ni demuestra menor riesgo por viaje.
+Se documenta una reducción relativa inmediata de accidentes registrados: -0,107 en $\log(1+Z)$ durante los Días 0–1, con intervalo del 95 % de [-0,195; -0,019], agrupado por estado y fecha. El ajuste por covariables cambia poco la estimación; el placebo no reproduce una caída comparable. Después, las estimaciones son menores e inciertas, sin una fecha precisa de desaparición. El patrón es compatible con menos circulación, cambios al conducir o alteraciones de la captación; no identifica cada mecanismo ni demuestra menor riesgo por viaje.
 
 El resultado promedia 77 pares municipio–episodio documentados en 2019–2025, con igual peso por tratado y registros de vías no federales. No representa cada ataque ni se extrapola automáticamente a otros incidentes o territorios. Las diferencias previas, la sensibilidad de la inferencia y la cobertura desigual del catálogo limitan la atribución causal. Para las autoridades, una caída de registros requiere contrastar movilidad, atención de emergencias y captación antes de interpretarla como una mejora de seguridad.
 
@@ -239,9 +248,9 @@ Secretaría de Educación de Veracruz. (2026). *Calendarios escolares histórico
 | $R^2$ ponderado | 0,180 | 0,191 | 0,191 | 0,194 |
 | $R^2$ tras descontar las fechas | 0,017 | 0,030 | 0,030 | 0,033 |
 
-Cada celda presenta la estimación, el error estándar entre paréntesis, el intervalo de confianza del 95 % entre corchetes y el valor $p$ bilateral. La agrupación por estado y fecha utiliza 31 grados de libertad. Los cuatro modelos utilizan 3 613 observaciones municipio–fecha, 77 pares tratados y 32 fechas de inicio, e incluyen efectos fijos de fecha. Los pesos y la base previa son los mismos del Panel A.
+Cada celda presenta la estimación, el error estándar entre paréntesis, el intervalo de confianza del 95 % entre corchetes y el valor $p$ bilateral. La agrupación por estado y fecha utiliza 31 grados de libertad. Los cuatro modelos utilizan los mismos 3 613 pares, pesos y base previa del Panel A.
 
-Las dos medidas de $R^2$ del cuadro 2 y su Panel B resumen el ajuste de la regresión. La primera incluye los efectos fijos de fecha; la segunda mide el ajuste adicional del tratamiento y las covariables después de descontar las medias ponderadas de cada fecha. Ambas se calculan como $R^2=1-\mathrm{SCE}/\mathrm{SCT}$. La suma de cuadrados del error (SCE) utiliza residuos y pesos. La suma de cuadrados total (SCT) utiliza desviaciones respecto a la media ponderada general en la primera medida y respecto a las medias ponderadas de fecha en la segunda. Un $R^2$ mayor no demuestra validez causal.
+Las dos medidas de $R^2$ del cuadro 2 y su Panel B resumen el ajuste de la regresión sobre los cambios $\Delta_{ith}^g$. La primera incluye los efectos fijos de fecha; la segunda mide el ajuste adicional del tratamiento y las covariables después de descontar las medias ponderadas de cada fecha. Ambas se calculan como $R^2=1-\mathrm{SCE}/\mathrm{SCT}$. La suma de cuadrados del error (SCE) utiliza residuos y pesos. La suma de cuadrados total (SCT) utiliza desviaciones respecto a la media ponderada general en la primera medida y respecto a las medias ponderadas de fecha en la segunda. Un $R^2$ mayor no demuestra validez causal.
 
 ### Detalles de medición y emparejamiento.
 
@@ -293,7 +302,7 @@ Cada fila cuenta pérdidas después de los filtros anteriores. Un fallo de sopor
 
 **Cuadro A4.** Días 0–1: $M_0$–$M_3$, muestra fija
 
-| Controles | Modelo | Trat. | $N$ | $\log(1+Y)$, IC: estado y fecha | Niveles, IC: estado y fecha |
+| Controles | Modelo | Trat. | $N$ | $\log(1+Z)$, IC: estado y fecha | Niveles, IC: estado y fecha |
 |:---|---:|---:|---:|---:|---:|
 | Completos, calibre | Base ($M_0$) | 82 | 13 977 | -0,099 [-0,186; -0,012] | -0,426 [-0,893; 0,041] |
 | Completos, calibre | $M_1$: + población | 82 | 13 977 | -0,097 [-0,182; -0,013] | -0,360 [-0,825; 0,104] |
@@ -329,20 +338,20 @@ La referencia previa incluye controles con datos completos y ponderación unifor
 
 **Cuadro B1.** Contrastes principales, emparejamiento 1:muchos
 
-| Escala | Tramo | $\hat\beta$ (EE) | IC 95 %: estado y fecha | $\beta/\sigma$ | MDE: estado y fecha |
+| Escala | Tramo | $\hat\tau$ (EE) | IC 95 %: estado y fecha | $\tau/\sigma$ | MDE: estado y fecha |
 |:---|---:|---:|---:|---:|---:|
-| $\log(1+Y)$ | Día 0 | -0,116 (0,032) | [-0,251; 0,019] | -0,141 | 0,192 |
-| $\log(1+Y)$ | Día 1 | -0,098 (0,026) | [-0,193; -0,003] | -0,119 | 0,135 |
-| $\log(1+Y)$ | Días 0–1 | -0,107 (0,022) | [-0,195; -0,019] | -0,130 | 0,125 |
-| $\log(1+Y)$ | Días 2–6 | -0,018 (0,015) | [-0,069; 0,032] | -0,022 | 0,072 |
-| $\log(1+Y)$ | Sem. +1 | -0,041 (0,010) | [-0,084; 0,002] | -0,049 | 0,061 |
+| $\log(1+Z)$ | Día 0 | -0,116 (0,032) | [-0,251; 0,019] | -0,141 | 0,192 |
+| $\log(1+Z)$ | Día 1 | -0,098 (0,026) | [-0,193; -0,003] | -0,119 | 0,135 |
+| $\log(1+Z)$ | Días 0–1 | -0,107 (0,022) | [-0,195; -0,019] | -0,130 | 0,125 |
+| $\log(1+Z)$ | Días 2–6 | -0,018 (0,015) | [-0,069; 0,032] | -0,022 | 0,072 |
+| $\log(1+Z)$ | Sem. +1 | -0,041 (0,010) | [-0,084; 0,002] | -0,049 | 0,061 |
 | Niveles | Día 0 | -0,306 (0,172) | [-1,006; 0,393] | -0,083 | 0,992 |
 | Niveles | Día 1 | -0,487 (0,135) | [-0,911; -0,062] | -0,132 | 0,602 |
 | Niveles | Días 0–1 | -0,397 (0,128) | [-0,865; 0,072] | -0,108 | 0,664 |
 | Niveles | Días 2–6 | -0,126 (0,058) | [-0,336; 0,085] | -0,034 | 0,298 |
 | Niveles | Sem. +1 | -0,079 (0,057) | [-0,317; 0,158] | -0,022 | 0,336 |
 
-Los errores estándar (EE), entre paréntesis, se agrupan por estado. Los intervalos de confianza (IC) del 95 % se agrupan por estado y fecha; por eso no se calculan a partir de los EE entre paréntesis. El modelo $M_0$ utiliza 3 613 pares municipio–fecha. Los tramos son promedios diarios. La columna $\beta/\sigma$ divide el coeficiente por la desviación estándar diaria del resultado en $[-28,-8]$, calculada con divisor $n-1$; en niveles, esa desviación es de 3,68. El efecto mínimo detectable (MDE) se explica en el apéndice D.
+Los errores estándar (EE), entre paréntesis, se agrupan por estado. Los intervalos de confianza (IC) del 95 % se agrupan por estado y fecha; por eso no se calculan a partir de los EE entre paréntesis. El modelo $M_0$ utiliza 3 613 pares municipio–fecha. Los tramos son promedios diarios. La columna $\tau/\sigma$ divide el coeficiente por la desviación estándar diaria del resultado en $[-28,-8]$, calculada con divisor $n-1$; en niveles, esa desviación es de 3,68. El efecto mínimo detectable (MDE) se explica en el apéndice D.
 
 **Cuadro B2.** Log: selección y horizontes, IC: estado y fecha
 
@@ -480,17 +489,25 @@ El cuadro C4 mantiene exactamente los mismos pares municipio–fecha y pesos, y 
 
 Los errores agrupados por estado utilizan una estimación de varianza robusta por grupos, identificada como CRV1. Su corrección por tamaño de muestra es $\frac{G}{G-1}\frac{N-1}{N-K}$, donde $G$ es el número de estados, $N$ el número de pares municipio–fecha y $K$ el número de parámetros, incluidos los efectos de fecha. Los intervalos utilizan $G-1$ grados de libertad. En la agrupación por estado y fecha se suman los componentes de estado y fecha y se resta su intersección; la corrección y los grados de libertad utilizan el menor número de grupos. Este cálculo no permite cualquier dependencia entre estados en fechas distintas. Las varianzas indefinidas se señalan sin producir intervalos.
 
-La alternativa CRV3 omite cada estado por turno, mantiene los pesos de los casos restantes y vuelve a estimar los efectos de fecha. Si $\hat\beta$ es el coeficiente con la muestra completa y $\hat\beta_{-g}$ el coeficiente sin el estado $g$, su varianza es
+### Equivalencia de la estimación y la inferencia
+
+Al ajustar el efecto fijo de cada par con el mismo peso $w_{it}$ en sus dos filas, los residuos son opuestos. Si $u_{ith}$ es el residuo de su diferencia, son $-u_{ith}/2$ y $u_{ith}/2$. Así, la contribución a la suma de cuadrados del modelo largo es $w_{it}u_{ith}^2/2$, la mitad de la contribución en cambios. El factor común deja iguales los coeficientes.
+
+Las dos filas de cada par pertenecen al mismo estado y a la misma fecha de inicio. Al sumar sus contribuciones por conglomerado, la covarianza agrupada coincide antes de la corrección de muestra finita. Para reproducir la inferencia publicada, el ajuste largo aplica $(N-1)/(N-K)$ y conserva los grados de libertad por conglomerados. Si se cuentan las $2N$ filas y el rango completo $N+K$, el denominador sigue siendo $N-K$ y el numerador pasa a $2N-1$. Eso multiplica la varianza por $(2N-1)/(N-1)$.
+
+En la especificación principal hay 3 613 pares, 77 tratados y 3 536 de control. Con 31 grados de libertad, el error estándar agrupado por estado y fecha es 0,043 y el valor $p$ es 0,019. Si la corrección cuenta las 7 226 filas, el error estándar pasa a 0,061, el intervalo del 95 % a [-0,232; 0,018] y el valor $p$ a 0,090. El coeficiente sigue en -0,107. En la prueba semanal de Wald del cuadro D2, los valores $p$ en logaritmos pasan de 0,00022 a 0,01065 por estado y de 0,109 a 0,366 por estado y fecha. En niveles, la prueba por estado pasa de 0,035 a 0,205. Los cuadros aplican la corrección por pares.
+
+La alternativa CRV3 omite cada estado por turno, mantiene los pesos de los casos restantes y vuelve a estimar los efectos fijos. Si $\hat\tau$ es el coeficiente con la muestra completa y $\hat\tau_{-g}$ el coeficiente sin el estado $g$, su varianza es
 
 $$
-\widehat V_{\mathrm{CRV3}}=\frac{G-1}{G}\sum_{g=1}^{G}(\hat\beta_{-g}-\hat\beta)^2.
+\widehat V_{\mathrm{CRV3}}=\frac{G-1}{G}\sum_{g=1}^{G}(\hat\tau_{-g}-\hat\tau)^2.
 $$
 
 El cálculo se centra en el coeficiente completo y difiere de una variante centrada en la media de las estimaciones por omisión (MacKinnon et al., 2023a, 2023b).
 
 ### Efecto mínimo detectable.
 
-El efecto mínimo detectable (MDE) es la magnitud que la prueba detectaría con una probabilidad del 80 %, bajo los supuestos del cálculo. Se utiliza una prueba bilateral al 5 %, errores estándar fijos y una distribución $t$ no central. En niveles, los umbrales de la especificación principal del cuadro D1 equivalen al 18,0 % de la media previa con agrupación estatal y al 32,4 % con agrupación por estado y fecha; esa media es de 2,05 registros por municipio y día. Los umbrales en $\log(1+Y)$ no son porcentajes directos del promedio de accidentes. Estas medidas de potencia condicional no corrigen sesgo ni demuestran equivalencia con cero.
+El efecto mínimo detectable (MDE) es la magnitud que la prueba detectaría con una probabilidad del 80 %, bajo los supuestos del cálculo. Se utiliza una prueba bilateral al 5 %, errores estándar fijos y una distribución $t$ no central. En niveles, los umbrales de la especificación principal del cuadro D1 equivalen al 18,0 % de la media previa con agrupación estatal y al 32,4 % con agrupación por estado y fecha; esa media es de 2,05 registros por municipio y día. Los umbrales en $\log(1+Z)$ no son porcentajes directos del promedio de accidentes. Estas medidas de potencia condicional no corrigen sesgo ni demuestran equivalencia con cero.
 
 **Cuadro D1.** Días 0–1: agrupamiento, CRV3 y MDE
 
@@ -607,9 +624,11 @@ Registros por municipio y día; IC del 95 % agrupados por estado y fecha.
 
 ## Apéndice H. Código reproducible en R
 
-Se incluye el archivo completo `codigo_R/analisis.R`, idéntico al ejecutado para la verificación. La obtención y limpieza de los datos se realizan en Python; este archivo reconstruye el análisis estadístico a partir del paquete de datos limpios, sin leer coeficientes, muestras emparejadas ni pesos precalculados.
+Se incluye el archivo completo `codigo_R/analisis.R`. La obtención y limpieza de los datos se realizan en Python. Este archivo reconstruye las muestras, el emparejamiento, los pesos y las estimaciones a partir del paquete de datos limpios.
 
-La ejecución en R reprodujo 22 productos de referencia con tolerancia absoluta de $10^{-6}$, incluidos muestras, pesos, coeficientes e inferencia. Las 18 tablas cotejadas coinciden a la precisión impresa. La diferencia máxima en efectos e inferencia fue de $1{,}4\times10^{-12}$. El registro de verificación se conserva en `reporte/verificacion/reproduccion-r.json`.
+El tercer argumento opcional `--panel-largo` construye dos filas por par y horizonte, absorbe los efectos fijos de par y de fecha de inicio por periodo y aplica la corrección por número de pares. Genera estimaciones para los efectos principales y de sensibilidad, las pruebas semanales y los cruces por franja y gravedad. La ejecución sin ese argumento genera la réplica completa en cambios, incluidas las tablas y gráficas.
+
+El subcomando `python -m choques cotejar-panel` reproduce la comparación de ambas formulaciones y permite incorporar las salidas de R. El archivo `reporte/verificacion/panel-largo.json` registra la tolerancia, las huellas de referencia y las diferencias por estadístico.
 
 El archivo conserva salidas históricas adicionales, incluida la comparación semanal de Culiacán. Esos resultados no forman parte del análisis presentado en este reporte.
 
@@ -633,6 +652,9 @@ Para reproducir el análisis, descargar y descomprimir `datos_limpios_R.zip`, in
 # 2. Instala una vez: install.packages(c("data.table", "R.utils", "ggplot2"))
 # 3. Desde la raíz del repositorio:
 #    Rscript codigo_R/analisis.R RUTA/datos_limpios_R RUTA/resultados_R
+#    Añade --panel-largo como tercer argumento para cotejar las regresiones:
+#    genera las salidas causal_efectos, causal_wald_semanal y causal_cruce
+#    en formato largo, junto con sus insumos de selección.
 # También puedes cambiar las dos rutas siguientes y ejecutar todo desde RStudio.
 # Las salidas siempre van a la carpeta indicada; no modifica reporte/ ni Python.
 # Verificado con R 4.6.1, data.table 1.18.4 y ggplot2 4.0.3.
@@ -644,6 +666,7 @@ carpeta_salida <- "resultados_R"
 argumentos <- commandArgs(trailingOnly = TRUE)
 if (length(argumentos) >= 1) carpeta_datos <- argumentos[1]
 if (length(argumentos) >= 2) carpeta_salida <- argumentos[2]
+formato_largo <- identical(argumentos[3], "--panel-largo")
 
 library(data.table)
 library(ggplot2)
@@ -1090,7 +1113,7 @@ rango_matriz <- function(x) {
   sum(d > max(dim(x)) * max(d) * .Machine$double.eps)
 }
 
-estimar <- function(muestra, columnas, y, inferencia = TRUE) {
+estimar <- function(muestra, columnas, y, inferencia = TRUE, base = NULL) {
   x <- as.matrix(muestra[columnas])
   y <- as.matrix(y)
   n <- nrow(x)
@@ -1103,11 +1126,30 @@ estimar <- function(muestra, columnas, y, inferencia = TRUE) {
   grupos <- match(muestra$indice, unique(muestra$indice))
   f <- length(unique(grupos))
   g <- length(unique(muestra$estado))
+  entidades <- muestra$estado
+  pesos <- muestra$peso
   z <- cbind(x, y)
-  sumas <- rowsum(z * muestra$peso, grupos, reorder = TRUE)
-  masas <- rowsum(muestra$peso, grupos, reorder = TRUE)[, 1]
+  celdas <- grupos
+  if (!is.null(base)) {
+    stopifnot(identical(dim(base), dim(y)), all(is.finite(base)),
+              !anyDuplicated(muestra[c("clave", "indice")]))
+    post <- rep(0:1, each = n)
+    z <- cbind(rbind(x, x) * post, rbind(base, y))
+    celdas <- c(grupos, grupos + f)
+    grupos <- rep(grupos, 2)
+    entidades <- rep(entidades, 2)
+    pesos <- rep(pesos, 2)
+  }
+  sumas <- rowsum(z * pesos, celdas, reorder = TRUE)
+  masas <- rowsum(pesos, celdas, reorder = TRUE)[, 1]
   medias <- sumas / masas
-  dentro <- (z - medias[grupos, , drop = FALSE]) * sqrt(muestra$peso)
+  dentro <- z - medias[celdas, , drop = FALSE]
+  if (!is.null(base)) {
+    a <- seq_len(n)
+    media_par <- (dentro[a, , drop = FALSE] + dentro[n + a, , drop = FALSE]) / 2
+    dentro <- dentro - rbind(media_par, media_par)
+  }
+  dentro <- dentro * sqrt(pesos)
   xw <- dentro[, seq_len(k), drop = FALSE]
   yw <- dentro[, k + seq_len(m), drop = FALSE]
   independientes <- integer()
@@ -1128,6 +1170,8 @@ estimar <- function(muestra, columnas, y, inferencia = TRUE) {
   influencia <- xw %*% solve(crossprod(xw))
   puntuaciones <- do.call(cbind, lapply(seq_len(m), function(j) influencia * residuo[, j]))
   posiciones <- unlist(lapply(seq_len(m), function(j) (j - 1) * k + independientes))
+  # Las dos filas comparten conglomerados. La corrección usa pares y el
+  # rango en cambios, con un efecto fijo por fecha y los regresores retenidos.
   correccion <- (n - 1) / (n - f - length(independientes))
   carne <- function(grupo) crossprod(rowsum(puntuaciones, grupo, reorder = FALSE))
   expandir <- function(v) {
@@ -1135,13 +1179,13 @@ estimar <- function(muestra, columnas, y, inferencia = TRUE) {
     completa[posiciones, posiciones] <- v
     completa
   }
-  v_estado <- carne(muestra$estado)
+  v_estado <- carne(entidades)
   covarianzas$entidad <- expandir(v_estado * correccion * g / (g - 1))
   gl["entidad"] <- g - 1
   if (f >= 6) {
     menor <- min(g, f)
     v_fecha <- carne(grupos)
-    v_interseccion <- carne(paste(muestra$estado, muestra$indice))
+    v_interseccion <- carne(paste(entidades, grupos))
     covarianzas$entidad_fecha <- expandir((v_estado + v_fecha - v_interseccion) *
                                          correccion * menor / (menor - 1))
     gl["entidad_fecha"] <- menor - 1
@@ -1213,7 +1257,7 @@ resumir <- function(muestra) {
 
 # 7. Contrastes, bases y pruebas previas -----------------------------------
 # %% es el módulo no negativo de R: también sirve para h = -7,...,-1.
-# Primero se aplica log(1+Y) a cada observación; después se promedia.
+# Primero se aplica log(1+Z) a cada observación; después se promedia.
 
 offsets_base <- function(h) (h %% 7) - c(28, 21, 14)
 transformar <- function(x, escala) {
@@ -1224,7 +1268,8 @@ transformar <- function(x, escala) {
 # precisión extendida en R: difiere en los residuos de contrastes idénticos
 # a su base. Sus valores p son artefactos numéricos, no pruebas informativas.
 promedio_vectores <- function(lista) Reduce("+", lista) / length(lista)
-contrastes <- function(muestra, escala, base = "tres_semanas", horizontes = tramos) {
+contrastes <- function(muestra, escala, base = "tres_semanas", horizontes = tramos,
+                       panel = FALSE) {
   dias <- sort(unique(unlist(horizontes)))
   referencias <- lapply(dias, function(h) {
     if (base == "tres_semanas") offsets_base(h) else if (base == "wk-1") -7:-1 else -2
@@ -1233,16 +1278,26 @@ contrastes <- function(muestra, escala, base = "tres_semanas", horizontes = tram
   necesarios <- sort(unique(c(dias, unlist(referencias))))
   valores <- lapply(necesarios, function(h) transformar(extraer(muestra, h), escala))
   names(valores) <- as.character(necesarios)
-  delta <- lapply(dias, function(h) {
-    valores[[as.character(h)]] - promedio_vectores(valores[as.character(referencias[[as.character(h)]])])
+  bases <- lapply(referencias, function(h) promedio_vectores(valores[as.character(h)]))
+  agregar <- function(serie) {
+    resultado <- sapply(horizontes, function(h) promedio_vectores(serie[as.character(h)]))
+    matrix(resultado, nrow = nrow(muestra), dimnames = list(NULL, names(horizontes)))
+  }
+  if (panel) return(list(base = agregar(bases), analizado = agregar(valores)))
+  delta <- lapply(as.character(dias), function(h) {
+    valores[[h]] - bases[[h]]
   })
   names(delta) <- as.character(dias)
-  resultado <- sapply(horizontes, function(h) promedio_vectores(delta[as.character(h)]))
-  matrix(resultado, nrow = nrow(muestra), dimnames = list(NULL, names(horizontes)))
+  agregar(delta)
 }
 
 resultados <- function(muestra, escala, base, modelos = 0, crv3 = FALSE) {
-  y <- contrastes(muestra, escala, base)
+  y <- contrastes(muestra, escala, base, panel = formato_largo)
+  previo <- NULL
+  if (formato_largo) {
+    previo <- y$base
+    y <- y$analizado
+  }
   resumen <- resumir(muestra)
   t <- muestra[muestra$tratado == 1, ]
   previa <- unlist(lapply(-28:-8, function(h) extraer(t, h)))
@@ -1252,13 +1307,15 @@ resultados <- function(muestra, escala, base, modelos = 0, crv3 = FALSE) {
   muestra$log_poblacion <- log(muestra$poblacion)
   for (modelo in modelos) {
     columnas <- columnas_modelo[seq_len(modelo + 1)]
-    ajuste <- estimar(muestra, columnas, y)
+    ajuste <- estimar(muestra, columnas, y, base = previo)
     if (crv3) {
       entidades <- sort(unique(muestra$estado))
       replicas <- matrix(NA_real_, length(entidades), length(ajuste$b))
       for (i in seq_along(entidades)) {
         conservar <- muestra$estado != entidades[i]
-        replica <- estimar(muestra[conservar, ], columnas, y[conservar, , drop = FALSE], FALSE)$b
+        previo_replica <- if (formato_largo) previo[conservar, , drop = FALSE] else NULL
+        replica <- estimar(muestra[conservar, ], columnas, y[conservar, , drop = FALSE],
+                           FALSE, base = previo_replica)$b
         replicas[i, ] <- as.vector(t(replica))
         omisiones[[length(omisiones) + 1]] <- data.frame(
           estado_omitido = entidades[i], modelo = paste0("M", modelo), tramo = names(tramos),
@@ -1291,10 +1348,11 @@ resultados <- function(muestra, escala, base, modelos = 0, crv3 = FALSE) {
 pruebas_semanales <- function(muestra, escala) {
   promedio <- function(h) rowMeans(sapply(h, function(d) transformar(extraer(muestra, d), escala)))
   referencia <- promedio(-14:-8)
-  y <- cbind("wk-4" = promedio(-28:-22) - referencia,
-             "wk-3" = promedio(-21:-15) - referencia,
-             "wk-1" = promedio(-7:-1) - referencia)
-  ajuste <- estimar(muestra, "tratado", y)
+  y <- cbind("wk-4" = promedio(-28:-22), "wk-3" = promedio(-21:-15),
+             "wk-1" = promedio(-7:-1))
+  ajuste <- if (formato_largo) {
+    estimar(muestra, "tratado", y, base = matrix(referencia, nrow(y), ncol(y)))
+  } else estimar(muestra, "tratado", y - referencia)
   filas <- list()
   for (agrupacion in names(ajuste$v)) {
     v <- ajuste$v[[agrupacion]]
@@ -1541,14 +1599,18 @@ for (metodo in c("emparejada", "emparejada_1a1")) {
     valores[is.na(valores)] <- 0
     valores
   }
-  cambios_celdas <- lapply(0:1, function(h) celdas_en(h) -
-                            Reduce("+", lapply(offsets_base(h), celdas_en)) / 3)
+  bases_celdas <- lapply(0:1, function(h) promedio_vectores(lapply(offsets_base(h), celdas_en)))
+  analizados_celdas <- lapply(0:1, celdas_en)
+  cambios_celdas <- Map("-", analizados_celdas, bases_celdas)
   cambio <- Reduce("+", cambios_celdas) / 2
   stopifnot(max(abs(rowSums(cambio) - contrastes(muestra, "niveles")[, "d0..1"])) < 0.000000001)
-  y <- cbind(cambio, cambio[, 4:6] - cambio[, 1:3])
+  incluir_brecha <- function(z) cbind(z, z[, 4:6] - z[, 1:3])
   actividad <- colSums(Reduce("+", lapply(sort(unique(c(0:1, offsets_base(0), offsets_base(1)))), celdas_en))) > 0
   presente <- c(actividad, actividad[1:3] | actividad[4:6])
-  ajuste <- estimar(muestra, "tratado", y)
+  ajuste <- if (formato_largo) {
+    estimar(muestra, "tratado", incluir_brecha(promedio_vectores(analizados_celdas)),
+            base = incluir_brecha(promedio_vectores(bases_celdas)))
+  } else estimar(muestra, "tratado", incluir_brecha(cambio))
   for (agrupacion in names(ajuste$v)) {
     v <- ajuste$v[[agrupacion]]
     estadisticas <- intervalo(ajuste$b[, 1], if (is.null(v)) rep(NA_real_, 12) else diag(v),
@@ -1562,6 +1624,7 @@ for (metodo in c("emparejada", "emparejada_1a1")) {
 }
 cruce_final <- unir_filas(cruces)
 guardar(cruce_final, "causal_cruce")
+if (formato_largo) quit(save = "no")
 
 fechas_base <- list()
 for (escenario in c("principal", "placebo")) {
@@ -1784,12 +1847,12 @@ for (escala in c("log1p", "niveles")) {
   for (tramo in c("d0", "d1", "d0..1", "d2..6", "wk+1")) {
     a <- obtener(escala = escala, tramo = tramo)
     b <- obtener(escala = escala, tramo = tramo, agrupacion = "entidad_fecha")
-    filas[[length(filas) + 1]] <- c(if (escala == "log1p") "$\\log(1+Y)$" else "Niveles", tramo,
+    filas[[length(filas) + 1]] <- c(if (escala == "log1p") "$\\log(1+Z)$" else "Niveles", tramo,
                                    resultado(a, FALSE), paste0("[", formato(b$ic_inf, 3), "; ", formato(b$ic_sup, 3), "]"),
                                    formato(a$efecto_sigma, 3), formato(b$mde, 3))
   }
 }
-tabla("causal_principales", c("Escala", "Tramo", "$\\hat\\beta$ (EE)", "IC 95\\% doble", "$\\beta/\\sigma$", "MDE doble"), filas)
+tabla("causal_principales", c("Escala", "Tramo", "$\\hat\\tau$ (EE)", "IC 95\\% doble", "$\\tau/\\sigma$", "MDE doble"), filas)
 
 filas <- list()
 for (metodo in c("comun_m0_m3", "mismos_tratados", "emparejada", "emparejada_1a1")) {
@@ -1800,7 +1863,7 @@ for (metodo in c("comun_m0_m3", "mismos_tratados", "emparejada", "emparejada_1a1
                                    resultado(a), resultado(b))
   }
 }
-tabla("causal_modelos", c("Controles", "Modelo", "T", "$N$", "$\\log(1+Y)$, IC doble", "Niveles, IC doble"), filas)
+tabla("causal_modelos", c("Controles", "Modelo", "T", "$N$", "$\\log(1+Z)$, IC doble", "Niveles, IC doble"), filas)
 
 bal <- balance_final[balance_final$escenario == "principal", ]
 filas <- antes_despues <- list()

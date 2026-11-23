@@ -68,11 +68,11 @@ La comparación requiere una base previa para cada día analizado.
 
 **Explicación oral**
 
-Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. Dejo fuera la semana menos uno para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local, h el día relativo y r conserva el día de la semana. Aplico logaritmo de uno más Y a cada conteo antes de promediar las tres referencias. Resto esa base del valor observado. Cada tramo promedia cambios diarios. El Día 0 puede incluir horas anteriores al inicio.
+Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. La semana menos uno sirve para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local y h el día relativo. Aplico logaritmo de uno más Z a cada conteo antes de promediar. Para cada día guardo dos filas: la base y el valor observado. En cada tramo, cada fila promedia sus valores diarios. El Día cero puede incluir horas anteriores al inicio.
 
 **Transición**
 
-Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus controles.
+Ahora podemos comparar las dos filas de cada par.
 
 **Referencia para consulta.** Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.
 
@@ -82,13 +82,13 @@ Una vez que cada municipio tiene un cambio, podemos contrastarlo con el de sus c
 
 **Explicación oral**
 
-La variable dependiente es el cambio que acabamos de construir. D vale uno para el tratado y cero para un control. Lambda es el efecto fijo de fecha y descuenta cambios comunes a cada inicio. Beta es la diferencia entre cambios. Buscamos estimar el efecto promedio del tratamiento sobre los tratados, el ATT. X reúne covariables previas, gamma sus coeficientes y u el residuo. La regresión usa mínimos cuadrados ponderados. En M cero, cada tratado pesa uno y distribuye una unidad de peso entre sus controles. Equivale a promediar 77 contrastes, uno por par tratado. M uno añade logaritmo de población, M dos empleo por mil habitantes y M tres autos por mil. La muestra y los pesos explícitos se conservan.
+Después vale cero en la base y uno en el día o tramo que analizo. En los días cero a uno, Y promedia el resultado de ambos días en la fila con Después igual a uno. Si analizo el día menos dos, esa fila también lleva un uno. Al restar los dos valores de Y, obtengo el cambio de cada par y alfa se cancela. Lambda recoge el cambio común de cada fecha de inicio. Tau compara el cambio de los tratados con el de sus controles. En M cero, los 77 tratados pesan igual. Los modelos siguientes ajustan por población, empleo y autos.
 
 **Transición**
 
 Veamos las trayectorias que dan origen a ese contraste.
 
-**Referencia para consulta.** Reporte, §3 y §3.1. Los modelos ajustados pueden cambiar la ponderación implícita.
+**Referencia para consulta.** Reporte, §3 y apéndice D. Las dos formas de estimar reproducen el mismo coeficiente y la misma inferencia cuando la corrección cuenta pares.
 
 ## Promedios y cambios de tratados y controles
 
@@ -110,7 +110,7 @@ Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.
 
 **Explicación oral**
 
-Cada punto es la diferencia entre los cambios de tratados y controles. Es el coeficiente estimado, beta gorro. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.
+Cada punto estima tau, la diferencia entre los cambios de tratados y controles. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.
 
 **Transición**
 
@@ -124,13 +124,13 @@ Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.
 
 **Explicación oral**
 
-En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Y. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.
+En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Z. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.
 
 **Transición**
 
 Veamos si la caída persiste después del primer tramo.
 
-**Referencia para consulta.** Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares municipio–fecha, efectos fijos de fecha y el cambio en log(1+Y). Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*). Los coeficientes de las covariables son ajustes estadísticos.
+**Referencia para consulta.** Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares: 77 tratados y 3 536 de control. Las dos medidas de ajuste corresponden a la regresión sobre cambios. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*).
 
 ## La caída estimada es mayor en los días 0 y 1
 
@@ -158,7 +158,7 @@ Con los mismos pares y pesos, usar la semana previa como base atenúa la caída 
 
 ¿Qué se puede sostener con ese conjunto de resultados?
 
-**Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Y) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
+**Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Z) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
 
 ## La mayor caída estimada aparece al inicio
 
@@ -172,7 +172,7 @@ La mayor caída relativa se estima en los días cero y uno. Después, los interv
 
 Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.
 
-**Referencia para consulta.** Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Y).
+**Referencia para consulta.** Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Z).
 
 ## Referencias
 
@@ -224,7 +224,7 @@ Volver al índice de respaldos.
 
 **Explicación oral**
 
-La agrupación en dos dimensiones admite dependencia por estado y por fecha, descuenta su intersección y conserva el coeficiente. Se distingue de un ajuste de Bonferroni: los intervalos de la trayectoria tienen cobertura nominal por punto. Catorce estados aportan tratados y el peso está concentrado. El intervalo alternativo omite un estado a la vez, conserva los pesos de las filas restantes y vuelve a absorber las fechas. En la prueba previa, la semana menos dos es el punto de referencia para una comparación conjunta distinta de la base diaria y del placebo. El efecto mínimo detectable en niveles para Días 0–1 es de 0,664 registros por municipio y día, bajo prueba bilateral del 5 por ciento y potencia del 80 por ciento.
+La agrupación en dos dimensiones admite dependencia por estado y por fecha, descuenta su intersección y conserva el coeficiente. La corrección de muestra finita cuenta pares. Si cuenta las 7 226 filas, el valor p del contraste principal pasa de 0,019 a 0,090 con los mismos 31 grados de libertad. Los intervalos de la trayectoria tienen cobertura nominal por punto. Catorce estados aportan tratados y el peso está concentrado. El intervalo alternativo omite un estado a la vez, conserva los pesos de los pares restantes y vuelve a absorber los efectos fijos. En la prueba previa, la semana menos dos es la referencia de la comparación conjunta. El efecto mínimo detectable en niveles para Días 0–1 es de 0,664 registros por municipio y día, bajo una prueba bilateral del 5 por ciento y potencia del 80 por ciento.
 
 **Transición**
 
@@ -238,7 +238,7 @@ Volver al índice de respaldos.
 
 **Explicación oral**
 
-En uno a uno la magnitud es similar y el intervalo se amplía. En niveles se estiman 0,397 registros menos por municipio y día. El intervalo admite otras magnitudes y un cambio nulo. La transformación exponencial del coeficiente principal da una caída del 10,2 por ciento en la escala geométrica de uno más Y. La media aritmética de los accidentes corresponde a otra cantidad.
+En uno a uno la magnitud es similar y el intervalo se amplía. En niveles se estiman 0,397 registros menos por municipio y día. El intervalo admite otras magnitudes y un cambio nulo. La transformación exponencial del coeficiente principal da una caída del 10,2 por ciento en la escala geométrica de uno más Z. La media aritmética de los accidentes corresponde a otra cantidad.
 
 **Transición**
 

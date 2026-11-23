@@ -3,8 +3,8 @@ import pandas as pd
 from scipy.stats import f, t
 
 
-def estimate(frame, columns, outcomes, design):
-    """Weighted date fixed effects and CRV1, with outcomes in row order."""
+def estimate(frame, columns, outcomes, design, *, baseline=None, inference=True):
+    """Weighted differences, or the two-row panel when baseline is supplied."""
     y = np.asarray(outcomes, dtype=float)
     x = frame[columns].to_numpy(dtype=float)
     n, k = x.shape
@@ -19,12 +19,33 @@ def estimate(frame, columns, outcomes, design):
     if n == 0:
         return coefficients, covariances, dfs
     weights = frame.peso.to_numpy(dtype=float)
-    w = np.sqrt(weights)[:, None]
-    values = pd.DataFrame(np.column_stack([x, y]))
     groups = frame.indice.to_numpy()
-    means = values.mul(weights, axis=0).groupby(groups).transform("sum").to_numpy()
-    denominators = pd.Series(weights).groupby(groups).transform("sum").to_numpy()
-    within = (values.to_numpy() - means / denominators[:, None]) * w
+    entity = frame.estado.to_numpy()
+    values = np.column_stack([x, y])
+    date_cells = groups
+    if baseline is not None:
+        baseline = np.asarray(baseline, dtype=float)
+        if baseline.shape != y.shape or not np.isfinite(baseline).all():
+            raise ValueError("El panel largo requiere una base finita por par y horizonte")
+        if frame.duplicated(["clave", "indice"]).any():
+            raise ValueError("El panel largo requiere un par único por municipio y fecha")
+        # Dos bloques de N filas, en el mismo orden de pares: Post=0 y Post=1.
+        post = np.repeat([0, 1], n)
+        values = np.column_stack([np.tile(x, (2, 1)) * post[:, None],
+                                  np.vstack([baseline, y])])
+        weights = np.tile(weights, 2)
+        groups = np.tile(groups, 2)
+        entity = np.tile(entity, 2)
+        date_cells = [groups, post]
+    weighted = pd.DataFrame(values).mul(weights, axis=0)
+    sums = weighted.groupby(date_cells).transform("sum").to_numpy()
+    masses = pd.Series(weights).groupby(date_cells).transform("sum").to_numpy()
+    within = values - sums / masses[:, None]
+    if baseline is not None:
+        # Cada par pertenece a una sola fecha y tiene igual peso en ambos
+        # periodos. Quitar su media preserva las medias fecha × periodo nulas.
+        within -= np.tile((within[:n] + within[n:]) / 2, (2, 1))
+    within *= np.sqrt(weights)[:, None]
     xw, yw = within[:, :k], within[:, k:]
     # Keep treatment and each independent variable in block order.
     independent = []
@@ -37,12 +58,14 @@ def estimate(frame, columns, outcomes, design):
     xw = xw[:, independent]
     b = np.linalg.lstsq(xw, yw, rcond=None)[0]
     coefficients[:, independent] = b.T
-    residual = yw - xw @ b
-    if states < 2 or n <= dates + len(independent):
+    if not inference or states < 2 or n <= dates + len(independent):
         return coefficients, covariances, dfs
+    residual = yw - xw @ b
     influence = xw @ np.linalg.inv(xw.T @ xw)
-    scores = (residual[:, :, None] * influence[:, None, :]).reshape(n, -1)
+    scores = (residual[:, :, None] * influence[:, None, :]).reshape(len(within), -1)
     retained = (np.arange(n_outcomes)[:, None] * k + independent).ravel()
+    # Ambas filas comparten estado y fecha. La corrección usa N pares y el
+    # rango del modelo en cambios; los efectos de par absorben N parámetros.
     correction = (n - 1) / (n - dates - len(independent))
 
     def meat(keys):
@@ -54,7 +77,6 @@ def estimate(frame, columns, outcomes, design):
         result[np.ix_(retained, retained)] = v
         return result
 
-    entity = frame.estado.to_numpy()
     v1 = meat(entity)
     dfs["entidad"] = states - 1
     covariances["entidad"] = expanded(v1 * correction * states / (states - 1))

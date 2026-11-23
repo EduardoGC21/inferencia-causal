@@ -7,6 +7,9 @@
 # 2. Instala una vez: install.packages(c("data.table", "R.utils", "ggplot2"))
 # 3. Desde la raíz del repositorio:
 #    Rscript codigo_R/analisis.R RUTA/datos_limpios_R RUTA/resultados_R
+#    Añade --panel-largo como tercer argumento para cotejar las regresiones:
+#    genera las salidas causal_efectos, causal_wald_semanal y causal_cruce
+#    en formato largo, junto con sus insumos de selección.
 # También puedes cambiar las dos rutas siguientes y ejecutar todo desde RStudio.
 # Las salidas siempre van a la carpeta indicada; no modifica reporte/ ni Python.
 # Verificado con R 4.6.1, data.table 1.18.4 y ggplot2 4.0.3.
@@ -18,6 +21,7 @@ carpeta_salida <- "resultados_R"
 argumentos <- commandArgs(trailingOnly = TRUE)
 if (length(argumentos) >= 1) carpeta_datos <- argumentos[1]
 if (length(argumentos) >= 2) carpeta_salida <- argumentos[2]
+formato_largo <- identical(argumentos[3], "--panel-largo")
 
 library(data.table)
 library(ggplot2)
@@ -464,7 +468,7 @@ rango_matriz <- function(x) {
   sum(d > max(dim(x)) * max(d) * .Machine$double.eps)
 }
 
-estimar <- function(muestra, columnas, y, inferencia = TRUE) {
+estimar <- function(muestra, columnas, y, inferencia = TRUE, base = NULL) {
   x <- as.matrix(muestra[columnas])
   y <- as.matrix(y)
   n <- nrow(x)
@@ -477,11 +481,30 @@ estimar <- function(muestra, columnas, y, inferencia = TRUE) {
   grupos <- match(muestra$indice, unique(muestra$indice))
   f <- length(unique(grupos))
   g <- length(unique(muestra$estado))
+  entidades <- muestra$estado
+  pesos <- muestra$peso
   z <- cbind(x, y)
-  sumas <- rowsum(z * muestra$peso, grupos, reorder = TRUE)
-  masas <- rowsum(muestra$peso, grupos, reorder = TRUE)[, 1]
+  celdas <- grupos
+  if (!is.null(base)) {
+    stopifnot(identical(dim(base), dim(y)), all(is.finite(base)),
+              !anyDuplicated(muestra[c("clave", "indice")]))
+    post <- rep(0:1, each = n)
+    z <- cbind(rbind(x, x) * post, rbind(base, y))
+    celdas <- c(grupos, grupos + f)
+    grupos <- rep(grupos, 2)
+    entidades <- rep(entidades, 2)
+    pesos <- rep(pesos, 2)
+  }
+  sumas <- rowsum(z * pesos, celdas, reorder = TRUE)
+  masas <- rowsum(pesos, celdas, reorder = TRUE)[, 1]
   medias <- sumas / masas
-  dentro <- (z - medias[grupos, , drop = FALSE]) * sqrt(muestra$peso)
+  dentro <- z - medias[celdas, , drop = FALSE]
+  if (!is.null(base)) {
+    a <- seq_len(n)
+    media_par <- (dentro[a, , drop = FALSE] + dentro[n + a, , drop = FALSE]) / 2
+    dentro <- dentro - rbind(media_par, media_par)
+  }
+  dentro <- dentro * sqrt(pesos)
   xw <- dentro[, seq_len(k), drop = FALSE]
   yw <- dentro[, k + seq_len(m), drop = FALSE]
   independientes <- integer()
@@ -502,6 +525,8 @@ estimar <- function(muestra, columnas, y, inferencia = TRUE) {
   influencia <- xw %*% solve(crossprod(xw))
   puntuaciones <- do.call(cbind, lapply(seq_len(m), function(j) influencia * residuo[, j]))
   posiciones <- unlist(lapply(seq_len(m), function(j) (j - 1) * k + independientes))
+  # Las dos filas comparten conglomerados. La corrección usa pares y el
+  # rango en cambios, con un efecto fijo por fecha y los regresores retenidos.
   correccion <- (n - 1) / (n - f - length(independientes))
   carne <- function(grupo) crossprod(rowsum(puntuaciones, grupo, reorder = FALSE))
   expandir <- function(v) {
@@ -509,13 +534,13 @@ estimar <- function(muestra, columnas, y, inferencia = TRUE) {
     completa[posiciones, posiciones] <- v
     completa
   }
-  v_estado <- carne(muestra$estado)
+  v_estado <- carne(entidades)
   covarianzas$entidad <- expandir(v_estado * correccion * g / (g - 1))
   gl["entidad"] <- g - 1
   if (f >= 6) {
     menor <- min(g, f)
     v_fecha <- carne(grupos)
-    v_interseccion <- carne(paste(muestra$estado, muestra$indice))
+    v_interseccion <- carne(paste(entidades, grupos))
     covarianzas$entidad_fecha <- expandir((v_estado + v_fecha - v_interseccion) *
                                          correccion * menor / (menor - 1))
     gl["entidad_fecha"] <- menor - 1
@@ -587,7 +612,7 @@ resumir <- function(muestra) {
 
 # 7. Contrastes, bases y pruebas previas -----------------------------------
 # %% es el módulo no negativo de R: también sirve para h = -7,...,-1.
-# Primero se aplica log(1+Y) a cada observación; después se promedia.
+# Primero se aplica log(1+Z) a cada observación; después se promedia.
 
 offsets_base <- function(h) (h %% 7) - c(28, 21, 14)
 transformar <- function(x, escala) {
@@ -598,7 +623,8 @@ transformar <- function(x, escala) {
 # precisión extendida en R: difiere en los residuos de contrastes idénticos
 # a su base. Sus valores p son artefactos numéricos, no pruebas informativas.
 promedio_vectores <- function(lista) Reduce("+", lista) / length(lista)
-contrastes <- function(muestra, escala, base = "tres_semanas", horizontes = tramos) {
+contrastes <- function(muestra, escala, base = "tres_semanas", horizontes = tramos,
+                       panel = FALSE) {
   dias <- sort(unique(unlist(horizontes)))
   referencias <- lapply(dias, function(h) {
     if (base == "tres_semanas") offsets_base(h) else if (base == "wk-1") -7:-1 else -2
@@ -607,16 +633,26 @@ contrastes <- function(muestra, escala, base = "tres_semanas", horizontes = tram
   necesarios <- sort(unique(c(dias, unlist(referencias))))
   valores <- lapply(necesarios, function(h) transformar(extraer(muestra, h), escala))
   names(valores) <- as.character(necesarios)
-  delta <- lapply(dias, function(h) {
-    valores[[as.character(h)]] - promedio_vectores(valores[as.character(referencias[[as.character(h)]])])
+  bases <- lapply(referencias, function(h) promedio_vectores(valores[as.character(h)]))
+  agregar <- function(serie) {
+    resultado <- sapply(horizontes, function(h) promedio_vectores(serie[as.character(h)]))
+    matrix(resultado, nrow = nrow(muestra), dimnames = list(NULL, names(horizontes)))
+  }
+  if (panel) return(list(base = agregar(bases), analizado = agregar(valores)))
+  delta <- lapply(as.character(dias), function(h) {
+    valores[[h]] - bases[[h]]
   })
   names(delta) <- as.character(dias)
-  resultado <- sapply(horizontes, function(h) promedio_vectores(delta[as.character(h)]))
-  matrix(resultado, nrow = nrow(muestra), dimnames = list(NULL, names(horizontes)))
+  agregar(delta)
 }
 
 resultados <- function(muestra, escala, base, modelos = 0, crv3 = FALSE) {
-  y <- contrastes(muestra, escala, base)
+  y <- contrastes(muestra, escala, base, panel = formato_largo)
+  previo <- NULL
+  if (formato_largo) {
+    previo <- y$base
+    y <- y$analizado
+  }
   resumen <- resumir(muestra)
   t <- muestra[muestra$tratado == 1, ]
   previa <- unlist(lapply(-28:-8, function(h) extraer(t, h)))
@@ -626,13 +662,15 @@ resultados <- function(muestra, escala, base, modelos = 0, crv3 = FALSE) {
   muestra$log_poblacion <- log(muestra$poblacion)
   for (modelo in modelos) {
     columnas <- columnas_modelo[seq_len(modelo + 1)]
-    ajuste <- estimar(muestra, columnas, y)
+    ajuste <- estimar(muestra, columnas, y, base = previo)
     if (crv3) {
       entidades <- sort(unique(muestra$estado))
       replicas <- matrix(NA_real_, length(entidades), length(ajuste$b))
       for (i in seq_along(entidades)) {
         conservar <- muestra$estado != entidades[i]
-        replica <- estimar(muestra[conservar, ], columnas, y[conservar, , drop = FALSE], FALSE)$b
+        previo_replica <- if (formato_largo) previo[conservar, , drop = FALSE] else NULL
+        replica <- estimar(muestra[conservar, ], columnas, y[conservar, , drop = FALSE],
+                           FALSE, base = previo_replica)$b
         replicas[i, ] <- as.vector(t(replica))
         omisiones[[length(omisiones) + 1]] <- data.frame(
           estado_omitido = entidades[i], modelo = paste0("M", modelo), tramo = names(tramos),
@@ -665,10 +703,11 @@ resultados <- function(muestra, escala, base, modelos = 0, crv3 = FALSE) {
 pruebas_semanales <- function(muestra, escala) {
   promedio <- function(h) rowMeans(sapply(h, function(d) transformar(extraer(muestra, d), escala)))
   referencia <- promedio(-14:-8)
-  y <- cbind("wk-4" = promedio(-28:-22) - referencia,
-             "wk-3" = promedio(-21:-15) - referencia,
-             "wk-1" = promedio(-7:-1) - referencia)
-  ajuste <- estimar(muestra, "tratado", y)
+  y <- cbind("wk-4" = promedio(-28:-22), "wk-3" = promedio(-21:-15),
+             "wk-1" = promedio(-7:-1))
+  ajuste <- if (formato_largo) {
+    estimar(muestra, "tratado", y, base = matrix(referencia, nrow(y), ncol(y)))
+  } else estimar(muestra, "tratado", y - referencia)
   filas <- list()
   for (agrupacion in names(ajuste$v)) {
     v <- ajuste$v[[agrupacion]]
@@ -915,14 +954,18 @@ for (metodo in c("emparejada", "emparejada_1a1")) {
     valores[is.na(valores)] <- 0
     valores
   }
-  cambios_celdas <- lapply(0:1, function(h) celdas_en(h) -
-                            Reduce("+", lapply(offsets_base(h), celdas_en)) / 3)
+  bases_celdas <- lapply(0:1, function(h) promedio_vectores(lapply(offsets_base(h), celdas_en)))
+  analizados_celdas <- lapply(0:1, celdas_en)
+  cambios_celdas <- Map("-", analizados_celdas, bases_celdas)
   cambio <- Reduce("+", cambios_celdas) / 2
   stopifnot(max(abs(rowSums(cambio) - contrastes(muestra, "niveles")[, "d0..1"])) < 0.000000001)
-  y <- cbind(cambio, cambio[, 4:6] - cambio[, 1:3])
+  incluir_brecha <- function(z) cbind(z, z[, 4:6] - z[, 1:3])
   actividad <- colSums(Reduce("+", lapply(sort(unique(c(0:1, offsets_base(0), offsets_base(1)))), celdas_en))) > 0
   presente <- c(actividad, actividad[1:3] | actividad[4:6])
-  ajuste <- estimar(muestra, "tratado", y)
+  ajuste <- if (formato_largo) {
+    estimar(muestra, "tratado", incluir_brecha(promedio_vectores(analizados_celdas)),
+            base = incluir_brecha(promedio_vectores(bases_celdas)))
+  } else estimar(muestra, "tratado", incluir_brecha(cambio))
   for (agrupacion in names(ajuste$v)) {
     v <- ajuste$v[[agrupacion]]
     estadisticas <- intervalo(ajuste$b[, 1], if (is.null(v)) rep(NA_real_, 12) else diag(v),
@@ -936,6 +979,7 @@ for (metodo in c("emparejada", "emparejada_1a1")) {
 }
 cruce_final <- unir_filas(cruces)
 guardar(cruce_final, "causal_cruce")
+if (formato_largo) quit(save = "no")
 
 fechas_base <- list()
 for (escenario in c("principal", "placebo")) {
@@ -1158,12 +1202,12 @@ for (escala in c("log1p", "niveles")) {
   for (tramo in c("d0", "d1", "d0..1", "d2..6", "wk+1")) {
     a <- obtener(escala = escala, tramo = tramo)
     b <- obtener(escala = escala, tramo = tramo, agrupacion = "entidad_fecha")
-    filas[[length(filas) + 1]] <- c(if (escala == "log1p") "$\\log(1+Y)$" else "Niveles", tramo,
+    filas[[length(filas) + 1]] <- c(if (escala == "log1p") "$\\log(1+Z)$" else "Niveles", tramo,
                                    resultado(a, FALSE), paste0("[", formato(b$ic_inf, 3), "; ", formato(b$ic_sup, 3), "]"),
                                    formato(a$efecto_sigma, 3), formato(b$mde, 3))
   }
 }
-tabla("causal_principales", c("Escala", "Tramo", "$\\hat\\beta$ (EE)", "IC 95\\% doble", "$\\beta/\\sigma$", "MDE doble"), filas)
+tabla("causal_principales", c("Escala", "Tramo", "$\\hat\\tau$ (EE)", "IC 95\\% doble", "$\\tau/\\sigma$", "MDE doble"), filas)
 
 filas <- list()
 for (metodo in c("comun_m0_m3", "mismos_tratados", "emparejada", "emparejada_1a1")) {
@@ -1174,7 +1218,7 @@ for (metodo in c("comun_m0_m3", "mismos_tratados", "emparejada", "emparejada_1a1
                                    resultado(a), resultado(b))
   }
 }
-tabla("causal_modelos", c("Controles", "Modelo", "T", "$N$", "$\\log(1+Y)$, IC doble", "Niveles, IC doble"), filas)
+tabla("causal_modelos", c("Controles", "Modelo", "T", "$N$", "$\\log(1+Z)$, IC doble", "Niveles, IC doble"), filas)
 
 bal <- balance_final[balance_final$escenario == "principal", ]
 filas <- antes_despues <- list()
