@@ -99,9 +99,7 @@ def models_table():
         body.append((labels[label], *cells))
     if len(body) != len(labels) or any(len(row) != 5 for row in body):
         raise ValueError("El cuadro de regresiones del reporte no tiene la estructura esperada")
-    adjustments = ("Sin covariables", "+ Log. población", "+ Empleo por mil", "+ Autos por mil")
-    models = tuple(math(f"M_{n}") + f'<span class="model-adjustment">{adjustment}</span>'
-                   for n, adjustment in enumerate(adjustments))
+    models = tuple(math(f"M_{n}") for n in range(4))
     return table(("Variable / estadístico", *models), body)
 
 

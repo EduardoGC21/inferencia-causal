@@ -184,7 +184,6 @@
 #resultados th:first-child { width: 30%; }
 #resultados :is(th, td) { padding: 2px 10px; }
 #resultados tbody td, #resultados thead th:not(:first-child) { text-align: right; }
-#resultados .model-adjustment { display: block; margin-top: 3px; font-weight: 400; white-space: nowrap; }
 #resultados .model-cell-stats { display: block; color: var(--muted); font-size: var(--label); font-weight: 400; margin-top: 2px; }
 #resultados .model-stars { font-size: var(--label); vertical-align: super; line-height: 0; margin-left: 2px; }
 .model-caption { font-size: var(--label); margin-top: 7px; color: var(--muted); }
