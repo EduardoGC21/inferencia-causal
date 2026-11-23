@@ -286,8 +286,6 @@ add("respaldos", "Discusión", "Respaldos para la discusión", 0, """
   <a href="#/inferencia">¿Qué mide la incertidumbre?</a>
   <a href="#/contrastes">¿Qué pasa con 1:1 o en niveles?</a>
   <a href="#/alternativas">¿Cómo cambian las trayectorias?</a>
-  <a href="#/alcance">¿Qué cubren el catálogo y los registros?</a>
-  <a href="#/fuentes">¿Qué aporta el antecedente alemán?</a>
 </nav>""",
 "Abre la pregunta correspondiente. Cada respaldo termina con un enlace al índice.", "Volver a la conclusión cuando termine la discusión.", "Reporte, apéndices A–H.")
 
@@ -329,22 +327,6 @@ add("alternativas", "Discusión", "En niveles cambia la precisión", 0, f"""
 <p class="axis-caption">Días respecto al inicio local · agrupación por estado y fecha</p>""",
 """En niveles, el punto se interpreta como registros por municipio y día. En uno a uno usamos los mismos 77 pares tratados y cambiamos comparadores y pesos. Un intervalo que incluye cero admite un cambio nulo y también otros efectos. Que un método excluya cero y otro lo incluya no establece una diferencia estadística entre métodos. Las tendencias paralelas se requieren en la escala empleada. La comparación semanal de la crisis prolongada de Culiacán desde septiembre de 2024 queda fuera del reporte y de esta exposición.""",
 "Volver al índice de respaldos.", "Reporte, figura 1, apéndices A–C y README del repositorio.", sources)
-
-add("alcance", "Discusión", "Los registros y el catálogo tienen coberturas distintas", 0, """
-<div class="backup-grid">
-  <div><h3>Accidentes y covariables</h3><p>ATUS cuenta registros publicados. Población, empleo, automóviles y territorio proceden de fuentes oficiales.</p><p>La población anual de CONAPO sirve de denominador para las tasas por mil.</p></div>
-  <div><h3>Catálogo de ataques</h3><p>Tres agentes de inteligencia artificial asistieron la búsqueda web, con cobertura desigual y sin validación humana exhaustiva.</p><p>La muestra conserva los episodios puntuales de Culiacán de 2019 y 2023.</p></div>
-</div>""",
-"""El catálogo recoge prensa y comunicados sobre acciones coordinadas. Los cotejos entre agentes ayudan a corroborar casos y dejan incertidumbre en la cobertura. Las exclusiones de casos pendientes o señales en controles corresponden a sensibilidades del reporte. ATUS se concentra en vías no federales. El registro puede cambiar si se altera la atención de emergencias o el proceso de publicación. Las covariables se enlazan con medición previa a la base, aunque las ediciones consultadas son retrospectivas. El apéndice H contiene el código R reproducible.""",
-"Volver al índice de respaldos.", "Reporte, §2 y apéndices A, C, E, F y H.")
-
-add("fuentes", "Discusión", "El antecedente alemán orienta la pregunta temporal", 0, """
-<div class="backup-grid">
-  <div><h3>Artículo de referencia</h3><p>Bauernschuster, S. y Rekers, R. (2022). <em>Speed limit enforcement and road safety.</em> Journal of Public Economics, 210, 104663.</p><p>Frecuencia diaria, exposición transitoria y duración.</p></div>
-  <div><h3>Proyecto de Inferencia Causal</h3><p>Eduardo Garcia Cortez · ITAM · Mauricio Romero.</p><p>El diseño adapta el emparejamiento y la base al contexto mexicano.</p></div>
-</div>""",
-"""El artículo aprovecha fechas de operativos y participación por estado en Alemania. Le tomo la pregunta por la duración de un cambio tras una exposición transitoria y la frecuencia diaria. El diseño mexicano usa inicios locales que pueden repetirse y compara municipios seleccionados para las mismas fechas. La base y las reglas de emparejamiento responden a ese problema.""",
-"Volver al índice de respaldos.", "Bauernschuster y Rekers (2022), figuras 1 y 4. Reporte, §1 y §3.")
 
 assert sum(s["seconds"] for s in slides) == 480
 assert len({s["id"] for s in slides}) == len(slides)

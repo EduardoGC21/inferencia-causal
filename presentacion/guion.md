@@ -245,31 +245,3 @@ En niveles, el punto se interpreta como registros por municipio y día. En uno a
 Volver al índice de respaldos.
 
 **Referencia para consulta.** Reporte, figura 1, apéndices A–C y README del repositorio.
-
-## Los registros y el catálogo tienen coberturas distintas
-
-**Identificador** `alcance` · **Tiempo** Fuera de la ruta cronometrada
-
-**Explicación oral**
-
-El catálogo recoge prensa y comunicados sobre acciones coordinadas. Los cotejos entre agentes ayudan a corroborar casos y dejan incertidumbre en la cobertura. Las exclusiones de casos pendientes o señales en controles corresponden a sensibilidades del reporte. ATUS se concentra en vías no federales. El registro puede cambiar si se altera la atención de emergencias o el proceso de publicación. Las covariables se enlazan con medición previa a la base, aunque las ediciones consultadas son retrospectivas. El apéndice H contiene el código R reproducible.
-
-**Transición**
-
-Volver al índice de respaldos.
-
-**Referencia para consulta.** Reporte, §2 y apéndices A, C, E, F y H.
-
-## El antecedente alemán orienta la pregunta temporal
-
-**Identificador** `fuentes` · **Tiempo** Fuera de la ruta cronometrada
-
-**Explicación oral**
-
-El artículo aprovecha fechas de operativos y participación por estado en Alemania. Le tomo la pregunta por la duración de un cambio tras una exposición transitoria y la frecuencia diaria. El diseño mexicano usa inicios locales que pueden repetirse y compara municipios seleccionados para las mismas fechas. La base y las reglas de emparejamiento responden a ese problema.
-
-**Transición**
-
-Volver al índice de respaldos.
-
-**Referencia para consulta.** Bauernschuster y Rekers (2022), figuras 1 y 4. Reporte, §1 y §3.
