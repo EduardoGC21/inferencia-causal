@@ -1,49 +1,70 @@
 {
-  "alcance": "Extractos de resultados existentes; ninguna estimación nueva",
+  "alcance": "Resultados en niveles y medias descriptivas de la muestra verificada",
+  "dias_base": [
+    -28,
+    -27,
+    -26,
+    -25,
+    -24,
+    -23,
+    -22,
+    -21,
+    -20,
+    -19,
+    -18,
+    -17,
+    -16,
+    -15,
+    -14,
+    -13,
+    -12,
+    -11,
+    -10,
+    -9,
+    -8
+  ],
+  "contrastes_diarios_cotejados": 21,
+  "diferencia_maxima": 2.886579864025407e-15,
   "archivos": [
     {
-      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/resultados/modelos/causal_efectos.csv",
-      "sha256": "0142fecb2222f50137de10567603a6f2e9e4663c09e7c9254b045332b268c178"
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_efectos.csv",
+      "sha256": "fc18e1388962592a78000b09ca2d5550d42427110c348fc03de58698055ef1e5"
     },
     {
-      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/resultados/modelos/causal_wald_semanal.csv",
-      "sha256": "0a500dc9b06e8249bc972a1e25e09d375b65c98fc30e01b4e2f9ee384f51b54b"
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_coeficientes.csv",
+      "sha256": "a7955b836e9c22560d4313e45c4e7776bff9e7a3377f25e59435fb74156dd9f7"
     },
     {
-      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/resultados/modelos/causal_balance.csv",
-      "sha256": "dbbb3b8413d716f452f28fcd7f6b17e6d89ab12525362910708ece39de677a67"
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_wald_semanal.csv",
+      "sha256": "589776265fc26739499d3872c2e0e4f3ce4a8419c57a9e1e8a2047cbfd150da5"
     },
     {
-      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/resultados/modelos/causal_muestras.csv",
-      "sha256": "b3d5740922ae8b3a10a033d312073235322b26bb6970d446c528b96dfc2a89d0"
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_balance.csv",
+      "sha256": "253a48e020ed273cba79e730a63e047ef2d5525f75c49f79d7bea10ce0fd0384"
     },
     {
-      "ruta_desde_repo": "../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/conteos_diarios.csv.gz",
-      "sha256": "c23344ec092d16d96cbf0ef06d7e876cd3545f9bc28865c7a7be633c090dad3d"
+      "ruta_desde_repo": "../../data/outputs/niveles-base-semanal/solo-base/python/modelos/causal_muestras.csv",
+      "sha256": "153ce7364191eb19214a22e0c420e24ba6006e931213ea14e03abdd2ebc597b9"
+    },
+    {
+      "ruta_desde_repo": "../../data/processed/conteos_diarios.parquet",
+      "sha256": "2456f052aa5f952f0fe61d813c16de579aade8534939aba2b1488e4dc9f01e0e"
     },
     {
       "ruta_desde_repo": "reporte/reporte.md",
-      "sha256": "cc677aeeee878baebe6e913016bd10cb2c625b5f9d8ff2e3d8227186b48ba6bc"
+      "sha256": "7cb073dd67b91e27422df605fe6f71c96bfbe05bf27e4cf3c6c62970bc278203"
     },
     {
       "ruta_desde_repo": "reporte/reporte.pdf",
-      "sha256": "3bcfde54222b7acce477a101b783b39f13e8beeecb0d95c7282d1daeefebd1db"
+      "sha256": "1d804f55aaa344a8499f6f7dda1c57231f5d4478a38bc6b992672a1185c81374"
     },
     {
       "ruta_desde_repo": "reporte/main.tex",
-      "sha256": "02ad299d47c35c5f3c3cf4d054f1b00869e023f8ac7455d28f225c8c816f7427"
+      "sha256": "204b125b359604c9c555c12e5dd27f90284211d3d832061e98f68dc46aab1cbe"
     },
     {
       "ruta_desde_repo": "reporte/figuras/mapa-municipios.png",
       "sha256": "c3de5f9c5d75d764320b338e4083dc771c5d883653b818a9a949dd73fcfb6dbd"
     }
-  ],
-  "cotejo_en_formato_largo": {
-    "registro": "reporte/verificacion/panel-largo.json",
-    "resultados_verificados": {
-      "efectos.csv": 3584,
-      "causal_wald_semanal.csv": 144,
-      "diferencias_diarias_de_series": 21
-    }
-  }
+  ]
 }

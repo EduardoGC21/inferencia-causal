@@ -4,8 +4,14 @@ from html import escape
 from pathlib import Path
 
 DECK = Path(__file__).resolve().parents[1]
-with (DECK / "assets/datos/efectos.csv").open(encoding="utf-8", newline="") as stream:
-    effects = list(csv.DictReader(stream))
+def read_results(name):
+    with (DECK / "assets/datos" / name).open(encoding="utf-8", newline="") as stream:
+        return list(csv.DictReader(stream))
+
+
+effects = read_results("efectos.csv")
+coefficients = read_results("causal_coeficientes.csv")
+weekly = read_results("causal_wald_semanal.csv")
 
 slides = []
 data = "INEGI (ATUS y covariables), Consejo Nacional de Población (CONAPO) y catálogo propio."
@@ -27,13 +33,13 @@ def figure(file, alt):
     return f'<img src="assets/{file}" alt="{escape(alt, quote=True)}">'
 
 
-def num(n):
-    return f"{float(n):.3f}".replace(".", ",").replace("-", "−")
+def num(n, digits=3):
+    return f"{float(n):.{digits}f}".replace(".", ",").replace("-", "−")
 
 
 def result(tramo="d0..1", **options):
     key = dict(tramo=tramo, escenario="principal", muestra="emparejada", modelo="M0",
-               escala="log1p", base="tres_semanas", agrupacion="entidad_fecha") | options
+               escala="niveles", base="tres_semanas", agrupacion="entidad_fecha") | options
     row, = (row for row in effects if all(row[k] == v for k, v in key.items()))
     return row
 
@@ -54,7 +60,7 @@ def calendar():
     def period(label, start, end, group=""):
         cells = []
         for h in range(start, end + 1):
-            cls = "reference" if h in {-28, -21, -14} else "prior" if h < 0 else "followup"
+            cls = "reference" if h <= -8 else "prior" if h < 0 else "followup"
             cells.append(f'<span class="{cls}">{str(h).replace("-", "−")}</span>')
         return f'<div class="{group}"><strong>{label}</strong><div class="days" style="--day-count:{end - start + 1}">{"".join(cells)}</div></div>'
 
@@ -62,70 +68,59 @@ def calendar():
     immediate = period("Días 0–1", 0, 1)
     after = period("Días 2–6", 2, 6, "period-mid")
     week = period("Días 7–13", 7, 13, "period-late")
-    return (f'<div class="calendar" aria-label="Días −28 a 13. El seguimiento posterior abarca tres tramos.">'
+    return (f'<div class="calendar" aria-label="Días −28 a 13. Las semanas −4 a −2 forman la base común. El seguimiento abarca tres tramos.">'
             f'{before}<div class="split-period">{immediate}{after}</div>{week}</div>')
 
 
 def models_table():
-    report = (DECK.parent / "reporte/reporte.md").read_text(encoding="utf-8")
-    panel = report.split("**Panel A. Resultado:", 1)[1].split("\n\nCada celda", 1)[0]
     labels = {
-        "Tratamiento": "Tratado × Después (" + math(r"\widehat{\tau}_{\mathrm{DD}}") + ")",
-        "Logaritmo de la población": "Logaritmo de población",
-        "Empleo por cada mil habitantes": "Empleo por mil habitantes",
-        "Automóviles por cada mil habitantes": "Autos por mil habitantes",
-        "$R^2$ ponderado": math("R^2") + " ponderado",
-        "$R^2$ tras descontar las fechas": math("R^2") + " tras descontar fechas",
+        "tratado": "Tratado × Después (" + math(r"\widehat{\tau}_{\mathrm{DD}}") + ")",
+        "log_poblacion": "Logaritmo de población",
+        "empleo_mil": "Empleo por mil habitantes",
+        "autos_mil": "Autos por mil habitantes",
     }
+    index = {(row["termino"], row["modelo"]): row for row in coefficients}
     body = []
-    for line in panel.splitlines():
-        if not line.startswith("|"):
-            continue
-        label, *values = [value.strip() for value in line.strip("|").split("|")]
-        if label not in labels:
-            continue
-        cells = []
-        for value in values:
-            coefficient, *stats = value.replace("-", "−").split("<br>")
-            detail = ""
-            if stats:
-                p_value = stats[2].removeprefix("$p=").removesuffix("$").replace("{,}", ",")
-                p_number = float(p_value.replace(",", "."))
-                stars = next((mark for limit, mark in ((0.001, "***"), (0.01, "**"), (0.05, "*"))
-                              if p_number <= limit), "")
-                if stars:
-                    coefficient += f'<sup class="model-stars">{stars}</sup>'
-                detail = f'<span class="model-cell-stats">{stats[0]} · {p_value}</span>'
-            cells.append(coefficient + detail)
-        body.append((labels[label], *cells))
-    if len(body) != len(labels) or any(len(row) != 5 for row in body):
-        raise ValueError("El cuadro de regresiones del reporte no tiene la estructura esperada")
-    models = tuple(math(f"M_{n}") for n in range(4))
-    return table(("Variable / estadístico", *models), body)
+    for term, label in labels.items():
+        cells = [label]
+        digits = 6 if term in ("empleo_mil", "autos_mil") else 3
+        for n in range(4):
+            row = index.get((term, f"M{n}"))
+            if row is None:
+                cells.append("—")
+                continue
+            cells.append(num(row["efecto"], digits) +
+                         f'<span class="model-cell-stats">({num(row["ee"], digits)}) · {num(row["p"])}</span>')
+        body.append(cells)
+    return table(("Variable", *(math(f"M_{n}") for n in range(4))), body)
 
 
-log = math(r"\log(1+Z)")
+def wald_p(group):
+    row, = (row for row in weekly if row["escenario"] == "principal" and row["muestra"] == "emparejada"
+            and row["restricciones"] == "wk-4;wk-3;wk-1" and row["agrupacion"] == group)
+    return num(row["p"])
+
+
 m0 = math("M_0")
 base_eq = math(
-    r"\left.\begin{aligned}"
-    r"B_{ith}^{g}&=\tfrac13\sum_{k\in\{28,21,14\}}g(Z_{i,r(t,h)-k})\\"
-    r"g(z)&=\log(1+z)"
-    r"\end{aligned}\right\}"
-    r"\quad{\color{#235ca0}\longrightarrow}\quad"
-    r"\begin{aligned}Y_{ith0}^{g}&=B_{ith}^{g}\\"
-    r"Y_{ith1}^{g}&=g(Z_{i,t+h})\end{aligned}",
+    r"B_{it}=\frac{1}{21}\sum_{k=-28}^{-8}Y_{i,t+k}"
+    r"\qquad"
+    r"\bar Y_{ith}=\frac{1}{|h|}\sum_{k\in h}Y_{i,t+k}",
     True,
 )
 reg_eq = math(
-    r"\begin{gathered}\underbrace{Y_{iths}^{g}}_{\text{Valor por municipio, fecha y día o tramo}}"
-    r"=\underbrace{\alpha_{ith}}_{\text{Efecto fijo de par}}"
-    r"+\underbrace{\lambda_{th}\mathrm{Post}_s}_{\text{Efecto fijo de inicio × periodo}}"
-    r"\\+\underbrace{\color{#235ca0}{\tau_{\mathrm{DD},h}^{g}}}_{\text{Coeficiente de interés}}"
-    r"\underbrace{(\mathrm{Treat}_{it}\times\mathrm{Post}_s)}_{\text{Tratado × Después}}"
-    r"+\underbrace{(X_{it}^{\prime}\gamma_h)\mathrm{Post}_s}_{\text{Ajuste por covariables}}"
-    r"+\underbrace{\varepsilon_{iths}}_{\text{Residuo}}\end{gathered}",
+    r"\begin{aligned}Y_{i,d}={}&\underbrace{\alpha_{ith}}_{\text{Par}}"
+    r"+\underbrace{\lambda_{th}\mathrm{Post}_s}_{\text{Inicio × bloque}}"
+    r"+\underbrace{\delta_{h,\operatorname{ds}(d)}}_{\text{Día de la semana}}\\"
+    r"&+\underbrace{\color{#235ca0}{\tau_{\mathrm{DD},h}}(\mathrm{Treat}_{it}\times\mathrm{Post}_s)}"
+    r"_{\text{Tratado × Después}}"
+    r"+\underbrace{(X_{it}^{\prime}\gamma_h)\mathrm{Post}_s}_{\text{Covariables}}"
+    r"+\varepsilon_{ithsd}\end{aligned}",
     True,
 )
+initial = result()
+initial_ci = f'[{num(initial["ic_inf"])}; {num(initial["ic_sup"])}]'
+wald_state, wald_two = wald_p("entidad"), wald_p("entidad_fecha")
 
 add("pregunta", "Municipios de México · 2019–2025", "¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques?", 20, """
 <canvas class="cover-art" width="1100" height="1440" role="img" aria-label="Ilustración cenital de un choque entre dos autos en un cruce"></canvas>
@@ -166,7 +161,7 @@ add("datos", "Datos", "La muestra reúne 77 pares tratados", 50, f"""
 <div class="map-context">
   <p><strong>31 episodios, 32 fechas</strong><br>Un municipio puede participar en distintas fechas.</p>
   <p><strong>Tratamiento</strong><br>Inicio local de una jornada coordinada de violencia.</p>
-  <p><strong>Resultado</strong><br>Accidentes registrados en vías no federales.</p>
+  <p><strong>Resultado</strong><br>Siniestros diarios registrados en vías no federales.</p>
 </div>
 <div class="map-pair">
   <figure><figcaption><span class="dot treated"></span>54 municipios tratados</figcaption>{figure("mapa-tratados.png", "Municipios de la muestra que figuran como tratados al menos una vez")}</figure>
@@ -204,64 +199,65 @@ add("matching", "Estrategia empírica", "Cómo elegimos los controles para compa
   </div>
 </div>""",
 """El contrafactual es cómo habría cambiado el resultado del tratado sin el ataque. Para aproximarlo, busco controles en estados ajenos al episodio. Exijo cobertura en tres meses completos previos, estabilidad territorial y ausencia de exposición documentada desde el Día menos 49. Aplico márgenes de la mitad al doble en accidentes previos, población, empleo y autos. El mínimo es de diez candidatos de al menos cinco estados. Uno a muchos usa todos los elegibles y reparte el peso. Uno a uno elige al más cercano por población, empleo y autos. Después, diferencias en diferencias compara los cambios en las mismas fechas. Queremos estimar el efecto promedio de los pares tratados incluidos, con igual peso por par.""",
-"La comparación requiere una base previa para cada día analizado.", "Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.")
+"Todos los tramos usan la misma base previa.", "Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.")
 
-add("base", "Estrategia empírica", "Cada día tiene tres referencias previas", 50, f"""
-<p class="lead">{math("Z")} es el conteo diario. La base del Día 0 usa las tres fechas resaltadas.</p>
+add("base", "Estrategia empírica", "La base reúne 21 días, del −28 al −8", 50, f"""
+<p class="lead">{math("Y_{i,d}")} cuenta los siniestros registrados del municipio {math("i")} en la fecha {math("d")}.</p>
 {calendar()}
-<div class="timeline-key"><span><i class="key-swatch reference"></i> Referencias del Día 0</span><span><i class="key-swatch followup"></i> Tramos analizados</span><span>Semana −1 · diagnóstico previo</span></div>
+<div class="timeline-key"><span><i class="key-swatch reference"></i> Base común · días −28 a −8</span><span><i class="key-swatch followup"></i> Tramos posteriores</span><span>Semana −1 · diagnóstico previo</span></div>
 <div class="math-band">
   {base_eq}
 </div>""",
-"""Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. La semana menos uno sirve para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local y h el día relativo. Aplico logaritmo de uno más Z a cada conteo antes de promediar. Para cada día guardo dos filas: la base y el valor observado. En cada tramo, cada fila promedia sus valores diarios. El Día cero puede incluir horas anteriores al inicio.""",
-"Ahora podemos comparar las dos filas de cada par.", "Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.")
+"""La base de cada par es el promedio de los 21 conteos de las semanas menos cuatro, menos tres y menos dos. Incluye tres lunes, tres martes y lo mismo para cada día de la semana. Para el inicio del jueves 17 de octubre de 2019 en Culiacán, abarca del 19 de septiembre al 9 de octubre. La semana menos uno sirve para detectar diferencias previas. Para cada tramo posterior, el resultado es el promedio de sus días. El día cero puede incluir horas anteriores al inicio local.""",
+"El ajuste conserva una observación por día en cada bloque.", "Reporte, §3. La base de comparación y el promedio de cada tramo están en siniestros registrados por municipio y día.")
 
-add("regresion", "Estrategia empírica", "Estimación por mínimos cuadrados ponderados", 50, f"""
-<p class="reg-indices">{math("i")} municipio · {math("t")} fecha de inicio · {math("h")} día o tramo · {math("s")} fila de comparación · {math("g")} escala (logaritmos o niveles)</p>
-<p class="reg-periods">{math(r"\mathrm{Post}_s=0")} Base previa <span aria-hidden="true">·</span> {math(r"\mathrm{Post}_s=1")} Día o tramo {math("h")} (p. ej., días 0–1)</p>
+add("regresion", "Estrategia empírica", "Las filas diarias permiten ajustar por día de la semana", 50, f"""
+<p class="reg-indices">{math("i")} municipio · {math("t")} inicio local · {math("d")} fecha del conteo · {math("h")} tramo · {math("s")} bloque</p>
+<p class="reg-periods">{math(r"\mathrm{Post}_s=0")} en la base <span aria-hidden="true">·</span> {math(r"\mathrm{Post}_s=1")} en el tramo analizado</p>
 <div class="math-band reg-equation">{reg_eq}</div>
-<p class="reg-reading">{math(r"\mathrm{Treat}_{it}")} vale 1 para tratados y 0 para controles.</p>""",
-"""Después vale cero en la base y uno en el día o tramo que analizo. En los días cero a uno, Y promedia el resultado de ambos días en la fila con Después igual a uno. Si analizo el día menos dos, esa fila también lleva un uno. Al restar los dos valores de Y, obtengo el cambio de cada par y alfa se cancela. Lambda recoge el cambio común de cada fecha de inicio. Tau compara el cambio de los tratados con el de sus controles. En M cero, los 77 tratados pesan igual. Los modelos siguientes ajustan por población, empleo y autos.""",
-"Veamos las trayectorias que dan origen a ese contraste.", "Reporte, §3 y apéndice D. Las dos formas de estimar reproducen el mismo coeficiente y la misma inferencia cuando la corrección cuenta pares.")
+<p class="reg-reading">Peso por día: {math(r"w_{it}/21")} en la base y {math(r"w_{it}/|h|")} en el tramo. Cada bloque conserva {math(r"w_{it}")}.</p>""",
+"""Después indica el bloque que analizo, incluso si es un diagnóstico previo. El ajuste compara los cambios de tratados y controles con el mismo inicio. Cada bloque recibe el mismo peso por par, aunque tenga distinta duración. Uso el día de la semana de cada fecha del conteo, con lunes como referencia. Con dos filas agregadas, los efectos de inicio por bloque absorben esa información. Las filas diarias identifican los seis efectos. En el modelo principal los 77 tratados pesan igual. Los demás modelos ajustan por población, empleo y autos.""",
+"Veamos los conteos que dan origen a esa comparación.", "Reporte, §3 y apéndice D. El ajuste absorbe efectos de par y de inicio por bloque. Los seis efectos de día de la semana se identifican por la variación dentro de cada bloque.")
 
-add("eventos", "Estrategia empírica", "Promedios y cambios de tratados y controles", 60, f"""
+add("eventos", "Estrategia empírica", "Cada grupo se compara con su propia base", 60, f"""
 <div class="series-key"><span><i class="series-line treated"></i> Tratados</span><span><i class="series-line control"></i> Controles ponderados</span></div>
 <div class="series-layout">
-  <figure><figcaption>Promedio observado</figcaption>{figure("eventos-observados.svg", "Promedios observados por grupo, del día −28 al 13.")}</figure>
-  <figure><figcaption>Cambio medio respecto a la base</figcaption>{figure("eventos-cambios.svg", "Cambios medios de tratados y controles en log(1+Z), del día −7 al 13.")}</figure>
+  <figure><figcaption>Promedios diarios · base sombreada</figcaption>{figure("eventos-observados.svg", "Promedio ponderado de los conteos de cada grupo, del día −28 al 13. El sombreado abarca la base de los días −28 a −8.")}</figure>
+  <figure><figcaption>Cambio respecto a la base</figcaption>{figure("eventos-cambios.svg", "Cambios medios de tratados y controles en siniestros registrados por municipio y día, del día −7 al 13.")}</figure>
 </div>
 <p class="axis-caption">Días respecto al inicio local</p>""",
-"""A la izquierda, cada línea promedia el logaritmo de uno más el conteo de siniestros por municipio y día. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.""",
-"Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.", "Emparejamiento 1:muchos con 77 pares tratados y 3 536 de control. Las 21 diferencias de cambios reproducen los coeficientes de M₀.", sources)
+"""A la izquierda están los conteos medios en niveles. Alineo cada serie en el inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. El fondo sombreado marca los 21 días de la base. A la derecha, resto el promedio de esos días a cada par y después promedio los cambios dentro de cada grupo. El cero indica igualdad con la base propia. En el día menos dos los grupos ya muestran cambios distintos. Su distancia vertical reproduce el coeficiente diario del modelo principal: el ajuste de día de la semana es común dentro de cada fecha de inicio y se cancela al comparar los grupos.""",
+"Ahora veamos esa distancia y sus intervalos de confianza.", "Muestra principal 1:muchos. El cotejo verifica los 21 contrastes diarios de M₀ contra la diferencia entre cambios ponderados.", sources)
 
-add("trayectoria", "Supuestos", "Diagnóstico de tendencias paralelas", 45, f"""
-<figure class="wide-chart">{figure("trayectoria-principal.svg", "Coeficientes de los días −7 a 13. Los días −5 y −2 muestran diferencias negativas antes del inicio.")}
-  <figcaption class="axis-caption">Días respecto al inicio local · {m0} · Intervalos puntuales del 95 %</figcaption>
+add("trayectoria", "Supuestos", "Los grupos ya difieren antes del inicio", 45, f"""
+<figure class="wide-chart">{figure("trayectoria-principal.svg", "Coeficientes diarios de los días −7 a 13. Los intervalos puntuales de los días −3 y −2 quedan por debajo de cero.")}
+  <figcaption class="axis-caption">Días respecto al inicio local · {m0} · Intervalos del 95 % por estado y fecha</figcaption>
 </figure>
 <div class="diagnostic">
   <p><strong>Tendencias paralelas:</strong> cambios comparables en ausencia del ataque.</p>
-  <p><strong>Prueba previa por semanas:</strong> rechaza por estado; es inconclusa por estado y fecha.</p>
+  <p><strong>Prueba semanal:</strong> p = {wald_state} por estado y p = {wald_two} por estado y fecha.</p>
 </div>""",
-"""Cada punto estima tau, la diferencia entre los cambios de tratados y controles. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.""",
-"Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Modelo M₀, 1:muchos. Intervalos puntuales del 95 % por estado y fecha. Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.", sources)
+"""Cada punto compara el cambio de tratados y controles. En los días menos tres y menos dos, los intervalos puntuales quedan por debajo de cero. La prueba conjunta compara las semanas menos cuatro, menos tres y menos uno con la base común. Las tres semanas de la base suman cero frente a su promedio, así que la semana menos dos queda implícita. Se rechaza al cinco por ciento con agrupación estatal. Con la agrupación por estado y fecha, el valor p es 0,081. Las diferencias previas limitan cuánto podemos atribuir al inicio del ataque.""",
+"Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.", "Reporte, §3–4, figura 1 y apéndice D. La gráfica usa el modelo M₀, emparejamiento 1:muchos y base de 21 días. La prueba semanal compara tres semanas con la base de 21 días.", sources)
 
 add("resultados", "Resultados", "Añadir covariables cambia poco la estimación inicial", 35, f"""
-{models_table()}""",
-"""En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Z. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.""",
-"Veamos si la caída persiste después del primer tramo.", "Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares: 77 tratados y 3 536 de control. Las dos medidas de ajuste corresponden a la regresión sobre cambios. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*).", sources,
-table_note="Días 0–1 · 1:muchos · Segunda línea con (error estándar) y valor p bilateral, por estado y fecha.")
+{models_table()}
+<p class="model-interval">En {m0}, el intervalo del 95 % es {initial_ci}.</p>""",
+f"""El modelo inicial estima {num(-float(initial["efecto"]))} siniestros registrados menos por municipio y día en los días cero y uno. El intervalo agrupado por estado y fecha incluye cero. Al añadir logaritmo de población, empleo y autos por mil habitantes, la estimación cambia poco. Los cuatro modelos usan los mismos pares, pesos y efectos fijos.""",
+"Veamos qué se estima en los tramos posteriores.", "Reporte, cuadro 2 y apéndices A y B. Los cuatro modelos usan 3 613 pares: 77 tratados y 3 536 de control.", sources,
+table_note="Días 0–1 · 1:muchos · Siniestros registrados por municipio y día · Segunda línea: (error estándar) y valor p por estado y fecha.")
 
 add("duracion", "Resultados", "La caída estimada es mayor en los días 0 y 1", 40, f"""
-<figure>{figure("duracion.svg", "La mayor caída se estima para los días 0 y 1. Los intervalos de 2 a 6 y 7 a 13 incluyen cero.")}
+<figure>{figure("duracion.svg", "Los tres tramos muestran estimaciones negativas y sus intervalos incluyen cero.")}
   <figcaption class="axis-caption">{m0} · Intervalos del 95 % por estado y fecha</figcaption>
 </figure>
-<p class="duration-reading">Los intervalos de los <strong>días 2–6 y 7–13</strong> incluyen cero.</p>""",
-"""Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estima en los días cero a uno: menos 0,107 en la escala logarítmica. Después, los coeficientes están más cerca de cero y sus intervalos admiten una caída y un cambio nulo. La señal de los días siete a trece depende de la agrupación y las exclusiones. Si exijo continuidad del registro y ausencia de otro ataque posterior, cambia la muestra. El seguimiento hasta el Día trece deja abierta la duración.""",
-"La base y el calendario también afectan la lectura del resultado inicial.", "Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.", sources)
+<p class="duration-reading">Los tres intervalos incluyen cero.</p>""",
+"""Cada punto resume un tramo. Se estiman menos 0,348 en los dos primeros días, menos 0,145 en los días dos a seis y menos 0,079 en la segunda semana, en siniestros registrados por municipio y día. Los tres intervalos incluyen cero. Los posteriores admiten caídas de magnitud relevante. La muestra que exige continuidad del reporte y aislamiento posterior cambia los pares disponibles. Con estos datos la duración sigue abierta.""",
+"Veamos la sensibilidad al calendario y al inicio ficticio.", "Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.", sources)
 
 sensitivity_rows = []
 for label, row in [
-    ("Base principal: tres fechas", result()), ("Base: semana anterior", result(base="wk-1")),
+    ("Muestra principal", result()),
     ("Sin feriados ni recesos escolares", result(escenario="sin_laborales_escolares")),
     ("Placebo: inicio 28 días antes", result(escenario="placebo")),
 ]:
@@ -270,17 +266,16 @@ for label, row in [
 
 add("sensibilidades", "Resultados", "Sensibilidad del resultado", 30, f"""
 {table(("Comparación", "Pares tratados", "Estimación", "Intervalo del 95 %"), sensitivity_rows)}""",
-"""Con los mismos pares y pesos, usar la semana previa como base atenúa la caída y el intervalo incluye cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.""",
-"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Z) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources,
-table_note=f"Días 0–1 · {m0} · 1:muchos")
+"""Excluir feriados y recesos deja 25 tratados. El placebo ubica el inicio 28 días antes, reconstruye los pares y estima una caída menor. Los tres intervalos incluyen cero. Cada comparación usa la misma regla de base, los días menos veintiocho a menos ocho respecto a su inicio.""",
+"¿Qué se puede sostener con ese conjunto de resultados?", "Reporte, cuadros B2–B3 y C1–C3. Siniestros registrados por municipio y día. Intervalos agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.", sources,
+table_note=f"Días 0–1 · {m0} · 1:muchos · Base días −28 a −8 · Siniestros registrados por municipio y día")
 
-initial = result()
 add("conclusion", "Conclusión", "La mayor caída estimada aparece al inicio", 20, f"""
 <div class="closing-results">
   <div class="closing-estimate">
     <p class="closing-period">Días 0–1</p>
-    <p class="closing-number">{num(initial["efecto"])} <span class="closing-scale">en {log}</span></p>
-    <p class="closing-interval">Intervalo del 95 % [{num(initial["ic_inf"])}; {num(initial["ic_sup"])}]</p>
+    <p class="closing-number">{num(initial["efecto"])} <span class="closing-scale">siniestros registrados por municipio y día</span></p>
+    <p class="closing-interval">Intervalo del 95 % {initial_ci}</p>
   </div>
   <div class="closing-persistence">
     <p class="closing-period">Días 2–6 y 7–13</p>
@@ -290,8 +285,8 @@ add("conclusion", "Conclusión", "La mayor caída estimada aparece al inicio", 2
 </div>
 <p class="closing-limit"><strong>Las diferencias previas</strong> entre tratados y controles limitan la atribución al ataque.</p>
 <a class="backup-link" href="#/respaldos">Respaldos para discusión →</a>""",
-"""La mayor caída relativa se estima en los días cero y uno. Después, los intervalos incluyen cero y la duración sigue abierta. Las diferencias que ya había entre tratados y controles limitan cuánto podemos atribuir al ataque.""",
-"Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.", "Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Z).", sources, style="closing")
+"""La mayor caída estimada aparece en los días cero y uno. El intervalo incluye cero. La duración sigue abierta y las diferencias previas limitan cuánto podemos atribuir al ataque.""",
+"Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.", "Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente mide la diferencia de cambios en siniestros registrados por municipio y día.", sources, style="closing")
 
 add("referencias", "", "Referencias", 0, """
 <ul class="reference-list">
@@ -315,8 +310,8 @@ add("respaldos", "Discusión", "Respaldos para la discusión", 0, """
 <nav class="backup-index" aria-label="Respaldos">
   <a href="#/soporte">¿Cómo se construye el grupo de control?</a>
   <a href="#/inferencia">¿Qué mide la incertidumbre?</a>
-  <a href="#/contrastes">¿Qué pasa con 1:1 o en niveles?</a>
-  <a href="#/alternativas">¿Cómo cambian las trayectorias?</a>
+  <a href="#/contrastes">¿Qué cambia con el emparejamiento 1:1?</a>
+  <a href="#/alternativas">¿Cómo se comparan las trayectorias diarias?</a>
 </nav>""",
 "Abre la pregunta correspondiente. Cada respaldo termina con un enlace al índice.", "Volver a la conclusión cuando termine la discusión.", "Reporte, apéndices A–H.")
 
@@ -327,37 +322,36 @@ add("soporte", "Discusión", "Soporte, balance y pesos", 0, f"""
   <div class="math-band">{math(r"w_{it}=1\quad(\mathrm{Treat}_{it}=1),\qquad w_{ct}=\sum_{i:\,c\in C_{it}}\frac{1}{|C_{it}|}",True)}</div></div>
 </div>
 <p class="takeaway">La mayor diferencia estandarizada observada en 1:muchos es 0,082 en valor absoluto.</p>""",
-"""El nivel de accidentes se calcula en Días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.""",
+"""El filtro de comparabilidad usa la media de los días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.""",
 "Volver al índice de respaldos.", "Reporte, cuadro 1, §3 y apéndices A y D.", sources)
 
 add("inferencia", "Discusión", "La agrupación permite errores dependientes", 0, f"""
 <div class="backup-grid">
   <div><h3>Intervalos puntuales</h3><p>Estado: dependencia entre municipios del mismo estado.</p><p>Fecha: dependencia entre municipios con el mismo inicio.</p><p>Omisión de estados: sensibilidad a la concentración del peso.</p></div>
-  <div><h3>Diagnóstico previo por semanas</h3><p>Compara las semanas −4, −3 y −1 con la −2.</p><p>Por estado: {math(r"p<0{,}001")}.<br>Por estado y fecha: {math(r"p=0{,}109")}.</p></div>
+  <div><h3>Diagnóstico previo por semanas</h3><p>Compara las semanas −4, −3 y −1 con la base de los días −28 a −8.</p><p>Por estado: p = {wald_state}.<br>Por estado y fecha: p = {wald_two}.</p></div>
 </div>
 <p class="takeaway">La agrupación cambia la precisión. El diagnóstico examina una fuente de sesgo.</p>""",
-"""La agrupación en dos dimensiones admite dependencia por estado y por fecha, descuenta su intersección y conserva el coeficiente. La corrección de muestra finita cuenta pares. Si cuenta las 7 226 filas, el valor p del contraste principal pasa de 0,019 a 0,090 con los mismos 31 grados de libertad. Los intervalos de la trayectoria tienen cobertura nominal por punto. Catorce estados aportan tratados y el peso está concentrado. El intervalo alternativo omite un estado a la vez, conserva los pesos de los pares restantes y vuelve a absorber los efectos fijos. En la prueba previa, la semana menos dos es la referencia de la comparación conjunta. El efecto mínimo detectable en niveles para Días 0–1 es de 0,664 registros por municipio y día, bajo una prueba bilateral del 5 por ciento y potencia del 80 por ciento.""",
-"Volver al índice de respaldos.", "Reporte, §3.1, §4 y apéndice D.", sources)
+"""Se suma la covarianza por estado y por fecha y se resta la de su intersección. En los días cero y uno el panel tiene 83 099 filas. La corrección de muestra finita cuenta 3 613 pares y el rango del contraste entre bloques. Las desviaciones diarias dentro de cada bloque se cancelan al sumar las contribuciones a la varianza del contraste. La inferencia principal tiene 31 grados de libertad. El intervalo alternativo omite un estado por turno. Con la agrupación por estado y fecha, el efecto mínimo detectable del contraste inmediato es 0,690 siniestros registrados por municipio y día.""",
+"Volver al índice de respaldos.", "Reporte, §3.1, §4 y apéndice D. El efecto mínimo detectable usa una prueba bilateral al 5 % y potencia del 80 %.", sources)
 
-contrast_table = table(("Modelo y escala", "Estimación", "Intervalo del 95 %"), rows([
-    (f"{m0} · 1:muchos · {log}", result()),
-    (f"{m0} · 1:1 · {log}", result(muestra="emparejada_1a1")),
-    (f"{m0} · 1:muchos · registros por municipio y día", result(escala="niveles")),
+contrast_table = table(("Emparejamiento", "Estimación", "Intervalo del 95 %"), rows([
+    ("1:muchos", result()),
+    ("1:1", result(muestra="emparejada_1a1")),
 ]))
-add("contrastes", "Discusión", "El signo se mantiene con 1:1 y en niveles", 0, f"""
-<p class="lead">Días 0–1 · 77 pares tratados · intervalos por estado y fecha</p>
+add("contrastes", "Discusión", "La estimación inmediata es negativa con ambos métodos", 0, f"""
+<p class="lead">Días 0–1 · {m0} · 77 pares tratados · intervalos por estado y fecha</p>
 {contrast_table}
-<p class="takeaway">Con 1:1 y en niveles, el intervalo incluye cero.</p>""",
-"""En uno a uno la magnitud es similar y el intervalo se amplía. En niveles se estiman 0,397 registros menos por municipio y día. El intervalo admite otras magnitudes y un cambio nulo. La transformación exponencial del coeficiente principal da una caída del 10,2 por ciento en la escala geométrica de uno más Z. La media aritmética de los accidentes corresponde a otra cantidad.""",
-"Volver al índice de respaldos.", "Reporte, §4 y cuadros B1–B2.", sources)
+<p class="takeaway">Ambos intervalos incluyen cero.</p>""",
+"""El emparejamiento uno a uno conserva los 77 tratados. Se estiman 0,311 siniestros registrados menos por municipio y día. Los intervalos de ambos métodos incluyen cero. Cambian los controles y sus pesos.""",
+"Volver al índice de respaldos.", "Reporte, §4, cuadro A5 y cuadros B1–B2. Estimaciones en siniestros registrados por municipio y día.", sources)
 
-add("alternativas", "Discusión", "En niveles cambia la precisión", 0, f"""
-<p class="lead">{m0} · Intervalos del 95 %</p>
+add("alternativas", "Discusión", "Trayectorias diarias de ambos emparejamientos", 0, f"""
+<p class="lead">{m0} · Intervalos del 95 % por estado y fecha</p>
 <div class="series-key"><span><i class="series-line estimate"></i> 1:muchos</span><span><i class="series-line control"></i> 1:1</span></div>
-<figure class="wide-chart">{figure("trayectoria-niveles.svg", "Comparación diaria a escala de conteos para ambos emparejamientos.")}</figure>
-<p class="axis-caption">Días respecto al inicio local · agrupación por estado y fecha</p>""",
-"""En niveles, el punto se interpreta como registros por municipio y día. En uno a uno usamos los mismos 77 pares tratados y cambiamos comparadores y pesos. Un intervalo que incluye cero admite un cambio nulo y también otros efectos. Que un método excluya cero y otro lo incluya no establece una diferencia estadística entre métodos. Las tendencias paralelas se requieren en la escala empleada. La comparación semanal de la crisis prolongada de Culiacán desde septiembre de 2024 queda fuera del reporte y de esta exposición.""",
-"Volver al índice de respaldos.", "Reporte, figura 1, apéndices A–C y README del repositorio.", sources)
+<figure class="wide-chart">{figure("trayectoria-niveles.svg", "Contrastes diarios en siniestros registrados por municipio y día con ambos emparejamientos.")}</figure>
+<p class="axis-caption">Días respecto al inicio local</p>""",
+"""Los dos métodos usan la base de 21 días y el ajuste por día de la semana. Uno a uno conserva los mismos 77 pares tratados. El cuadro de resultados y la trayectoria permiten ver cómo cambian la magnitud y la precisión al seleccionar otro conjunto de controles.""",
+"Volver al índice de respaldos.", "Reporte, figura 1 y apéndices A–C.", sources)
 
 assert sum(s["seconds"] for s in slides) == 480
 assert len({s["id"] for s in slides}) == len(slides)

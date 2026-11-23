@@ -58,65 +58,65 @@ El contrafactual es cómo habría cambiado el resultado del tratado sin el ataqu
 
 **Transición**
 
-La comparación requiere una base previa para cada día analizado.
+Todos los tramos usan la misma base previa.
 
 **Referencia para consulta.** Reporte, §3 y apéndice A. Covariables disponibles con medición anterior a t−28.
 
-## Cada día tiene tres referencias previas
+## La base reúne 21 días, del −28 al −8
 
 **Identificador** `base` · **Tiempo** 2:30–3:20 (50 s)
 
 **Explicación oral**
 
-Analizo tres tramos posteriores: días cero a uno, dos a seis y siete a trece. Si el inicio es jueves, uso los jueves menos 28, menos 21 y menos 14. El jueves siguiente reutiliza esas referencias. La semana menos uno sirve para ver si los grupos ya divergían. En la fórmula, i indica municipio, t el inicio local y h el día relativo. Aplico logaritmo de uno más Z a cada conteo antes de promediar. Para cada día guardo dos filas: la base y el valor observado. En cada tramo, cada fila promedia sus valores diarios. El Día cero puede incluir horas anteriores al inicio.
+La base de cada par es el promedio de los 21 conteos de las semanas menos cuatro, menos tres y menos dos. Incluye tres lunes, tres martes y lo mismo para cada día de la semana. Para el inicio del jueves 17 de octubre de 2019 en Culiacán, abarca del 19 de septiembre al 9 de octubre. La semana menos uno sirve para detectar diferencias previas. Para cada tramo posterior, el resultado es el promedio de sus días. El día cero puede incluir horas anteriores al inicio local.
 
 **Transición**
 
-Ahora podemos comparar las dos filas de cada par.
+El ajuste conserva una observación por día en cada bloque.
 
-**Referencia para consulta.** Reporte, §3. La regla r(t,h) = t + (h mod 7) mantiene la base entre los días −28 y −8. El ejemplo usa el jueves 17 de octubre de 2019 en Culiacán.
+**Referencia para consulta.** Reporte, §3. La base de comparación y el promedio de cada tramo están en siniestros registrados por municipio y día.
 
-## Estimación por mínimos cuadrados ponderados
+## Las filas diarias permiten ajustar por día de la semana
 
 **Identificador** `regresion` · **Tiempo** 3:20–4:10 (50 s)
 
 **Explicación oral**
 
-Después vale cero en la base y uno en el día o tramo que analizo. En los días cero a uno, Y promedia el resultado de ambos días en la fila con Después igual a uno. Si analizo el día menos dos, esa fila también lleva un uno. Al restar los dos valores de Y, obtengo el cambio de cada par y alfa se cancela. Lambda recoge el cambio común de cada fecha de inicio. Tau compara el cambio de los tratados con el de sus controles. En M cero, los 77 tratados pesan igual. Los modelos siguientes ajustan por población, empleo y autos.
+Después indica el bloque que analizo, incluso si es un diagnóstico previo. El ajuste compara los cambios de tratados y controles con el mismo inicio. Cada bloque recibe el mismo peso por par, aunque tenga distinta duración. Uso el día de la semana de cada fecha del conteo, con lunes como referencia. Con dos filas agregadas, los efectos de inicio por bloque absorben esa información. Las filas diarias identifican los seis efectos. En el modelo principal los 77 tratados pesan igual. Los demás modelos ajustan por población, empleo y autos.
 
 **Transición**
 
-Veamos las trayectorias que dan origen a ese contraste.
+Veamos los conteos que dan origen a esa comparación.
 
-**Referencia para consulta.** Reporte, §3 y apéndice D. Las dos formas de estimar reproducen el mismo coeficiente y la misma inferencia cuando la corrección cuenta pares.
+**Referencia para consulta.** Reporte, §3 y apéndice D. El ajuste absorbe efectos de par y de inicio por bloque. Los seis efectos de día de la semana se identifican por la variación dentro de cada bloque.
 
-## Promedios y cambios de tratados y controles
+## Cada grupo se compara con su propia base
 
 **Identificador** `eventos` · **Tiempo** 4:10–5:10 (60 s)
 
 **Explicación oral**
 
-A la izquierda, cada línea promedia el logaritmo de uno más el conteo de siniestros por municipio y día. Alineo cada serie en su inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. A la derecha, resto a cada par su propia base del mismo día semanal y después promedio por grupo. El cero de este panel indica igualdad con la base propia. Justo antes del inicio, por ejemplo en el Día menos dos, las dos líneas registran cambios distintos. La distancia vertical entre ellas da el coeficiente diario del modelo M cero. Así llegamos a un contraste de cambios con unidades y pesos definidos.
+A la izquierda están los conteos medios en niveles. Alineo cada serie en el inicio local. Los tratados pesan lo mismo y los controles conservan los pesos del emparejamiento. El fondo sombreado marca los 21 días de la base. A la derecha, resto el promedio de esos días a cada par y después promedio los cambios dentro de cada grupo. El cero indica igualdad con la base propia. En el día menos dos los grupos ya muestran cambios distintos. Su distancia vertical reproduce el coeficiente diario del modelo principal: el ajuste de día de la semana es común dentro de cada fecha de inicio y se cancela al comparar los grupos.
 
 **Transición**
 
-Ahora podemos ver esa distancia como una sola trayectoria, con su incertidumbre.
+Ahora veamos esa distancia y sus intervalos de confianza.
 
-**Referencia para consulta.** Emparejamiento 1:muchos con 77 pares tratados y 3 536 de control. Las 21 diferencias de cambios reproducen los coeficientes de M₀.
+**Referencia para consulta.** Muestra principal 1:muchos. El cotejo verifica los 21 contrastes diarios de M₀ contra la diferencia entre cambios ponderados.
 
-## Diagnóstico de tendencias paralelas
+## Los grupos ya difieren antes del inicio
 
 **Identificador** `trayectoria` · **Tiempo** 5:10–5:55 (45 s)
 
 **Explicación oral**
 
-Cada punto estima tau, la diferencia entre los cambios de tratados y controles. Las barras muestran la incertidumbre de esa diferencia. Antes del Día 0 esperamos que los puntos fluctúen alrededor de cero. Aquí aparecen diferencias puntuales, como en el Día −2. La prueba por semanas detecta diferencias al agrupar por estado y es inconclusa al agrupar por estado y fecha. Por eso interpreto con cautela la caída que aparece al inicio.
+Cada punto compara el cambio de tratados y controles. En los días menos tres y menos dos, los intervalos puntuales quedan por debajo de cero. La prueba conjunta compara las semanas menos cuatro, menos tres y menos uno con la base común. Las tres semanas de la base suman cero frente a su promedio, así que la semana menos dos queda implícita. Se rechaza al cinco por ciento con agrupación estatal. Con la agrupación por estado y fecha, el valor p es 0,081. Las diferencias previas limitan cuánto podemos atribuir al inicio del ataque.
 
 **Transición**
 
 Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.
 
-**Referencia para consulta.** Modelo M₀, 1:muchos. Intervalos puntuales del 95 % por estado y fecha. Reporte, §3–4, figura 1 y apéndice D. La prueba semanal compara Sem. −4, −3 y −1 con Sem. −2.
+**Referencia para consulta.** Reporte, §3–4, figura 1 y apéndice D. La gráfica usa el modelo M₀, emparejamiento 1:muchos y base de 21 días. La prueba semanal compara tres semanas con la base de 21 días.
 
 ## Añadir covariables cambia poco la estimación inicial
 
@@ -124,13 +124,13 @@ Con esa cautela, veamos el resultado inicial y cuánto cambia con el ajuste.
 
 **Explicación oral**
 
-En M cero, menos 0,107 es el coeficiente estimado del tratamiento. Resta al cambio medio de los tratados el de sus controles, respecto a la base y en la escala de logaritmo de uno más Z. Su valor p es 0,019. Cada columna añade al modelo anterior logaritmo de población, empleo o autos por mil habitantes. El coeficiente cambia poco. En conteos y con el emparejamiento uno a uno, los intervalos del tratamiento incluyen cero.
+El modelo inicial estima 0,348 siniestros registrados menos por municipio y día en los días cero y uno. El intervalo agrupado por estado y fecha incluye cero. Al añadir logaritmo de población, empleo y autos por mil habitantes, la estimación cambia poco. Los cuatro modelos usan los mismos pares, pesos y efectos fijos.
 
 **Transición**
 
-Veamos si la caída persiste después del primer tramo.
+Veamos qué se estima en los tramos posteriores.
 
-**Referencia para consulta.** Reporte, cuadro 2, Panel A, y apéndices A y B. Los cuatro modelos usan 3 613 pares: 77 tratados y 3 536 de control. Las dos medidas de ajuste corresponden a la regresión sobre cambios. Los asteriscos siguen los umbrales de R: 0,001 (***), 0,01 (**) y 0,05 (*).
+**Referencia para consulta.** Reporte, cuadro 2 y apéndices A y B. Los cuatro modelos usan 3 613 pares: 77 tratados y 3 536 de control.
 
 ## La caída estimada es mayor en los días 0 y 1
 
@@ -138,11 +138,11 @@ Veamos si la caída persiste después del primer tramo.
 
 **Explicación oral**
 
-Cada punto resume un tramo y tiene su propio intervalo. La mayor caída se estima en los días cero a uno: menos 0,107 en la escala logarítmica. Después, los coeficientes están más cerca de cero y sus intervalos admiten una caída y un cambio nulo. La señal de los días siete a trece depende de la agrupación y las exclusiones. Si exijo continuidad del registro y ausencia de otro ataque posterior, cambia la muestra. El seguimiento hasta el Día trece deja abierta la duración.
+Cada punto resume un tramo. Se estiman menos 0,348 en los dos primeros días, menos 0,145 en los días dos a seis y menos 0,079 en la segunda semana, en siniestros registrados por municipio y día. Los tres intervalos incluyen cero. Los posteriores admiten caídas de magnitud relevante. La muestra que exige continuidad del reporte y aislamiento posterior cambia los pares disponibles. Con estos datos la duración sigue abierta.
 
 **Transición**
 
-La base y el calendario también afectan la lectura del resultado inicial.
+Veamos la sensibilidad al calendario y al inicio ficticio.
 
 **Referencia para consulta.** Modelo M₀, 1:muchos. Reporte, §4, cuadros B1–B2 y apéndice D. Se permite que el episodio inicial continúe.
 
@@ -152,13 +152,13 @@ La base y el calendario también afectan la lectura del resultado inicial.
 
 **Explicación oral**
 
-Con los mismos pares y pesos, usar la semana previa como base atenúa la caída y el intervalo incluye cero. Si el día cero o uno cae en feriado o receso, excluyo ese inicio. Quedan 25 pares y el intervalo se amplía. El placebo simula un inicio 28 días antes. La caída estimada es menor y su intervalo incluye cero.
+Excluir feriados y recesos deja 25 tratados. El placebo ubica el inicio 28 días antes, reconstruye los pares y estima una caída menor. Los tres intervalos incluyen cero. Cada comparación usa la misma regla de base, los días menos veintiocho a menos ocho respecto a su inicio.
 
 **Transición**
 
 ¿Qué se puede sostener con ese conjunto de resultados?
 
-**Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C4. Cambio en log(1+Z) e intervalos con errores agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
+**Referencia para consulta.** Reporte, cuadros B2–B3 y C1–C3. Siniestros registrados por municipio y día. Intervalos agrupados por estado y fecha. La sensibilidad amplia usa feriados laborales y recesos de educación básica.
 
 ## La mayor caída estimada aparece al inicio
 
@@ -166,13 +166,13 @@ Con los mismos pares y pesos, usar la semana previa como base atenúa la caída 
 
 **Explicación oral**
 
-La mayor caída relativa se estima en los días cero y uno. Después, los intervalos incluyen cero y la duración sigue abierta. Las diferencias que ya había entre tratados y controles limitan cuánto podemos atribuir al ataque.
+La mayor caída estimada aparece en los días cero y uno. El intervalo incluye cero. La duración sigue abierta y las diferencias previas limitan cuánto podemos atribuir al ataque.
 
 **Transición**
 
 Aquí termina la exposición. Las referencias y los respaldos quedan para consulta.
 
-**Referencia para consulta.** Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente es una diferencia de cambios en log(1+Z).
+**Referencia para consulta.** Reporte, cuadro 2, §5 y apéndices E–G. El coeficiente mide la diferencia de cambios en siniestros registrados por municipio y día.
 
 ## Referencias
 
@@ -210,7 +210,7 @@ Volver a la conclusión cuando termine la discusión.
 
 **Explicación oral**
 
-El nivel de accidentes se calcula en Días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.
+El filtro de comparabilidad usa la media de los días menos 28 a menos 15. Su razón usa un desplazamiento de 0,5 en numerador y denominador. Las tres covariables cumplen por separado el margen. En uno a muchos, si un control se reutiliza en una fecha, se suman sus aportes; un tratado con cuarenta controles reparte una unidad en cuarenta partes. En uno a uno se elige el vecino por población, empleo y autos. La cobertura previa predice el universo, y los cambios posteriores de captación pueden afectar el resultado. El comparador observado requiere además ausencia de contagio y cambios paralelos.
 
 **Transición**
 
@@ -224,38 +224,38 @@ Volver al índice de respaldos.
 
 **Explicación oral**
 
-La agrupación en dos dimensiones admite dependencia por estado y por fecha, descuenta su intersección y conserva el coeficiente. La corrección de muestra finita cuenta pares. Si cuenta las 7 226 filas, el valor p del contraste principal pasa de 0,019 a 0,090 con los mismos 31 grados de libertad. Los intervalos de la trayectoria tienen cobertura nominal por punto. Catorce estados aportan tratados y el peso está concentrado. El intervalo alternativo omite un estado a la vez, conserva los pesos de los pares restantes y vuelve a absorber los efectos fijos. En la prueba previa, la semana menos dos es la referencia de la comparación conjunta. El efecto mínimo detectable en niveles para Días 0–1 es de 0,664 registros por municipio y día, bajo una prueba bilateral del 5 por ciento y potencia del 80 por ciento.
+Se suma la covarianza por estado y por fecha y se resta la de su intersección. En los días cero y uno el panel tiene 83 099 filas. La corrección de muestra finita cuenta 3 613 pares y el rango del contraste entre bloques. Las desviaciones diarias dentro de cada bloque se cancelan al sumar las contribuciones a la varianza del contraste. La inferencia principal tiene 31 grados de libertad. El intervalo alternativo omite un estado por turno. Con la agrupación por estado y fecha, el efecto mínimo detectable del contraste inmediato es 0,690 siniestros registrados por municipio y día.
 
 **Transición**
 
 Volver al índice de respaldos.
 
-**Referencia para consulta.** Reporte, §3.1, §4 y apéndice D.
+**Referencia para consulta.** Reporte, §3.1, §4 y apéndice D. El efecto mínimo detectable usa una prueba bilateral al 5 % y potencia del 80 %.
 
-## El signo se mantiene con 1:1 y en niveles
+## La estimación inmediata es negativa con ambos métodos
 
 **Identificador** `contrastes` · **Tiempo** Fuera de la ruta cronometrada
 
 **Explicación oral**
 
-En uno a uno la magnitud es similar y el intervalo se amplía. En niveles se estiman 0,397 registros menos por municipio y día. El intervalo admite otras magnitudes y un cambio nulo. La transformación exponencial del coeficiente principal da una caída del 10,2 por ciento en la escala geométrica de uno más Z. La media aritmética de los accidentes corresponde a otra cantidad.
+El emparejamiento uno a uno conserva los 77 tratados. Se estiman 0,311 siniestros registrados menos por municipio y día. Los intervalos de ambos métodos incluyen cero. Cambian los controles y sus pesos.
 
 **Transición**
 
 Volver al índice de respaldos.
 
-**Referencia para consulta.** Reporte, §4 y cuadros B1–B2.
+**Referencia para consulta.** Reporte, §4, cuadro A5 y cuadros B1–B2. Estimaciones en siniestros registrados por municipio y día.
 
-## En niveles cambia la precisión
+## Trayectorias diarias de ambos emparejamientos
 
 **Identificador** `alternativas` · **Tiempo** Fuera de la ruta cronometrada
 
 **Explicación oral**
 
-En niveles, el punto se interpreta como registros por municipio y día. En uno a uno usamos los mismos 77 pares tratados y cambiamos comparadores y pesos. Un intervalo que incluye cero admite un cambio nulo y también otros efectos. Que un método excluya cero y otro lo incluya no establece una diferencia estadística entre métodos. Las tendencias paralelas se requieren en la escala empleada. La comparación semanal de la crisis prolongada de Culiacán desde septiembre de 2024 queda fuera del reporte y de esta exposición.
+Los dos métodos usan la base de 21 días y el ajuste por día de la semana. Uno a uno conserva los mismos 77 pares tratados. El cuadro de resultados y la trayectoria permiten ver cómo cambian la magnitud y la precisión al seleccionar otro conjunto de controles.
 
 **Transición**
 
 Volver al índice de respaldos.
 
-**Referencia para consulta.** Reporte, figura 1, apéndices A–C y README del repositorio.
+**Referencia para consulta.** Reporte, figura 1 y apéndices A–C.

@@ -1,0 +1,479 @@
+{
+  "base_git": "593f46ac3b25884de4e3c676491c04a70a791049",
+  "rama": "codex/niveles-base-semanal",
+  "arbol_presentacion_base": "f9d50bbe5cfc5e8a850653ff3801cc11ddce53fa",
+  "arranque": {
+    "python": {
+      "pares": 8,
+      "fechas": 2,
+      "offsets_base": [
+        -28,
+        -27,
+        -26,
+        -25,
+        -24,
+        -23,
+        -22,
+        -21,
+        -20,
+        -19,
+        -18,
+        -17,
+        -16,
+        -15,
+        -14,
+        -13,
+        -12,
+        -11,
+        -10,
+        -9,
+        -8
+      ],
+      "dia_semana": "lunes=0",
+      "error_maximo_masa": 4.440892098500626e-16,
+      "rango_incremental_agregado": 0,
+      "rango_incremental_diario": 6,
+      "diferencia_maxima_ajuste_explicito": 3.941291737419306e-14
+    },
+    "r": {
+      "pares": "8",
+      "fechas": "2",
+      "dias_base": "21",
+      "dia_semana": "lunes=0",
+      "rango_incremental_agregado": "0",
+      "rango_incremental_diario": "6",
+      "diferencia_maxima_ajuste_explicito": "0.0000000000000106581410364015"
+    }
+  },
+  "cotejo": {
+    "tolerancia_absoluta": 1e-09,
+    "sha256": {
+      "..\\..\\data\\outputs\\niveles-base-semanal\\solo-base\\python\\modelos": {
+        "causal_muestras.csv": "153ce7364191eb19214a22e0c420e24ba6006e931213ea14e03abdd2ebc597b9",
+        "causal_vinculos.csv": "aff733741760c57c1bc14f853ee8962875577da8ca1dbd506c3bcc1db3fec957",
+        "causal_elegibilidad.csv": "4925b3fe1b5ce70966a0fe29495969f73855ad0d1593faf7972ffd5163623cdc",
+        "causal_efectos.csv": "fc18e1388962592a78000b09ca2d5550d42427110c348fc03de58698055ef1e5",
+        "causal_coeficientes.csv": "a7955b836e9c22560d4313e45c4e7776bff9e7a3377f25e59435fb74156dd9f7",
+        "causal_wald_semanal.csv": "589776265fc26739499d3872c2e0e4f3ce4a8419c57a9e1e8a2047cbfd150da5",
+        "causal_omision_estado.csv": "4c5008bc9b9cf0c17bc05559681fd50cc001bfc20828ace689fcc1ccf9af70ec",
+        "causal_cruce.csv": "d24a9253686c1581f799a0275a6533ce83aa5db8bbcf5863f2621923a18c514f",
+        "causal_dia_semana.csv": "98077136a529fd320c44bb1c4f0270e43093f37687f87ffd4333c2eea6e3a643",
+        "causal_fechas_base.csv": "13aadf79f5c0625b0952721b5a9a352c27ba4dd65beaafc719ae04b433fb9491"
+      },
+      "..\\..\\data\\outputs\\niveles-base-semanal\\solo-base\\revision-escrito\\r\\modelos": {
+        "causal_muestras.csv": "b3d5740922ae8b3a10a033d312073235322b26bb6970d446c528b96dfc2a89d0",
+        "causal_vinculos.csv": "c7175cb9c18ac1124a8a6dbfee837ce62f2368edb2447ee33e3e15f9dbba7c0a",
+        "causal_elegibilidad.csv": "0e9a15f43058b036eda615475d29a166654b1b2dd38c6b65d721c48948b11319",
+        "causal_efectos.csv": "ebec3a2710171ee8df72e3a4692f4ee54f652e3bbf8e3f068807de8f5c31c95f",
+        "causal_coeficientes.csv": "25ed463fe97714e0398793ddf78062273aeec96fa1200a2e8a2b17b97764e3ed",
+        "causal_wald_semanal.csv": "953b520b64caab4614312d6150a251afcba0ac9b9c1ecfa607a70239159ddba7",
+        "causal_omision_estado.csv": "d8c4dd408e0c22f90598451db93cd56c88ebb19410670bad4f6211ba16dbdf23",
+        "causal_cruce.csv": "7ec289da4ac17d68e2a49e32efb2a2b7f37ffed0243c96dfffbdf3bd8baf3bd9",
+        "causal_dia_semana.csv": "a7ec8843b07339287f8577bfdf6e42174878e6316d797842843cb85edecd1197",
+        "causal_fechas_base.csv": "13aadf79f5c0625b0952721b5a9a352c27ba4dd65beaafc719ae04b433fb9491"
+      },
+      "..\\..\\data\\outputs\\niveles-base-semanal\\python\\modelos": {
+        "causal_muestras.csv": "153ce7364191eb19214a22e0c420e24ba6006e931213ea14e03abdd2ebc597b9",
+        "causal_elegibilidad.csv": "4925b3fe1b5ce70966a0fe29495969f73855ad0d1593faf7972ffd5163623cdc"
+      }
+    },
+    "muestras": {
+      "filas": 180908,
+      "diferencias_maximas": {
+        "estado": 0.0,
+        "tratado": 0.0,
+        "peso": 4.996003610813204e-16,
+        "poblacion": 0.0,
+        "empleo_mil": 4.092726157978177e-12,
+        "autos_mil": 5.229594535194337e-12,
+        "pre_nivel": 4.263256414560601e-13
+      }
+    },
+    "vinculos": {
+      "filas": 184743,
+      "diferencias_maximas": {
+        "contribucion": 4.85722573273506e-17,
+        "distancia_log2": 5.551115123125783e-16
+      }
+    },
+    "elegibilidad": {
+      "filas": 319662,
+      "diferencias_maximas": {
+        "tratado": 0.0
+      }
+    },
+    "muestra_vs_anterior": {
+      "filas": 180908,
+      "diferencias_maximas": {
+        "estado": 0.0,
+        "tratado": 0.0,
+        "peso": 0.0,
+        "poblacion": 0.0,
+        "empleo_mil": 0.0,
+        "autos_mil": 0.0,
+        "pre_nivel": 0.0
+      }
+    },
+    "elegibilidad_vs_anterior": {
+      "filas": 319662,
+      "diferencias_maximas": {
+        "tratado": 0.0
+      }
+    },
+    "efectos": {
+      "filas": 2660,
+      "diferencias_maximas": {
+        "efecto": 7.610578833805448e-14,
+        "ee": 1.2742584765135234e-13,
+        "ic_inf": 2.7478019859472624e-13,
+        "ic_sup": 2.5604518505417673e-13,
+        "p": 2.2216950501530164e-13,
+        "gl": 0.0,
+        "n": 0.0,
+        "tratados": 0.0,
+        "controles": 0.0,
+        "fechas": 0.0,
+        "mde": 1.3142820165512603e-12,
+        "efecto_sigma": 1.867950238931826e-14,
+        "media_pre": 4.440892098500626e-15,
+        "sigma_pre": 4.884981308350689e-15
+      }
+    },
+    "coeficientes": {
+      "filas": 41,
+      "diferencias_maximas": {
+        "efecto": 3.452793606584237e-14,
+        "ee": 2.528532938583794e-14,
+        "ic_inf": 8.593126210598712e-14,
+        "ic_sup": 2.7200464103316335e-14,
+        "p": 2.631228568361621e-14,
+        "gl": 0.0
+      }
+    },
+    "wald_semanal": {
+      "filas": 120,
+      "diferencias_maximas": {
+        "efecto": 3.042011087472929e-14,
+        "ee": 1.1247947018233617e-14,
+        "ic_inf": 5.362377208939506e-14,
+        "ic_sup": 3.0780933357732465e-14,
+        "p": 8.071321389024888e-14,
+        "gl": 0.0,
+        "f": 5.151434834260726e-13,
+        "gl_num": 0.0,
+        "gl_den": 0.0,
+        "rango": 0.0,
+        "condicion": 9.556799795973347e-13,
+        "autovalor_min": 4.395355607256235e-16
+      }
+    },
+    "omision_estado": {
+      "filas": 14784,
+      "diferencias_maximas": {
+        "efecto": 1.9739765377835283e-13
+      }
+    },
+    "cruce": {
+      "filas": 48,
+      "diferencias_maximas": {
+        "efecto": 1.8457457784393227e-15,
+        "ee": 8.881784197001252e-16,
+        "ic_inf": 3.3584246494910985e-15,
+        "ic_sup": 2.192690473634684e-15,
+        "p": 1.4876988529977098e-14,
+        "gl": 0.0
+      }
+    },
+    "dia_semana": {
+      "filas": 786,
+      "diferencias_maximas": {
+        "dias_base": 0.0,
+        "dias_tramo": 0.0,
+        "filas": 0.0,
+        "rango_dia_semana": 0.0,
+        "d1": 1.4349632593280148e-14,
+        "d2": 1.429412144204889e-14,
+        "d3": 1.479372180313021e-14,
+        "d4": 1.4641066137244252e-14,
+        "d5": 1.3433698597964394e-14,
+        "d6": 1.3877787807814457e-14
+      }
+    },
+    "fechas_base": {
+      "filas": 1470,
+      "diferencias_maximas": {
+        "dia_semana": 0.0
+      }
+    }
+  },
+  "sha256": {
+    "insumos_python": {
+      "../../data/processed/panel_diario.parquet": "6457eeb43b992b11d4fd845f692cd8fdae061da6f48b653b962b0d4850625750",
+      "../../data/processed/conteos_diarios.parquet": "2456f052aa5f952f0fe61d813c16de579aade8534939aba2b1488e4dc9f01e0e",
+      "../../data/processed/exposiciones.parquet": "ed5436cc57a679e19d199245f64c4b620af087bad8dd7a7acc60926ccc7244e4",
+      "../../data/interim/atus.parquet": "5c7fde0edbda51e89aca2dac0c06f6ae7c6c15b39dada9600712ae724f9fba91",
+      "../../data/interim/fecha_invalida.parquet": "3f72f937c5cc4e2cfab18cef238bae6000b897b20ebdb6c57cc6c028feeef631",
+      "../../data/processed/municipios/cambios_territoriales.csv": "aa72bbe92dc1331b734e362cf55f0db89159f7f32da3af73f45957af659e4a61",
+      "../../data/processed/municipios/censo.parquet": "52935e26dcd6f9ec55610bab77cc4ff7655e5ef81b64086894a9d6c4e4b3d86e",
+      "../../data/processed/municipios/conapo.parquet": "c50d6ee2f53961bd4ffb1ac4ad30d3a52f7a646f40f3d93cf47cf9d63caee891",
+      "../../data/processed/municipios/saic.parquet": "bfc7742600f8f9b5e4dd110cb337000d1782050421834b2ae716ac9b14eccb9c",
+      "../../data/processed/municipios/vmrc.parquet": "706a9efc3f98ad2094ea16d74251f87086e28ba46845938315a6b386e251b4ef"
+    },
+    "insumos_r": {
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/calendario_escolar.csv": "5981634b8de2bb4cee4aab14cdc7429fb2202cdb2e034523c8f13b877665ef2c",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/calidad.csv": "be84decd6d5b7f3e78c80de5810d5bded100c7b286a898b7fc5b4634a9e5566d",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/cambios_territoriales.csv": "aa72bbe92dc1331b734e362cf55f0db89159f7f32da3af73f45957af659e4a61",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/censo.csv.gz": "8bc76b126cc0175857322da7f50cda53160c703f4fabe32067abeb58205e093d",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/cobertura_mensual.csv": "981acc0d0c8979c5ab23b0c360812b9f85cbac2234f23acff35e7408483be185",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/conapo.csv.gz": "3cc0fb0cab0156ffc5faa268d33cb28faa89e2edf5b70817dbceb9cfa8c13b00",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/conteos_diarios.csv.gz": "c23344ec092d16d96cbf0ef06d7e876cd3545f9bc28865c7a7be633c090dad3d",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/cotejo_controles.csv": "d90b306ca224a8a19b24e5bb713518c53c8215aa4810ad0787e0ce4f1e92bbf4",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/exposiciones.csv.gz": "0356f83ef0480eb43cbb5d4f527dcc5c81b415743d90fe3cbe121bb0a50a88fc",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/fecha_invalida.csv": "90cb4fcaee7b2d0b9dac52872f9667c6b645379288ac695218eb5102f0ec3c08",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/manifiesto.csv": "f9d3a54cc1b4959b8d94a6743cf2f8ff322e022ce5f6b23f1373c53f6179fdec",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/panel_diario.csv.gz": "3bf9752937a14dadc5abc0d8e89e2f699eaba7fc810c79c23231da3e804a80ac",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/saic.csv.gz": "97b55be523d85366506475ee7c555a6bb7ca791d1eadb27de1019082c141a206",
+      "../../data/outputs/apendice-r-verificado/replica_limpia/datos_limpios_R/vmrc.csv.gz": "2026739aebe0e95f0bc475a03ecc6ab470bf74bf18e6d7c8527f5f026a28c4a4"
+    },
+    "codigo": {
+      "codigo_R/analisis.R": "e91190eaf4e02523d355fd04617800ced491607143362768f5badf246dc0f8c3",
+      "src/choques/cli.py": "ca50008c6a10afbe49b18da89fd07366952b9554e88de0c7de795c7bb61f5d9f",
+      "src/choques/causal.py": "226b381ee1e8455a3ead7cc25d2b605e2046216c783a79d73480294ac8ec36dc",
+      "src/choques/estadistica.py": "14a77ea5c76407ffa9007549b04dab5fe062c52750a62013f747a4596828fc9e",
+      "src/choques/cotejo_panel.py": "53c4d7b4bb396684aa77539ae61ba7e2c2fce22dba4a21ff6adcca31d260c38b",
+      "src/choques/informe_final.py": "793350e7f60231ee0429679281132c773f2dc48559a8bab6502039dd57bd30c0",
+      "config/proyecto.toml": "9537097d06f65795a23a85c7cfcddf466c501082f1c4662221629df882f9f091",
+      "reporte/convertir_markdown.py": "2209a27e0d890a06649e5ce1ca50b2801a5e0ed410a0e9dde31c06f1df9633fe"
+    },
+    "reporte": {
+      "reporte/main.tex": "582d9bec11543decffd5268bf8d362b028fdd8b5f40dff53ab4873d4220751cb",
+      "reporte/reporte.md": "e19231a1ad0de2a6b8985105d153dc3271c767c1d946ac75d1d8c06f1d4fee19",
+      "reporte/main.pdf": "1f900e5212d60cf55614a98dfa428ca1f5b43311deee193eae6163375cee575a",
+      "reporte/reporte.pdf": "1f900e5212d60cf55614a98dfa428ca1f5b43311deee193eae6163375cee575a",
+      "reporte/figuras/trayectoria-siniestros.png": "55a7c174647a0b10505e91b45044eae5687514fe49543c75858054582d1c214b",
+      "reporte/figuras/cambios-por-grupo.pdf": "9ac61a8aaa5252a2dd7e1501a6481bd02b7e4e2225e95dcb3cabd88e6d488aea",
+      "reporte/figuras/conteos-por-grupo.pdf": "f73f257d6dac6d1ffbc15b9b27f76f04d760089cd7620bebc903279296c619e3",
+      "reporte/figuras/generar_series.py": "5d5d1e2fbf19ff57bd0c373aa983325034a75aa13fc96ec38e47da26b0622b14",
+      "reporte/figuras/mapa-municipios.png": "c3de5f9c5d75d764320b338e4083dc771c5d883653b818a9a949dd73fcfb6dbd"
+    },
+    "presentacion": {
+      "presentacion/index.html": "fd10c2384f6a168ab042fb901c7f13361b106944fbc3690a8b0050baf416e89d",
+      "presentacion/guion.md": "1976b8afa9b48201d940d0993da09d78719c3cd6b8563f6cbd23428fc7433364",
+      "presentacion/presentacion.pdf": "3e9e00d6bb645b5817c04ac22de491c50c97841cdd1f4483a3a6e16c40bf733d",
+      "presentacion/assets/datos/procedencia.json": "248c5d0e7a0e3ff3d5360d787e1ec18388937a898c61763e8da2ab4201367fcc"
+    },
+    "presentacion_base": {
+      "presentacion/index.html": "f520f28b590c87c03f201e097d635c327096115da4aacd3f2b1f315ab035f5e6",
+      "presentacion/presentacion.pdf": "ae9050ae55137e1d16c8b1f75828012be911974713f95c41999bc4e9c8856dfc",
+      "presentacion/guion.md": "eb1551ffb97104e0bf9f4861130e1d9e870633a1cf6028665a9205e5738d18fe"
+    }
+  },
+  "paginas_pdf": 45,
+  "paginas_secciones": {
+    "Referencias": 9,
+    "Apéndice A. Fuentes, emparejamiento y balance": 10,
+    "Apéndice B. Resultados por periodo y placebo": 13,
+    "Apéndice C. Sensibilidad a las exclusiones y al calendario": 14,
+    "Apéndice D. Inferencia, precisión y sensibilidad por estado": 16,
+    "Apéndice E. Fuentes del catálogo y reproducción del análisis": 18,
+    "Apéndice F. Contexto geográfico de la muestra": 19,
+    "Apéndice G. Análisis exploratorio por horario y gravedad": 20,
+    "Apéndice H. Código reproducible en R": 21
+  },
+  "lineas_codigo_r": 1353,
+  "identidad_listado_r": true,
+  "notacion_conteo_diario": "Y_{i,d}",
+  "paginas_reporte_revisadas_por_notacion": [
+    3,
+    4
+  ],
+  "presentacion_final": {
+    "prueba": "Archivo local en Chromium, red desactivada, 1440 × 900 y 1024 × 576",
+    "principales": 12,
+    "referencias": 1,
+    "respaldos": 5,
+    "segundos": 480,
+    "ecuaciones_katex": 31,
+    "dias_base_verificados": 21,
+    "notas_y_transiciones_cotejadas": 18,
+    "paginas_impresas": 18,
+    "solicitudes_externas": 0,
+    "errores": 0
+  },
+  "base_unica": {
+    "offsets": [
+      -28,
+      -27,
+      -26,
+      -25,
+      -24,
+      -23,
+      -22,
+      -21,
+      -20,
+      -19,
+      -18,
+      -17,
+      -16,
+      -15,
+      -14,
+      -13,
+      -12,
+      -11,
+      -10,
+      -9,
+      -8
+    ],
+    "escala": "niveles",
+    "estimaciones_concordantes_con_ejecucion_previa": 2660,
+    "pruebas_semanales_con_F_y_p_equivalentes": 30
+  },
+  "figura_cambios_por_grupo": {
+    "pagina": 6,
+    "dias": [
+      -7,
+      13
+    ],
+    "contrastes_diarios_cotejados": 21,
+    "diferencia_absoluta_maxima": 8.198997036856781e-13,
+    "paginas_revisadas": [
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "figura_conteos_por_grupo": {
+    "pagina": 6,
+    "dias": [
+      -28,
+      13
+    ],
+    "dias_base": [
+      -28,
+      -8
+    ],
+    "promedios_cotejados_por_grupo": 42,
+    "pares": 3613,
+    "diferencia_absoluta_maxima": 4.933831121434196e-13,
+    "paginas_revisadas": [
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "revision_editorial": {
+    "base_del_arbol": "c570eb1dd8162a5ddad37fc41bb11fdd2c69c15d",
+    "cuerpo": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "resolucion_revision_visual_ppp": 110,
+    "paginas_revisadas": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45
+    ],
+    "filas_cotejadas_por_cuadro": {
+      "1": 4,
+      "A1": 8,
+      "A2": 3,
+      "A3": 10,
+      "A4": 4,
+      "A5": 16,
+      "B2": 6,
+      "B3": 6,
+      "C1": 14,
+      "C3": 32,
+      "D1": 6,
+      "G1": 3,
+      "B1": 6,
+      "C2": 9,
+      "D2": 4,
+      "D3": 16,
+      "2": 4
+    },
+    "medias_observadas": {
+      "controles": {
+        "base": 2.094472457331774,
+        "dias_0_1": 2.0477720214513084,
+        "cambio": -0.04670043588046546
+      },
+      "tratados": {
+        "base": 2.0500927643784785,
+        "dias_0_1": 1.655844155844156,
+        "cambio": -0.39424860853432264
+      },
+      "diferencia_de_cambios": -0.3475481726538572,
+      "dias_observados_por_grupo": 42,
+      "brechas_diarias": 21
+    },
+    "municipios_mapa": {
+      "tratados": 54,
+      "controles": 765,
+      "ambos": 47
+    },
+    "filas_noticias": 196,
+    "archivo_r_adjunto": {
+      "nombre": "analisis.R",
+      "sha256": "e91190eaf4e02523d355fd04617800ced491607143362768f5badf246dc0f8c3",
+      "lineas_numeradas_en_pdf": 1353,
+      "identico_al_listado_y_al_programa_ejecutado": true
+    },
+    "paquete_de_datos": {
+      "nombre": "datos_limpios_R.zip",
+      "archivos": 17,
+      "sha256": "b186db07dd614377e13e3064cfcc72688e2c63b38530396964c3fcb6afcc86fd",
+      "coincide_con_extraccion": true
+    }
+  }
+}

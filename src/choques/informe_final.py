@@ -7,7 +7,7 @@ from .analisis import table, fmt, texesc
 METHOD = {"emparejada": "1:muchos", "emparejada_1a1": "1:1", "mismos_tratados": "Sin emparejar",
           "sin_covariables": "Calibre individual", "comun_m0_m3": "Completos, calibre"}
 SCENARIO = {"principal": "Principal", "persistencia": "Aislamiento posterior", "placebo": "Placebo 28 días antes",
-            "sin_cinco": "Cinco fechas de auditoría", "sin_laborales": "Sin feriados LFT",
+            "sin_cinco": "Sin las cinco fechas de auditoría", "sin_laborales": "Sin feriados LFT",
             "sin_laborales_escolares": "Sin LFT ni recesos SEP", "sin_pendientes": "Sin dos tratados pendientes",
             "sin_todos_pendientes": "Sin cuatro casos pendientes", "sin_senales": "Sin dos señales en controles"}
 SPAN_LABELS = {"d0": "Día 0", "d1": "Día 1", "d0..1": "Días 0–1", "d2..6": "Días 2–6",
@@ -39,22 +39,25 @@ def interval(row):
 def tables(config):
     out = config["paths"]["outputs"]
     mod, tab = out / "modelos", out / "tablas"
+    tab.mkdir(parents=True, exist_ok=True)
     e = pd.read_csv(mod / "causal_efectos.csv", dtype={"tramo": str})
-    def get(scenario="principal", method="emparejada", scale="log1p", span="d0..1", cluster="entidad", model="M0", base="tres_semanas"):
-        rows = e.loc[e.escenario.eq(scenario) & e.muestra.eq(method) & e.escala.eq(scale) & e.tramo.eq(span)
-                     & e.agrupacion.eq(cluster) & e.modelo.eq(model) & e.base.eq(base)]
+    if set(e.base) != {"tres_semanas"} or set(e.escala) != {"niveles"}:
+        raise ValueError("Las tablas requieren niveles y la base de 21 días")
+
+    def get(scenario="principal", method="emparejada", span="d0..1", cluster="entidad", model="M0"):
+        rows = e.loc[e.escenario.eq(scenario) & e.muestra.eq(method) & e.tramo.eq(span)
+                     & e.agrupacion.eq(cluster) & e.modelo.eq(model)]
         return rows.iloc[0] if len(rows) else None
 
     main = get()
-    two, level = get(cluster="entidad_fecha"), get(scale="niveles")
+    two, level = get(cluster="entidad_fecha"), get()
     macros = {}
     def put(name, value, digits=3):
         macros[name] = (pvalue(value) if name.endswith('P') else fmt(value,digits)) if isinstance(value,(int,float,np.number)) else str(value)
-    for name, row in [("Main",main),("Doble",two),("Nivel",level),("NivelDoble",get(scale="niveles",cluster="entidad_fecha")),
+    for name, row in [("Main",main),("Doble",two),("Nivel",level),("NivelDoble",get(cluster="entidad_fecha")),
                       ("Previa",get(span="wk-1")),("PreviaDoble",get(span="wk-1",cluster="entidad_fecha")),
                       ("MenosDos",get(span="-2")),("MenosCinco",get(span="-5")),
-                      ("CRVTres",get(cluster="CRV3")),("Placebo",get(scenario="placebo",cluster="entidad_fecha")),
-                      ("BaseSemana",get(base="wk-1",cluster="entidad_fecha"))]:
+                      ("CRVTres",get(cluster="CRV3")),("Placebo",get(scenario="placebo",cluster="entidad_fecha"))]:
         for field in ("efecto","ee","ic_inf","ic_sup","p","mde","efecto_sigma"):
             put(name+field.replace('_','').title(), row[field] if row is not None else np.nan)
     for field,name in [("tratados","Trat"),("controles","Cont"),("fechas","Fechas"),("episodios","Epis"),
@@ -62,9 +65,8 @@ def tables(config):
         put(name,main[field],0)
     put("EstadosEf",main.estados_tratados_efectivos,1)
     put("MediaPre",level.media_pre,2);put("SigmaPre",level.sigma_pre,2)
-    put("PorcentajeUnoMas",100*np.expm1(main.efecto),1)
     put("MdePctNivel",100*level.mde/level.media_pre,1)
-    put("MdePctNivelDoble",100*get(scale="niveles",cluster="entidad_fecha").mde/level.media_pre,1)
+    put("MdePctNivelDoble",100*get(cluster="entidad_fecha").mde/level.media_pre,1)
     direction = "una caída" if main.efecto < 0 else "un aumento"
     evidence = ("El contraste inmediato es negativo y su intervalo de dos vías excluye cero."
                 if two.ic_sup < 0 else "El intervalo inmediato de dos vías incluye cero; la evidencia no permite afirmar una reducción con ese criterio.")
@@ -77,30 +79,39 @@ def tables(config):
         if all(r.ic_inf<=0<=r.ic_sup for r in late) else
         "Al menos un intervalo posterior de dos vías excluye cero. El rediseño no sostiene una desaparición completa del cambio desde el día 2.")
     weekly=pd.read_csv(mod/'causal_wald_semanal.csv')
-    joint=weekly.loc[weekly.escenario.eq('principal') & weekly.muestra.eq('emparejada') & weekly.escala.eq('log1p') & weekly.restricciones.eq('wk-4;wk-3;wk-1')]
+    joint=weekly.loc[weekly.escenario.eq('principal') & weekly.muestra.eq('emparejada') & weekly.escala.eq('niveles') & weekly.restricciones.eq('wk-4;wk-3;wk-1')]
     for cluster,name in [('entidad','Wald'),('entidad_fecha','WaldDoble')]:
         r=joint.loc[joint.agrupacion.eq(cluster)].iloc[0]
         put(name+'P',r.p);put(name+'Estado',texesc(r.estado))
-    # Principal: niveles y log, d0 y d1 separados, y horizontes de persistencia.
     rows=[]
-    for scale,label in [('log1p',r'$\log(1+Z)$'),('niveles','Niveles')]:
-        for span in ['d0','d1','d0..1','d2..6','wk+1']:
-            a,b=get(scale=scale,span=span),get(scale=scale,span=span,cluster='entidad_fecha')
-            rows.append([label,SPAN_LABELS[span],result(a,False),interval(b),fmt(a.efecto_sigma,3),fmt(b.mde,3)])
-    table(tab/'causal_principales.tex',['Escala','Tramo',r'$\hat\tau$ (EE)',r'IC 95\% doble',r'$\tau/\sigma$', 'MDE doble'],rows)
+    for span in SPAN_LABELS:
+        a = get(span=span, cluster='entidad_fecha')
+        rows.append([SPAN_LABELS[span], result(a, False), interval(a), fmt(a.efecto_sigma, 3), fmt(a.mde, 3)])
+    table(tab/'causal_principales.tex',['Tramo',r'$\hat\tau$ (EE doble)',r'IC 95\% doble',r'$\hat\tau/\sigma$', 'MDE doble'],rows)
     # Progresión con muestra fija, incluido el ajuste sin matching para los mismos tratados.
     rows=[]
     for method in ['comun_m0_m3','mismos_tratados','emparejada','emparejada_1a1']:
         for model in ['M0','M1','M2','M3']:
-            log=get(method=method,model=model,cluster='entidad_fecha');lev=get(method=method,model=model,scale='niveles',cluster='entidad_fecha')
-            rows.append([METHOD[method],MODEL_LABELS[model],fmt(log.tratados,0),fmt(log.n,0),result(log),result(lev)])
-    table(tab/'causal_modelos.tex',['Controles','Modelo','Trat.',r'$N$',r'$\log(1+Z)$, IC doble','Niveles, IC doble'],rows)
-    rows=[]
-    for model in ['M0','M1','M2','M3']:
-        a=get(model=model); b=get(model=model,cluster='entidad_fecha')
-        c=get(model=model,scale='niveles'); d=get(model=model,scale='niveles',cluster='entidad_fecha')
-        rows.append([MODEL_LABELS[model],fmt(a.n,0),result(a,False),interval(b),result(c,False),interval(d)])
-    table(tab/'causal_progresion_principal.tex',['Modelo',r'$N$',r'$\log(1+Z)$ (EE)','IC doble','Niveles (EE)','IC doble'],rows)
+            r=get(method=method,model=model,cluster='entidad_fecha')
+            rows.append([METHOD[method],MODEL_LABELS[model],fmt(r.tratados,0),fmt(r.n,0),result(r)])
+    table(tab/'causal_modelos.tex',['Controles','Modelo','Trat.',r'$N$','Estimación e IC doble'],rows)
+    c = pd.read_csv(mod/'causal_coeficientes.csv')
+    c = c.loc[c.escenario.eq('principal') & c.muestra.eq('emparejada')].set_index(['termino','modelo'])
+    terms = {"tratado": "Tratado × Después", "log_poblacion": "Logaritmo de la población × Después",
+             "empleo_mil": "Empleo por mil × Después", "autos_mil": "Automóviles por mil × Después"}
+    rows = []
+    for k, (term, label) in enumerate(terms.items()):
+        row = [label]
+        for model in MODEL_LABELS:
+            if (term, model) not in c.index:
+                row.append('—')
+                continue
+            r = c.loc[term, model]
+            digits = 6 if k >= 2 else 3
+            row.append(r'\shortstack{' + r'\\'.join([fmt(r.efecto,digits),f'({fmt(r.ee,digits)})',
+                        f'[{fmt(r.ic_inf,digits)}; {fmt(r.ic_sup,digits)}]', '$p='+fmt(r.p,3).replace(',','{,}')+'$']) + '}')
+        rows.append(row)
+    table(tab/'causal_progresion_principal.tex',['Término'] + [f'$M_{j}$' for j in range(4)],rows)
     # Balance: denominador común fijado en la muestra con calibre individual.
     bal=pd.read_csv(mod/'causal_balance.csv')
     bal=bal.loc[bal.escenario.eq('principal')]
@@ -139,9 +150,8 @@ def tables(config):
     for scenario in ['principal','sin_cinco','sin_laborales','sin_laborales_escolares','sin_pendientes','sin_todos_pendientes','sin_senales']:
         for method in ['emparejada','emparejada_1a1']:
             a=get(scenario=scenario,method=method,cluster='entidad_fecha')
-            b=get(scenario=scenario,method=method,scale='niveles',cluster='entidad_fecha')
-            rows.append([SCENARIO[scenario],METHOD[method],fmt(a.tratados,0),fmt(a.fechas,0),result(a),result(b)])
-    table(tab/'causal_sensibilidades.tex',['Exclusión / muestra','Matching','Trat.','Fechas','Log, IC doble','Niveles, IC doble'],rows)
+            rows.append([SCENARIO[scenario],METHOD[method],fmt(a.tratados,0),fmt(a.fechas,0),result(a)])
+    table(tab/'causal_sensibilidades.tex',['Exclusión / muestra','Matching','Trat.','Fechas','Estimación e IC doble'],rows)
     rows=[]
     for scenario in ['principal','persistencia','placebo']:
         for method in ['emparejada','emparejada_1a1']:
@@ -150,53 +160,37 @@ def tables(config):
                 result(get(scenario=scenario,method=method,span=span,cluster='entidad_fecha')) for span in ['d0..1','d2..6','wk+1']])
     table(tab/'causal_persistencia.tex',['Selección','Matching','Trat.','Días 0–1','Días 2–6','Sem. +1'],rows)
     rows=[]
-    for scale,label in [('log1p','Log'),('niveles','Niveles')]:
-        for span in ['d0','d1','d0..1','d2..6','wk0','wk+1']:
-            row=[label,SPAN_LABELS[span]]
-            for method in ['emparejada','emparejada_1a1']:
-                row += [result(get(scenario='placebo',method=method,scale=scale,span=span,cluster='entidad_fecha')),
-                        pvalue(get(scenario='placebo',method=method,scale=scale,span=span).p)]
-            rows.append(row)
-    table(tab/'causal_placebo.tex',['Escala','Horizonte','1:muchos, IC doble',r'$p_E$','1:1, IC doble',r'$p_E$'],rows)
+    for span in SPAN_LABELS:
+        row=[SPAN_LABELS[span]]
+        for method in ['emparejada','emparejada_1a1']:
+            a=get(scenario='placebo',method=method,span=span)
+            b=get(scenario='placebo',method=method,span=span,cluster='entidad_fecha')
+            row += [result(b),pvalue(b.p),pvalue(a.p)]
+        rows.append(row)
+    table(tab/'causal_placebo.tex',['Horizonte','1:muchos, IC doble',r'$p$ doble',r'$p$ estatal',
+                                   '1:1, IC doble',r'$p$ doble',r'$p$ estatal'],rows)
     rows=[]
     for method in ['emparejada','emparejada_1a1']:
-        for scale,label in [('log1p','Log'),('niveles','Niveles')]:
-            for cluster,name in [('entidad','CRV1 estatal'),('entidad_fecha','CRV1 doble'),('CRV3','CRV3 estatal')]:
-                r=get(method=method,scale=scale,cluster=cluster)
-                rows.append([METHOD[method],label,name,result(r),fmt(r.gl,0),fmt(r.mde,3)])
-    table(tab/'causal_inferencia.tex',['Matching','Escala','Inferencia',r'Días 0–1, IC 95\%','gl','MDE'],rows)
+        for cluster,name in [('entidad','CRV1 estatal'),('entidad_fecha','CRV1: estado y fecha'),('CRV3','CRV3 estatal')]:
+            r=get(method=method,cluster=cluster)
+            rows.append([METHOD[method],name,result(r),fmt(r.gl,0),fmt(r.mde,3)])
+    table(tab/'causal_inferencia.tex',['Matching','Inferencia',r'Días 0–1, IC 95\%','gl','MDE'],rows)
     rows=[]
     for method in ['emparejada','emparejada_1a1']:
-        for scale,label in [('log1p','Log'),('niveles','Niveles')]:
-            r=weekly.loc[weekly.escenario.eq('principal') & weekly.muestra.eq(method) & weekly.escala.eq(scale) & weekly.restricciones.eq('wk-4;wk-3;wk-1')]
-            for item in r.itertuples():
-                rows.append([METHOD[method],label,'Estatal' if item.agrupacion=='entidad' else 'Doble',fmt(item.f,3),pvalue(item.p),fmt(item.rango,0),fmt(item.condicion,1),texesc(item.estado)])
-    table(tab/'causal_previos.tex',['Matching','Escala','Agrupación','F','p','Rango','Condición','Cálculo'],rows)
-    # Referencia b=-2 separa cambio de base, muestra e inventario.
-    legacy=pd.read_csv(mod/'comparaciones_municipales.csv')
-    rows=[]
-    for method in ['emparejada','emparejada_1a1']:
-        old=legacy.loc[legacy.diseno.eq('principal') & legacy.muestra.eq(method) & legacy.h.eq(0)].iloc[0]
-        a=get(method=method,scale='niveles',span='d0',base='-2')
-        b=get(method=method,scale='niveles',span='d0')
-        rows.append([METHOD[method],fmt(old.tratados,0),result(old),fmt(a.tratados,0),result(a),result(b)])
-    table(tab/'causal_trazabilidad.tex',['Matching','Trat. antes','Antes: día 0, base -2','Trat. final','Final: día 0, base -2','Final: día 0, base limpia'],rows)
-    rows=[]
-    for method in ['emparejada','emparejada_1a1']:
-        for scale,label in [('log1p','Log'),('niveles','Niveles')]:
-            rows.append([METHOD[method],label]+[result(get(method=method,scale=scale,base=base,cluster='entidad_fecha'))
-                                               for base in ['-2','tres_semanas','wk-1']])
-    table(tab/'causal_bases.tex',['Matching','Escala','Día -2','Tres semanas','Sem. -1'],rows)
-    # Donantes de Morelia: listas completas y todas las etapas reproducibles.
-    final_edges=pd.read_csv(mod/'causal_vinculos.csv',dtype={'tratado_clave':str,'control_clave':str},parse_dates=['indice'])
-    old_edges=pd.read_csv(mod/'reparto_controles.csv',dtype={'tratado_clave':str,'control_clave':str},parse_dates=['indice'])
-    morelia=[]
-    for scenario,frame,field in [('auditada',old_edges,'diseno'),('principal',final_edges,'escenario'),('sin_senales',final_edges,'escenario')]:
-        subset=frame.loc[frame[field].eq('principal' if scenario=='auditada' else scenario) & frame.muestra.eq('emparejada') & frame.tratado_clave.eq('16053') & frame.indice.eq('2025-04-23')]
-        for r in subset.itertuples(): morelia.append(dict(escenario=scenario,control_clave=r.control_clave,contribucion=r.contribucion))
-    pd.DataFrame(morelia).to_csv(mod/'causal_morelia_donantes.csv',index=False)
-    for scenario,name in [('auditada','MoreliaAntes'),('principal','MoreliaDespues'),('sin_senales','MoreliaSenales')]:
-        put(name,len([r for r in morelia if r['escenario']==scenario]),0)
+        r=weekly.loc[weekly.escenario.eq('principal') & weekly.muestra.eq(method) & weekly.restricciones.eq('wk-4;wk-3;wk-1')]
+        for item in r.itertuples():
+            rows.append([METHOD[method],'Estatal' if item.agrupacion=='entidad' else 'Estado y fecha',
+                         fmt(item.f,3),pvalue(item.p),fmt(item.rango,0),fmt(item.condicion,1),texesc(item.estado)])
+    table(tab/'causal_previos.tex',['Matching','Agrupación','F','p','Rango','Condición','Cálculo'],rows)
+    # Donantes de Morelia en el modelo principal y sin señales en controles.
+    final_edges=pd.read_csv(mod/'causal_vinculos.csv',
+                            dtype={'tratado_clave':str,'control_clave':str},parse_dates=['indice'])
+    morelia=final_edges.loc[final_edges.escenario.isin(['principal','sin_senales'])
+                            & final_edges.muestra.eq('emparejada') & final_edges.tratado_clave.eq('16053')
+                            & final_edges.indice.eq('2025-04-23'), ['escenario','control_clave','contribucion']]
+    morelia.to_csv(mod/'causal_morelia_donantes.csv',index=False)
+    for scenario,name in [('principal','MoreliaDespues'),('sin_senales','MoreliaSenales')]:
+        put(name,morelia.escenario.eq(scenario).sum(),0)
     losses=pd.read_csv(mod/'causal_descartes.csv',dtype={'clave':str},parse_dates=['indice'])
     more=losses.loc[losses.escenario.eq('principal') & losses.clave.eq('16053') & losses.indice.eq('2025-04-23')].iloc[0]
     put('MoreliaUniverso',more.controles_auditados,0);put('MoreliaCalibre',more.despues_pre_nivel,0)
@@ -212,13 +206,9 @@ def tables(config):
           [[str(d.date()),fmt(r.tratados,0),'Sí' if r.laboral else 'No','Sí' if r.escolar else 'No','Sí' if r.cinco else 'No'] for d,r in dates.iterrows()])
     # Omisiones estatales del principal, sin rematching ni renormalizar pesos.
     loo=pd.read_csv(mod/'causal_omision_estado.csv',dtype={'estado_omitido':str,'tramo':str})
-    pick=loo.loc[loo.muestra.eq('emparejada') & loo.modelo.eq('M0') & loo.tramo.eq('d0..1')].pivot(index='estado_omitido',columns='escala',values='efecto')
-    table(tab/'causal_omision.tex',['Estado omitido','Log, días 0–1','Niveles, días 0–1'],[[STATE_NAMES[int(state)],fmt(r.log1p,3),fmt(r.niveles,3)] for state,r in pick.iterrows()])
-    cul=pd.read_csv(mod/'culiacan_soporte.csv').iloc[0]
-    gap=pd.read_csv(mod/'culiacan.csv')
-    observed=gap.loc[gap.semana.ge(0) & gap.brecha.notna()]
-    for name,value in [('CulDonantes',cul.comparadores_usados),('CulObs',cul.semanas_post_observadas),('CulTotal',cul.semanas_post_totales)]: put(name,value,0)
-    put('CulBrecha',observed.brecha.mean(),2)
+    pick=loo.loc[loo.muestra.eq('emparejada') & loo.modelo.eq('M0') & loo.tramo.eq('d0..1')].sort_values('estado_omitido')
+    table(tab/'causal_omision.tex',['Estado omitido','Días 0–1'],
+          [[STATE_NAMES[int(r.estado_omitido)],fmt(r.efecto,3)] for r in pick.itertuples()])
     # Cobertura/territorio como operaciones de unión distintas del matching estadístico.
     sample=pd.read_csv(mod/'causal_muestras.csv', low_memory=False)
     pool=sample.loc[sample.escenario.eq('principal') & sample.muestra.eq('emparejada')]
@@ -259,54 +249,36 @@ def figures(config):
     e = pd.read_csv(out / "modelos/causal_efectos.csv", dtype={"tramo": str})
     e = e.loc[e.escenario.eq("principal") & e.base.eq("tres_semanas")
               & e.modelo.eq("M0") & e.agrupacion.eq("entidad_fecha")]
-    fig, axes = plt.subplots(2, 1, figsize=(7.35, 5.4), sharex=True)
-    fig.subplots_adjust(left=.16, right=.98, bottom=.19, top=.73, hspace=.35)
-    labels = ["Cambio en\nlog(1 + registros)", "Cambio en registros\npor municipio y día"]
+    fig, ax = plt.subplots(figsize=(7.35, 3.35))
+    fig.subplots_adjust(left=.15, right=.97, bottom=.19, top=.80)
     methods = [
         ("emparejada", BLUE, -.10, "1:muchos", "o-"),
         ("emparejada_1a1", ACCENT, .10, "1:1", "^--"),
     ]
-    for ax, scale, label in zip(axes, ["log1p", "niveles"], labels):
-        for method, color, offset, name, style in methods:
-            rows = e.loc[e.muestra.eq(method) & e.escala.eq(scale)
-                         & e.tramo.isin([str(h) for h in range(-7, 14)])].copy()
-            rows["h"] = rows.tramo.astype(int)
-            rows = rows.sort_values("h")
-            ax.errorbar(
-                rows.h + offset, rows.efecto,
-                yerr=[rows.efecto - rows.ic_inf, rows.ic_sup - rows.efecto],
-                fmt=style, color=color, markersize=3, linewidth=.85,
-                elinewidth=.7, capsize=1.5, label=name,
-            )
-        ax.axhline(0, color="#555555", linewidth=.6)
-        ax.axvline(0, color="#555555", linestyle="--", linewidth=.8)
-        ax.set_ylabel(label, fontsize=9, labelpad=9)
-        ax.tick_params(labelsize=8.5)
-        ax.yaxis.set_major_formatter(
-            FuncFormatter(lambda value, _: f"{value:g}".replace(".", ","))
+    for method, color, offset, name, style in methods:
+        rows = e.loc[e.muestra.eq(method) & e.tramo.isin([str(h) for h in range(-7, 14)])].copy()
+        rows["h"] = rows.tramo.astype(int)
+        rows = rows.sort_values("h")
+        ax.errorbar(
+            rows.h + offset, rows.efecto,
+            yerr=[rows.efecto - rows.ic_inf, rows.ic_sup - rows.efecto],
+            fmt=style, color=color, markersize=3.2, linewidth=.9,
+            elinewidth=.8, capsize=1.5, label=name,
         )
-        ax.grid(axis="y", alpha=.2)
-        ax.set_axisbelow(True)
-        ax.spines[["top", "right"]].set_visible(False)
-
-    fig.suptitle(
-        "Los accidentes registrados muestran una caída relativa\n"
-        "alrededor del inicio local",
-        fontsize=11.5, fontweight="bold", y=.98,
-    )
-    fig.text(.57, .855, "Promedio de 77 pares tratados; dos esquemas de matching",
-             ha="center", fontsize=8.5)
-    handles, names = axes[0].get_legend_handles_labels()
-    fig.legend(handles, names, loc="upper center", bbox_to_anchor=(.57, .83),
-               frameon=False, ncols=2, fontsize=9)
-    axes[0].text(0, 1.025, "Día 0", transform=axes[0].get_xaxis_transform(),
-                 ha="center", fontsize=8)
-    axes[1].set_xlabel("Día respecto al inicio local (Día 0)", fontsize=9)
-    axes[1].set_xticks([-7, -5, -2, 0, 1, 3, 6, 9, 13])
-    fig.text(
-        .16, .045,
-        "Base: tres semanas previas del mismo día de la semana.\n"
-        "Barras: intervalos de confianza puntuales del 95 %, agrupados por estado y fecha.",
-        ha="left", fontsize=7.5, linespacing=1.5,
-    )
+    ax.axhline(0, color="#555555", linewidth=.6)
+    ax.axvline(0, color="#555555", linestyle="--", linewidth=.8)
+    ax.set_ylabel("Diferencia de cambios en siniestros\nregistrados por municipio y día", fontsize=9)
+    ax.set_xlabel("Día respecto al inicio local", fontsize=9)
+    ax.set_xticks([-7, -5, -2, 0, 1, 3, 6, 9, 13])
+    ax.tick_params(labelsize=8.5)
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:g}".replace(".", ",")))
+    ax.grid(axis="y", alpha=.2)
+    ax.set_axisbelow(True)
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.legend(loc="lower center", bbox_to_anchor=(.5, 1.05), frameon=False, ncols=2, fontsize=9)
+    (out / "figuras").mkdir(parents=True, exist_ok=True)
     save(fig, out / "figuras", "causal_dinamica")
+    # El reporte usa la copia local de esta figura. La presentación conserva la suya.
+    from shutil import copyfile
+    copyfile(out / "figuras" / "causal_dinamica.png",
+             config["root"] / "reporte" / "figuras" / "trayectoria-siniestros.png")

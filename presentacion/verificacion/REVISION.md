@@ -1,11 +1,23 @@
-# Revisión de la entrega
+# Revisión de la presentación final
 
-**12 diapositivas principales, 480 segundos, una diapositiva de referencias y 5 respaldos.** Los tiempos corresponden a la distribución del guion para ensayo.
+La ruta principal conserva 12 diapositivas y 480 segundos para el ensayo.
+Le siguen una diapositiva de referencias y cinco respaldos.
 
-- Se comprobó la carga de `index.html` y la navegación de portada a contexto y a mapas. Chromium recorrió 18 diapositivas a 1440 × 900, con la red desactivada. Se verificaron figuras, fuentes KaTeX, vínculos de respaldo y concordancia del guion con las notas. [Resultado de la ejecución](resultado.json)
-- El PDF exportado tiene 18 páginas. Se revisaron la definición del conteo diario $Z$ en la página 5 y los índices, las etiquetas de la ecuación y los valores de $\mathrm{Post}$ en la página 6. La página 9 identifica el coeficiente de Tratado × Después como $\hat\tau_{\mathrm{DD}}$. El guion explica cómo la resta de los dos valores de $Y$ da el cambio. Los respaldos explican la corrección de muestra finita. [PDF revisado](../presentacion.pdf)
-- La pregunta de la portada y la tabla de modelos se cotejaron con el reporte vigente. La tabla abre Resultados e identifica el ajuste de cada modelo. Incluye coeficientes, errores estándar, valores p y dos medidas de ajuste del cuadro 2, Panel A. Se verificó en el PDF que solo los cuatro coeficientes de tratamiento llevan un asterisco. Las 21 diferencias entre los cambios medios de los grupos reproducen la trayectoria diaria de M₀ con tolerancia absoluta de 1e−10. [Procedencia](../assets/datos/procedencia.json)
+- El calendario muestra los 21 días exactos de la base, del -28 al -8. La
+  ecuación usa $Y_{i,d}$ y distingue el ajuste por día de la semana de los
+  efectos fijos de par y de inicio por bloque. La prueba semanal, el
+  placebo y las sensibilidades usan la misma regla de base.
+- Los 21 contrastes de la trayectoria descriptiva reproducen los coeficientes
+  diarios en niveles con diferencia máxima de $2,89\times 10^{-15}$. La
+  tabla de resultados toma las cifras del mismo archivo que alimenta el
+  cuadro 2 del reporte. [Procedencia](../assets/datos/procedencia.json)
+- Chromium recorrió las 18 diapositivas sin conexión a 1440 × 900 y
+  1024 × 576. Se comprobaron la navegación, las ecuaciones, los archivos
+  de figuras, los enlaces de respaldo y las notas del guion. Se revisaron
+  las capturas y las 18 páginas renderizadas. [Resultado de la ejecución](resultado.json)
+- En el PDF se cotejaron la base y la ecuación de las páginas 5–6,
+  los valores $p$ de la prueba semanal en la página 8, el cuadro de
+  estimación en la página 9 y el intervalo principal en la página 12.
+  [PDF revisado](../presentacion.pdf)
 
-- Se revisaron las gráficas y las tablas en las páginas 7–11 y 17–18 del PDF. Las gráficas conservan trazos vectoriales y rótulos seleccionables. Las tres tablas se revisaron a 2048 píxeles de ancho y conservan texto seleccionable con fuentes incrustadas.
-
-Huella SHA-256 del PDF revisado: `ae9050ae55137e1d16c8b1f75828012be911974713f95c41999bc4e9c8856dfc`.
+Huella SHA-256 del PDF revisado: `3e9e00d6bb645b5817c04ac22de491c50c97841cdd1f4483a3a6e16c40bf733d`.
