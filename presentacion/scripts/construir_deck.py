@@ -111,11 +111,11 @@ base_eq = math(r"B_{ith}^{g}=\tfrac13\sum_{k\in\{28,21,14\}}g(Y_{i,r(t,h)-k}),\q
                r"\Delta_{ith}^{g}=g(Y_{i,t+h})-B_{ith}^{g}", True)
 reg_eq = math(r"\Delta_{ith}^{g}=\lambda_{th}+\beta_h^{g}D_{it}+X_{it}^{\prime}\gamma_h+u_{ith}", True)
 
-add("pregunta", "Municipios de México · 2019–2025", "¿Cómo cambian los siniestros viales registrados tras el inicio local de narcoataques?", 20, """
+add("pregunta", "Municipios de México · 2019–2025", "¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques?", 20, """
 <canvas class="cover-art" width="1100" height="1440" role="img" aria-label="Ilustración cenital de un choque entre dos autos en un cruce"></canvas>
 <p class="byline"><span class="project-title">Narcoataques y siniestros viales registrados</span>
 <strong>Eduardo Garcia Cortez · CU: 207480</strong><br>Inferencia Causal · ITAM</p>""",
-"""¿Cómo cambian los siniestros viales registrados tras el inicio local de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.""",
+"""¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.""",
 "Primero, ¿por qué esperaríamos un cambio?", "Reporte, §1 y §5. Bauernschuster y Rekers (2022).", style="cover")
 
 add("contexto", "Contexto", "Por qué podrían cambiar los siniestros viales registrados", 30, """

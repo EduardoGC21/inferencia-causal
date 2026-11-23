@@ -6,13 +6,13 @@ Eduardo Garcia Cortez · CU: 207480 · Inferencia Causal · ITAM
 
 Ruta principal de **480 segundos (8:00)**. Los tiempos incluyen las transiciones. Para ensayar, lee la explicación oral y la transición. Los respaldos quedan fuera del tiempo.
 
-## ¿Cómo cambian los siniestros viales registrados tras el inicio local de narcoataques?
+## ¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques?
 
 **Identificador** `pregunta` · **Tiempo** 0:00–0:20 (20 s)
 
 **Explicación oral**
 
-¿Cómo cambian los siniestros viales registrados tras el inicio local de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.
+¿Cómo cambian los siniestros viales registrados tras el inicio de narcoataques? El artículo de Bauernschuster y Rekers inspira el seguimiento diario después de un evento. Aquí observo las dos semanas desde el inicio.
 
 **Transición**
 

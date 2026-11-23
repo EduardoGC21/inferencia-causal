@@ -6,4 +6,4 @@
 - Se verificaron las 19 páginas exportadas. Se revisaron la portada y los tres mecanismos de la diapositiva de contexto. Al insertar el contexto, la página de mapas pasó de la posición 2 a la 3 con renderizado idéntico. [PDF revisado](../presentacion.pdf)
 - La pregunta de la portada y la tabla de modelos se cotejaron con el reporte vigente. La tabla abre Resultados e identifica el ajuste de cada modelo. Incluye coeficientes, errores estándar, valores p y dos medidas de ajuste del cuadro 2, Panel A. Se verificó en el PDF que solo los cuatro coeficientes de tratamiento llevan un asterisco. Las 21 diferencias entre los cambios medios de los grupos reproducen la trayectoria diaria de M₀ con tolerancia absoluta de 1e−10. [Procedencia](../assets/datos/procedencia.json)
 
-Huella SHA-256 del PDF revisado: `5c1e6f063a4eb2bb453569d192c4fd8aa80be0ea3a5c18fb648cb5f61d16bd82`.
+Huella SHA-256 del PDF revisado: `e45dc4e041fc4ff75e33ba630c9a1d456ab7d0e884b82306e42bc905fd5c431c`.
